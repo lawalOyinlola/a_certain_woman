@@ -15,7 +15,7 @@ export default function EventsPage() {
       <main className="pt-32 md:pt-40">
         <header className="mx-auto max-w-[1100px] px-6 text-center md:px-12">
           <div className="acw-section-label justify-center">
-            <span className="acw-num">VI.</span>
+            <span className="acw-num">V.</span>
             <span>Where she gathers</span>
           </div>
           <h1 className="acw-display acw-display--center mt-6">
