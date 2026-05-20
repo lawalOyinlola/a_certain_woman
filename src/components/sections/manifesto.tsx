@@ -30,7 +30,14 @@ export function Manifesto() {
           className="mx-auto h-14 w-14 text-gold"
           style={{ transform: `translateY(${(1 - p) * 40}px)`, opacity: p }}
         >
-          <svg viewBox="0 0 60 60" width="56" height="56" fill="none" stroke="currentColor" strokeWidth="0.6">
+          <svg
+            viewBox="0 0 60 60"
+            width="56"
+            height="56"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.6"
+          >
             <circle cx="30" cy="30" r="29" />
             <path
               d="M18 24 Q22 18 26 22 Q22 26 18 24 Z M34 24 Q38 18 42 22 Q38 26 34 24 Z"
@@ -54,7 +61,7 @@ export function Manifesto() {
         <h2 className="acw-display acw-display--center relative mt-12">
           <span
             aria-hidden
-            className="pointer-events-none absolute -top-16 left-1/2 -translate-x-[200px] font-display text-[140px] italic leading-none text-gold/20 md:-translate-x-[260px]"
+            className="pointer-events-none absolute -top-16 left-1/2 translate-x-[-200px] font-display text-[140px] italic leading-none text-gold/20 md:translate-x-[-260px]"
           >
             &ldquo;
           </span>
