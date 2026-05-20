@@ -4,10 +4,7 @@ import { ArrowRightThin } from "@/components/site/icons";
 
 export function About() {
   return (
-    <section
-      id="story"
-      className="relative px-6 py-24 md:px-12 md:py-36"
-    >
+    <section id="story" className="relative px-6 py-24 md:px-12 md:py-36">
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <div className="acw-section-label">
@@ -24,7 +21,7 @@ export function About() {
         <div className="space-y-12">
           <figure className="relative">
             <div className="relative overflow-hidden rounded-md border border-border bg-cream-2">
-              <div className="relative aspect-[4/5]">
+              <div className="relative aspect-4/5">
                 <Image
                   src="/photos/02.jpg"
                   alt="Portrait — A Certain Woman"
@@ -55,12 +52,12 @@ export function About() {
               <span className="acw-dropcap">A</span> Certain Woman is a
               sisterhood for the quiet ones, the rebuilding ones, the ones who
               refuse to shrink and refuse to shout. We gather women who are
-              becoming — through prayer, through practice, through the long
-              work of grace.
+              becoming — through prayer, through practice, through the long work
+              of grace.
             </p>
             <p>
-              She is not waiting for the world to name her worthy. She is the woman
-              God named before the world had a word for her.
+              She is not waiting for the world to name her worthy. She is the
+              woman God named before the world had a word for her.
             </p>
             <Link href="#pillars" className="acw-link-arrow">
               Our four pillars <ArrowRightThin />
