@@ -35,7 +35,7 @@ export function About() {
                 <div className="pointer-events-none absolute inset-3 border border-cream-1/40" />
               </div>
               <div className="flex items-end justify-between border-t border-border bg-cream-1 px-5 py-3 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-                <span>PORTRAIT</span>
+                <span>PORTRAIT OF BECOMING</span>
                 <span className="font-display text-base italic text-gold">
                   No. 01
                 </span>
@@ -59,7 +59,7 @@ export function About() {
               work of grace.
             </p>
             <p>
-              She is not the woman the algorithm celebrates. She is the woman
+              She is not waiting for the world to name her worthy. She is the woman
               God named before the world had a word for her.
             </p>
             <Link href="#pillars" className="acw-link-arrow">
