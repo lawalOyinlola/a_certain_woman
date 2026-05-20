@@ -11,32 +11,32 @@ const QUOTES = [
   },
   {
     n: "02",
-    word: "healing",
+    word: "Healing",
     body: "Slowly, honestly, without apology. Healing is the hardest holy work.",
   },
   {
     n: "03",
-    word: "discerning",
+    word: "Discerning",
     body: "Every yes is weighed. Every no is sacred. She does not rush her knowing.",
   },
   {
     n: "04",
-    word: "dignified",
-    body: "Strength is her clothing. She does not perform — she presides.",
+    word: "Walking in dignity",
+    body: "She carries herself with quiet authority. Not loud. Not fragile. Simply whole.",
   },
   {
     n: "05",
-    word: "led by grace",
+    word: "Led by grace",
     body: "Not by hustle. Not by hunger. Grace, soft and steady, is her guide.",
   },
   {
     n: "06",
-    word: "rebuilding with wisdom",
-    body: "What was broken becomes blueprint. She builds again — wiser, slower, stronger.",
+    word: "Rebuilding with wisdom",
+    body: "She honors what was broken, learns from it, and builds again — not in haste, but with intention.",
   },
   {
     n: "07",
-    word: "a certain woman",
+    word: "A certain woman",
     body: "Set apart. Set free. Set on a foundation that no season can shake.",
   },
 ];
@@ -96,7 +96,14 @@ export function Quotes() {
             aria-label="Previous"
             className="text-cream-1/70 transition-colors hover:text-gold-2"
           >
-            <svg width="22" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <svg
+              width="22"
+              height="14"
+              viewBox="0 0 20 14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.2"
+            >
               <path d="M19 7H1M6 1L1 7l5 6" />
             </svg>
           </button>
@@ -108,7 +115,7 @@ export function Quotes() {
                 aria-label={`Quote ${k + 1}`}
                 className={cn(
                   "h-px flex-1 transition-all",
-                  k === i ? "bg-gold-2" : "bg-cream-1/20 hover:bg-cream-1/40"
+                  k === i ? "bg-gold-2" : "bg-cream-1/20 hover:bg-cream-1/40",
                 )}
               />
             ))}
@@ -118,7 +125,14 @@ export function Quotes() {
             aria-label="Next"
             className="text-cream-1/70 transition-colors hover:text-gold-2"
           >
-            <svg width="22" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <svg
+              width="22"
+              height="14"
+              viewBox="0 0 20 14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.2"
+            >
               <path d="M1 7h18M14 1l5 6-5 6" />
             </svg>
           </button>
@@ -133,7 +147,7 @@ export function Quotes() {
                 "flex flex-col items-start gap-2 rounded-md border border-cream-1/15 p-4 text-left transition-all",
                 k === i
                   ? "border-gold-2/60 bg-cream-1/5"
-                  : "hover:border-cream-1/30 hover:bg-cream-1/[0.03]"
+                  : "hover:border-cream-1/30 hover:bg-cream-1/3",
               )}
             >
               <span className="text-[11px] uppercase tracking-[0.28em] text-cream-1/50">
