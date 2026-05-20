@@ -33,7 +33,7 @@ export function Join() {
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
         <div>
           <div className="acw-section-label">
-            <span className="acw-num">IV.</span>
+            <span className="acw-num">VII.</span>
             <span>An invitation</span>
           </div>
           <h2 className="acw-display mt-6">
