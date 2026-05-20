@@ -15,9 +15,10 @@ const marqueeItems = [
   "BECOMING",
   "HEALING",
   "DISCERNING",
-  "DIGNIFIED",
+  "WALKING IN DIGNITY",
   "LED BY GRACE",
   "REBUILDING WITH WISDOM",
+  "A CERTAIN WOMAN",
 ];
 
 export function Hero() {
@@ -99,19 +100,17 @@ export function Hero() {
 
         {/* Marquee */}
         <div className="mt-20 overflow-hidden border-y border-border py-4">
-          <div className="acw-marquee-track">
-            {Array(3)
-              .fill(0)
-              .map((_, i) => (
-                <div key={i} className="flex items-center">
-                  {marqueeItems.map((w) => (
-                    <div key={w} className="flex items-center">
-                      <span>{w}</span>
-                      <Diamond />
-                    </div>
-                  ))}
-                </div>
-              ))}
+          <div className="acw-marquee-track" aria-hidden>
+            {[0, 1].map((i) => (
+              <div key={i} className="flex shrink-0 items-center">
+                {marqueeItems.map((w) => (
+                  <div key={w} className="flex items-center gap-0">
+                    <span className="px-4">{w}</span>
+                    <Diamond />
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </div>
