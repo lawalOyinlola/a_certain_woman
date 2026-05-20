@@ -11,25 +11,25 @@ const PILLARS: { n: string; title: string; body: string; icon: PillarKind }[] = 
   {
     n: "01",
     title: "Rooted in God",
-    body: "Before becoming, before building — she is rooted. Quiet study, daily prayer, a soul that stays.",
+    body: "Before becoming, before building — she is rooted in God. Through quiet study, daily prayer and a soul that learns to stay, she is strengthened from within.",
     icon: "tree",
   },
   {
     n: "02",
     title: "Led by Grace",
-    body: "Not by ambition's sharp edges. Not by hustle's loud bargain. Grace is her compass and her ceiling.",
+    body: "Not by ambition's sharp edges. Not by hustle's loud bargain. Grace is her compass, her covering, and her way home.",
     icon: "crown",
   },
   {
     n: "03",
-    title: "Healing with Purpose",
-    body: "She does the long, unglamorous work of mending — so that what flows from her can nourish, not wound.",
+    title: "Restored in Identity",
+    body: "She is not reduced to her past, her pain, or the names life once gave her. She is restored to truth, dignity, and the woman God always saw.",
     icon: "heart",
   },
   {
     n: "04",
-    title: "Building a life",
-    body: "A life that honors her calling — slow, considered, full of meaning. Not for the feed. For the future.",
+    title: "Raised for Purpose",
+    body: "She rises not to perform, but to serve, lead, love, and build what will outlive her.",
     icon: "house",
   },
 ];
@@ -70,11 +70,11 @@ export function Pillars() {
         </div>
         <h2 className="acw-display acw-display--center mt-6">
           Four <em>pillars.</em>
-          <br /> One quiet life.
+          <br /> One sacred becoming.
         </h2>
         <p className="mx-auto mt-6 max-w-[640px] text-[15px] leading-[1.8] text-muted-foreground">
-          The shape of becoming is not an accident. It is built — daily,
-          tenderly, by hands that know what they&apos;re for.
+          The shape of becoming is not an accident. It is built daily,
+          tenderly - through faith, grace, healing and the quiet courage to keep becoming.
         </p>
       </div>
 
