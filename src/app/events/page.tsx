@@ -1,11 +1,14 @@
+import type { Metadata } from "next";
 import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
 import { EventDetail } from "@/components/sections/event-detail";
 import { EVENTS } from "@/lib/data/events";
 
-export const metadata = {
-  title: "Events — A Certain Woman",
-  description: "Gatherings, circles, and retreats of A Certain Woman.",
+export const metadata: Metadata = {
+  title: "Events",
+  description:
+    "Upcoming gatherings, healing circles, leadership conferences, and outreach events from A Certain Woman.",
+  alternates: { canonical: "/events" },
 };
 
 export default function EventsPage() {
@@ -15,7 +18,7 @@ export default function EventsPage() {
       <main className="pt-32 md:pt-40">
         <header className="mx-auto max-w-[1100px] px-6 text-center md:px-12">
           <div className="acw-section-label justify-center">
-            <span className="acw-num">V.</span>
+            <span className="acw-num">VI.</span>
             <span>Where she gathers</span>
           </div>
           <h1 className="acw-display acw-display--center mt-6">
