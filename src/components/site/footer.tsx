@@ -1,74 +1,81 @@
+import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 
+const COLS = [
+  {
+    h: "Explore",
+    items: [
+      ["Home", "/"],
+      ["About", "/about"],
+      ["Our Work", "/our-work"],
+      ["Programs", "/programs"],
+      ["Events", "/events"],
+    ] as const,
+  },
+  {
+    h: "Engage",
+    items: [
+      ["Partner With Us", "/partner"],
+      ["Stories", "/stories"],
+      ["Gallery", "/gallery"],
+      ["Contact", "/contact"],
+    ] as const,
+  },
+  {
+    h: "Connect",
+    items: [
+      ["Freetown, Sierra Leone", ""],
+      ["info@acertainwoman.org", ""],
+      ["WhatsApp / Phone", ""],
+    ] as const,
+  },
+  {
+    h: "Follow softly",
+    items: [
+      ["Instagram", ""],
+      ["Facebook", ""],
+      ["TikTok", ""],
+    ] as const,
+  },
+];
+
 export function Footer() {
   return (
-    <footer className="bg-forest overflow-hidden px-6 pb-12 pt-16 text-cream-1 md:px-12 md:pt-24">
-      <div className="mx-auto w-full max-w-[1280px]">
-        {/* ── Hero brand block ── */}
-        <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:gap-10">
-          {/* Logo */}
-          <Image
-            src="/assets/logo.png"
-            alt="A Certain Woman logo"
-            width={320}
-            height={320}
-            className="h-24 w-24 shrink-0 object-contain sm:h-80 sm:w-80"
-            priority
-          />
-
-          {/* Wordmark – font size is purely vw-based so it scales with the viewport */}
-          <div className="flex flex-col font-display tracking-[-0.02em] leading-[0.92]">
-            <div className="flex items-baseline gap-[0.15em]">
-              <span className="text-[clamp(40px,9vw,160px)]">A</span>
-              <em className="italic text-gold-2 text-[clamp(40px,9vw,160px)]">
-                Certain
-              </em>
-            </div>
-            <span className="text-[clamp(40px,9vw,160px)]">Woman.</span>
-          </div>
+    <footer className="overflow-hidden bg-forest px-6 pt-24 pb-9 text-cream-1 md:px-12">
+      <div className="mx-auto w-full max-w-[1320px]">
+        {/* Grand type lockup */}
+        <div className="acw-footer-grand">
+          <span>A</span>
+          <em>Certain</em>
+          <span>Woman.</span>
         </div>
 
-        <Separator className="mt-12 bg-cream-1/15" />
+        {/* Tagline */}
+        <div className="my-8 text-center font-display text-[18px] italic tracking-wider text-gold-2">
+          <em> Reclaiming Crowns. Restoring Hearts.</em>
+        </div>
 
-        {/* ── Nav columns ── */}
-        <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-          {[
-            {
-              h: "The sisterhood",
-              items: ["Our story", "Four pillars", "Founders", "Press"],
-            },
-            {
-              h: "Gather",
-              items: [
-                "Find a circle",
-                "Host a circle",
-                "Annual gathering",
-                "Volunteer",
-              ],
-            },
-            {
-              h: "Receive",
-              items: [
-                "Weekly letter",
-                "The reader",
-                "Resources",
-                "Prayer journal",
-              ],
-            },
-            {
-              h: "Follow softly",
-              items: ["TikTok", "Facebook", "Instagram"],
-            },
-          ].map((col) => (
+        <Separator className="bg-cream-1/15" />
+
+        {/* Nav columns */}
+        <div className="mt-14 grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4">
+          {COLS.map((col) => (
             <div key={col.h}>
-              <small className="text-[10px] uppercase tracking-[0.32em] text-cream-1/50">
+              <small className="block text-[11px] uppercase tracking-[0.32em] text-gold-2">
                 {col.h}
               </small>
-              <ul className="mt-4 space-y-2 text-[14px] text-cream-1/85">
-                {col.items.map((it) => (
-                  <li key={it} className="transition-colors hover:text-gold-2">
-                    {it}
+              <ul className="mt-5 space-y-2.5 font-display text-[22px] text-cream-1/85">
+                {col.items.map(([label, href]) => (
+                  <li
+                    key={label}
+                    className="transition-all hover:translate-x-1 hover:text-gold-2"
+                  >
+                    {href ? (
+                      <Link href={href}>{label}</Link>
+                    ) : (
+                      <span>{label}</span>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -76,14 +83,26 @@ export function Footer() {
           ))}
         </div>
 
-        <Separator className="mt-12 bg-cream-1/15" />
+        <Separator className="mt-14 bg-cream-1/15" />
 
-        {/* ── Legal bar ── */}
-        <div className="mt-6 flex flex-col items-center justify-between gap-2 text-[10px] uppercase tracking-[0.28em] text-cream-1/50 sm:flex-row sm:text-[11px]">
+        {/* Legal bar */}
+        <div className="mt-8 flex flex-col items-center justify-between gap-3 text-[11px] uppercase tracking-[0.2em] text-cream-1/50 md:flex-row">
           <span>
-            © {new Date().getFullYear()} A Certain Woman. All rights reserved.
+            A faith-rooted women&apos;s movement restoring identity, healing
+            hearts, raising leaders.
           </span>
-          <span>Made with care, in quiet rooms.</span>
+          <div className="flex-center">
+            <span>
+              © {new Date().getFullYear()} A Certain Woman. All Rights Reserved.
+            </span>
+            <Image
+              src="/assets/logo.png"
+              alt="A Certain Woman"
+              width={20}
+              height={20}
+              className="h-5 w-5 object-contain transition-all"
+            />
+          </div>
         </div>
       </div>
     </footer>
