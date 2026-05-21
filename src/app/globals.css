@@ -80,34 +80,28 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
-    box-sizing: border-box;
+    @apply border-border outline-ring/50 box-border;
   }
   html,
   body {
-    background: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-body), "Inter Tight", system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
+    @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: "ss01", "ss02";
   }
   body {
-    overflow-x: hidden;
+    @apply overflow-x-hidden;
   }
   em {
-    font-style: italic;
+    @apply italic;
   }
   ::selection {
-    background: var(--acw-gold);
-    color: var(--acw-cream-1);
+    @apply bg-gold text-cream-1;
   }
 }
 
 @layer components {
   /* Display headings */
   .acw-display {
-    @apply font-display font-normal leading-[1.02] tracking-[-0.015em] text-forest;
-    font-size: clamp(40px, 5.6vw, 88px);
+    @apply font-display font-normal leading-[1.02] tracking-[-0.015em] text-forest text-[clamp(40px,5.6vw,88px)];
   }
   .acw-display em {
     @apply italic text-gold;
@@ -153,11 +147,8 @@
 
   /* Marquee track */
   .acw-marquee-track {
-    @apply flex items-center text-[11px] uppercase tracking-[0.3em] text-muted-foreground;
-    min-width: max-content;
-    white-space: nowrap;
+    @apply flex items-center text-[11px] uppercase tracking-[0.3em] text-muted-foreground whitespace-nowrap min-w-max will-change-transform;
     animation: acw-marquee 40s linear infinite;
-    will-change: transform;
   }
 
   /* Entrance animations */
@@ -171,7 +162,7 @@
     animation: acw-fade 1s both;
   }
 
-  /* Section surfaces — gradients have no clean @apply form, kept raw */
+  /* Section surfaces — stacked gradients kept raw for legibility */
   .acw-grain {
     background-image:
       radial-gradient(circle at 20% 30%, rgba(182, 145, 74, 0.06) 0%, transparent 40%),
@@ -192,14 +183,12 @@
     background: radial-gradient(ellipse 60% 60% at 80% 20%, rgba(212, 174, 107, 0.18) 0%, transparent 70%);
   }
 
-  /* Hero type scales — clamp() has no Tailwind utility */
+  /* Hero type scales */
   .acw-tagline-small {
-    @apply font-display italic;
-    font-size: clamp(18px, 1.8vw, 26px);
+    @apply font-display italic text-[clamp(18px,1.8vw,26px)];
   }
   .acw-tagline-mega {
-    @apply font-display font-normal leading-[0.9] tracking-[-0.02em] text-forest;
-    font-size: clamp(72px, 14.5vw, 220px);
+    @apply font-display font-normal leading-[0.9] tracking-[-0.02em] text-forest text-[clamp(72px,14.5vw,220px)];
   }
 }
 
@@ -216,13 +205,243 @@
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: none; }
 }
+@keyframes acw-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============== NEW SECTION STYLES (v2 design) ============== */
+
+@layer components {
+  /* Welcome + Declaration */
+  .acw-bg-cream { @apply bg-cream-1; }
+  .acw-decl-rule {
+    @apply w-px h-14 bg-gold/50;
+  }
+  .acw-declaration-quote {
+    @apply font-display italic text-forest text-balance leading-tight text-[clamp(28px,3.4vw,44px)];
+  }
+  .acw-declaration-quote em {
+    @apply text-gold italic;
+  }
+
+  /* Persona / Pillar row — stacked editorial row pattern (shared) */
+  .acw-row {
+    @apply grid items-baseline border-b border-border transition-all duration-300 gap-12 py-11 grid-cols-[100px_minmax(260px,1.3fr)_2fr_22px];
+  }
+  .acw-row.is-in { @apply opacity-100 translate-y-0; }
+  .acw-row.is-out { @apply opacity-0 translate-y-5; }
+  .acw-row:first-child { @apply border-t border-border; }
+  .acw-row:hover { @apply px-[18px] bg-cream-1; }
+  .acw-row:hover .acw-row-tick { @apply text-gold translate-x-1.5; }
+  .acw-row-num {
+    @apply font-display italic text-[32px] text-gold;
+  }
+  .acw-row-title {
+    @apply font-display font-normal text-forest leading-[1.05] tracking-[-0.01em] text-[clamp(28px,3vw,40px)];
+  }
+  .acw-row-body {
+    @apply text-[16px] leading-[1.65] text-muted-foreground text-pretty;
+  }
+  .acw-row-tick {
+    @apply text-muted-foreground transition-[color,transform] duration-300;
+  }
+  @media (max-width: 960px) {
+    .acw-row {
+      @apply grid-cols-[56px_1fr_22px] gap-5;
+    }
+    .acw-row-title { @apply col-start-2 col-end-3; }
+    .acw-row-body { @apply col-start-2 col-end-3 mt-2; }
+    .acw-row-num { @apply text-2xl; }
+  }
+
+  /* Experiences (forest green, tabbed) */
+  .acw-bg-forest {
+    @apply bg-forest text-cream-1;
+  }
+  .acw-exp-tab-bar {
+    @apply grid border-y grid-cols-5 border-cream-2/18;
+  }
+  .acw-exp-tab {
+    @apply text-left transition-colors duration-200 relative px-[18px] py-6 border-r border-cream-2/15 text-cream-2/60;
+  }
+  .acw-exp-tab:last-child { @apply border-r-0; }
+  .acw-exp-tab:hover { @apply text-cream-1 bg-gold-2/6; }
+  .acw-exp-tab.is-active { @apply text-gold-2; }
+  .acw-exp-tab.is-active::before {
+    content: '';
+    @apply absolute inset-x-0 -top-px h-0.5 bg-gold-2;
+  }
+  .acw-exp-tab-n {
+    @apply block font-display italic text-[14px] mb-2;
+  }
+  .acw-exp-tab-title {
+    @apply block font-display text-[18px] leading-[1.2] text-cream-1;
+  }
+  .acw-exp-tab.is-active .acw-exp-tab-title {
+    @apply text-gold-2 italic;
+  }
+  .acw-exp-title {
+    @apply font-display font-normal text-cream-1 text-center leading-[0.95] tracking-[-0.02em] text-[clamp(48px,7vw,100px)];
+  }
+  .acw-exp-title em {
+    @apply text-gold-2 italic;
+  }
+  .acw-exp-features {
+    @apply list-none grid gap-3;
+  }
+  .acw-exp-features li {
+    @apply pl-6 relative font-display italic text-[20px] text-cream-1;
+  }
+  .acw-exp-features li::before {
+    content: '';
+    @apply absolute left-0 top-3 w-3 h-px bg-gold-2;
+  }
+  @media (max-width: 960px) {
+    .acw-exp-tab-bar { @apply grid-cols-2; }
+    .acw-exp-tab:nth-child(2n) { @apply border-r-0; }
+    .acw-exp-tab { @apply border-b border-cream-2/10; }
+  }
+
+  /* Founder letter */
+  .acw-founder-lead {
+    @apply font-display italic text-[22px] leading-[1.45] text-forest pl-5 border-l border-gold;
+  }
+  .acw-founder-emph {
+    @apply font-display italic text-[20px] text-gold;
+  }
+
+  /* Anthem — radial gradient + multi-stop shadow kept raw */
+  .acw-anthem-disc {
+    @apply w-[120px] h-[120px] rounded-full flex items-center justify-center text-cream-1 relative;
+    background: radial-gradient(circle, var(--acw-gold) 0%, var(--acw-gold-2) 30%, var(--acw-green-2) 60%, var(--acw-green) 100%);
+    box-shadow: 0 0 0 1px var(--acw-gold-2), 0 12px 24px -8px rgba(0, 0, 0, 0.3);
+  }
+  .acw-anthem-disc[data-playing="true"] {
+    animation: acw-spin 8s linear infinite;
+  }
+  .acw-anthem-disc-inner {
+    @apply w-14 h-14 rounded-full bg-forest flex items-center justify-center border border-gold-2 text-gold-2;
+  }
+  .acw-anthem-player-glow::before {
+    content: '';
+    @apply absolute inset-0 pointer-events-none;
+    background: radial-gradient(ellipse 60% 80% at 100% 0%, rgba(212, 174, 107, 0.15), transparent 60%);
+  }
+
+  /* Footer grand lockup */
+  .acw-footer-grand {
+    @apply text-center font-display leading-[0.85] tracking-[-0.02em] flex justify-center flex-wrap gap-x-[0.2em] text-[clamp(72px,14vw,220px)];
+  }
+  .acw-footer-grand em { @apply text-gold-2 italic; }
+  .acw-footer-grand span:last-child { @apply text-gold-2; }
+
+  /* Page hero — gradient background kept raw */
+  .acw-page-hero {
+    @apply pt-[220px] pb-[110px] px-12 text-center;
+    background:
+      radial-gradient(ellipse 90% 60% at 50% 0%, var(--acw-cream-2) 0%, transparent 70%),
+      var(--acw-cream-1);
+  }
+  .acw-page-hero h1 {
+    @apply font-display font-normal text-forest leading-[0.92] tracking-[-0.02em] text-[clamp(64px,11vw,168px)];
+  }
+  .acw-page-hero h1 em { @apply text-gold italic; }
+  .acw-page-hero p {
+    @apply max-w-[620px] mx-auto mt-8 text-[17px] leading-[1.65] text-muted-foreground text-pretty;
+  }
+
+  /* Two-up content block */
+  .acw-twoup {
+    @apply grid grid-cols-[1fr_1.5fr] gap-20 items-start;
+  }
+  .acw-twoup-left { @apply sticky top-[120px]; }
+  .acw-twoup-body {
+    @apply text-[17px] leading-[1.75] text-ink-2 flex flex-col gap-[18px] text-pretty;
+  }
+  .acw-page-h2 {
+    @apply font-display font-normal text-forest leading-none tracking-[-0.015em] text-[clamp(44px,5vw,72px)];
+  }
+  .acw-page-h2 em { @apply text-gold italic; }
+  @media (max-width: 960px) {
+    .acw-twoup { @apply grid-cols-1 gap-9; }
+    .acw-twoup-left { @apply static; }
+  }
+
+  /* Value cards */
+  .acw-value-card {
+    @apply border border-border px-7 py-8 bg-cream-1 transition-[border-color,transform] duration-300;
+  }
+  .acw-value-card:hover { @apply border-gold -translate-y-1; }
+  .acw-value-card h3 {
+    @apply font-display font-normal text-[26px] text-forest mb-3.5 tracking-[-0.01em];
+  }
+  .acw-value-card p {
+    @apply text-[15px] leading-[1.65] text-muted-foreground text-pretty;
+  }
+  .acw-vc-num {
+    @apply block font-display italic text-[14px] text-gold mb-3;
+  }
+
+  /* Checklist */
+  .acw-checklist {
+    @apply list-none grid grid-cols-2 gap-y-4 gap-x-9 mt-8;
+  }
+  .acw-checklist li {
+    @apply font-display italic text-[19px] text-forest pl-6 pb-3.5 border-b border-dashed border-border relative;
+  }
+  .acw-checklist li::before {
+    content: '+';
+    @apply absolute left-0 top-0 text-gold font-sans not-italic;
+  }
+  @media (max-width: 960px) {
+    .acw-checklist { @apply grid-cols-1; }
+  }
+
+  /* Contact form fields */
+  .acw-field {
+    @apply block relative;
+  }
+  .acw-field > span {
+    @apply block text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-2;
+  }
+  .acw-field input,
+  .acw-field select,
+  .acw-field textarea {
+    @apply w-full py-3 border-0 border-b border-border bg-transparent text-ink text-[16px] font-sans outline-none transition-colors duration-250;
+  }
+  .acw-field textarea { @apply min-h-[120px] resize-y; }
+  .acw-field input:focus,
+  .acw-field select:focus,
+  .acw-field textarea:focus { @apply border-gold; }
+  .acw-field input::placeholder,
+  .acw-field textarea::placeholder {
+    @apply text-muted-foreground opacity-50 italic;
+  }
+
+  .acw-contact-form {
+    @apply grid grid-cols-2 gap-6 max-w-[760px] mx-auto;
+  }
+  .acw-contact-form .acw-field--full { @apply col-span-2; }
+  .acw-contact-info {
+    @apply grid grid-cols-4 gap-8 mt-[100px] pt-12 border-t border-border text-center;
+  }
+  .acw-contact-info small {
+    @apply block text-[10px] tracking-[0.32em] text-gold mb-3;
+  }
+  .acw-contact-info span {
+    @apply font-display italic text-[20px] text-forest;
+  }
+  @media (max-width: 960px) {
+    .acw-contact-form { @apply grid-cols-1; }
+    .acw-contact-info { @apply grid-cols-2 gap-6; }
+  }
+}
 
 @layer utilities {
   .flex-center {
     @apply flex items-center justify-center;
   }
   .acw-diamond-spacer {
-    margin: 0 22px;
-    opacity: 0.6;
+    @apply mx-[22px] opacity-60;
   }
 }
