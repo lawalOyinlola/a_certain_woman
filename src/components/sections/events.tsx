@@ -23,7 +23,7 @@ export function Events() {
       <div className="mx-auto max-w-[1280px]">
         <div className="text-center">
           <div className="acw-section-label justify-center">
-            <span className="acw-num">V.</span>
+            <span className="acw-num">VI.</span>
             <span>Where she gathers</span>
           </div>
           <h2 className="acw-display acw-display--center mt-6">
