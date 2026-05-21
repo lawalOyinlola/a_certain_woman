@@ -1,16 +1,35 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 
-const ROLES = ["Letter", "Circle", "Volunteer", "Prayer"] as const;
+const PATHS = [
+  {
+    kind: "JOIN",
+    title: "Join the Movement",
+    body: "Receive our quiet letters, find a circle near you, and gather with women becoming whole.",
+    cta: "Begin",
+    href: "/contact",
+  },
+  {
+    kind: "PARTNER",
+    title: "Partner With Us",
+    body: "Churches, companies, NGOs, and government partners — build restoration alongside ACW.",
+    cta: "Become a Partner",
+    href: "/partner",
+  },
+  {
+    kind: "SUPPORT",
+    title: "Support Our Work",
+    body: "Sponsor a woman, fund an outreach, support an event, or become a monthly partner.",
+    cta: "Give / Support ACW",
+    href: "/partner#support",
+  },
+];
 
-export function Join() {
+export function Join({ withLabel = true }: { withLabel?: boolean }) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
@@ -28,163 +47,135 @@ export function Join() {
   return (
     <section
       id="join"
-      className="acw-bg-cream-up relative px-6 py-24 md:px-12 md:py-36"
+      className="acw-bg-cream-up relative px-6 py-32 md:px-12 md:py-40"
     >
-      <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
-        <div>
+      <div className="mx-auto mb-20 flex max-w-[760px] flex-col items-center text-center">
+        {withLabel && (
           <div className="acw-section-label">
-            <span className="acw-num">VII.</span>
+            <span className="acw-num">IX.</span>
             <span>An invitation</span>
           </div>
-          <h2 className="acw-display mt-6">
-            Join the
-            <br />
-            <em>sisterhood.</em>
-          </h2>
-          <p className="mt-8 max-w-[460px] text-[15px] leading-[1.85] text-ink-2">
-            We gather monthly — for Scripture, for stillness, for the slow work
-            of becoming together. Volunteer, attend a circle, or simply receive
-            our weekly letter.
-          </p>
+        )}
+        <h2 className="acw-display acw-display--center mt-6">
+          There is a place for you
+          <br />
+          <em>in this movement.</em>
+        </h2>
+        <p className="mt-7 max-w-[620px] text-[17px] leading-[1.65] text-muted-foreground">
+          Whether you are a woman seeking healing, a leader desiring to mentor
+          others, a church or organization looking to collaborate, or a donor
+          wanting to support transformational work — A Certain Woman welcomes
+          you.
+        </p>
+      </div>
 
-          <ul className="mt-10 space-y-4 text-[14px] text-ink-2">
-            {[
-              "Weekly letter, every Sunday morning",
-              "Local circles in 47 cities",
-              "Volunteer roles: writers, hosts, prayer partners",
-              "Annual gathering — Spring 2026",
-            ].map((item) => (
-              <li key={item} className="flex gap-3">
-                <span className="font-display text-gold">—</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+      {/* 3 pathways */}
+      <div className="mx-auto mb-24 grid max-w-[1320px] gap-6 md:grid-cols-3">
+        {PATHS.map((p) => (
+          <article
+            key={p.kind}
+            className="flex flex-col gap-5 border border-border bg-cream-1 p-10 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold hover:shadow-[0_28px_60px_-28px_rgba(31,38,32,0.18)]"
+          >
+            <small className="text-[10px] uppercase tracking-[0.32em] text-gold">
+              {p.kind}
+            </small>
+            <h3 className="font-display text-[34px] leading-[1.05] tracking-[-0.01em] text-forest">
+              {p.title}
+            </h3>
+            <p className="flex-1 text-[15px] leading-[1.65] text-muted-foreground">
+              {p.body}
+            </p>
+            <Link href={p.href} className="acw-link-arrow w-fit">
+              {p.cta}
+              <svg
+                width="14"
+                height="10"
+                viewBox="0 0 14 10"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.2"
+              >
+                <path d="M0 5h12M8 1l4 4-4 4" />
+              </svg>
+            </Link>
+          </article>
+        ))}
+      </div>
+
+      {/* Newsletter */}
+      <div className="relative mx-auto grid max-w-[1320px] gap-16 border border-border bg-cream-1 p-10 md:grid-cols-2 md:gap-16 md:p-16">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-3 border border-border"
+        />
+        <div className="relative">
+          <small className="acw-section-label-mini">QUIET LETTER</small>
+          <h3 className="mt-3 font-display text-[clamp(40px,4.5vw,64px)] font-normal leading-[0.95] tracking-[-0.015em] text-forest">
+            Receive the
+            <br />
+            <em className="italic text-gold">weekly letter.</em>
+          </h3>
+          <p className="mt-6 text-[16px] leading-[1.65] text-muted-foreground">
+            Sundays. Quietly written. Freely sent. Reflections, scripture, and
+            notes on the journey of becoming.
+          </p>
         </div>
 
-        <Card className="rounded-md border-border bg-cream-1 shadow-[0_30px_60px_-30px_rgba(31,61,43,0.18)]">
-          <CardContent className="p-8 md:p-10">
-            {!submitted ? (
-              <form onSubmit={onSubmit} className="space-y-6">
-                <div className="flex items-center justify-between border-b border-border pb-4">
-                  <small className="text-[10px] uppercase tracking-[0.32em] text-muted-foreground">
-                    FORM 01 / NEWSLETTER
-                  </small>
-                  <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                </div>
-                <div>
-                  <h3 className="font-display text-[36px] leading-[1.05] text-forest">
-                    Receive the
-                    <br /> weekly letter.
-                  </h3>
-                  <p className="mt-3 text-[14px] text-muted-foreground">
-                    Sundays. Quietly written. Freely sent.
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="grid gap-2">
-                    <Label
-                      htmlFor="join-name"
-                      className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground"
-                    >
-                      Name
-                    </Label>
-                    <Input
-                      id="join-name"
-                      placeholder="Her name"
-                      className="h-11 rounded-md border-border bg-cream-1 text-[14px] placeholder:text-muted-foreground/60 focus-visible:border-gold focus-visible:ring-gold/30"
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label
-                      htmlFor="join-email"
-                      className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground"
-                    >
-                      Email
-                    </Label>
-                    <Input
-                      id="join-email"
-                      type="email"
-                      placeholder="her@email.com"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        setError("");
-                      }}
-                      className="h-11 rounded-md border-border bg-cream-1 text-[14px] placeholder:text-muted-foreground/60 focus-visible:border-gold focus-visible:ring-gold/30"
-                    />
-                    {error && (
-                      <small className="text-[12px] text-destructive">
-                        {error}
-                      </small>
-                    )}
-                  </div>
-                </div>
-
-                <fieldset>
-                  <legend className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-                    I&apos;m interested in
-                  </legend>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {ROLES.map((r) => (
-                      <Label
-                        key={r}
-                        htmlFor={`role-${r}`}
-                        className="flex cursor-pointer items-center gap-2 rounded-full border border-border px-4 py-2 text-[12px] tracking-wider text-ink-2 transition-colors hover:border-gold has-[input:checked]:border-gold has-[input:checked]:bg-gold/10 has-[input:checked]:text-forest"
-                      >
-                        <Checkbox
-                          id={`role-${r}`}
-                          defaultChecked={r === "Letter"}
-                          className="border-border data-[state=checked]:border-gold data-[state=checked]:bg-gold"
-                        />
-                        {r}
-                      </Label>
-                    ))}
-                  </div>
-                </fieldset>
-
-                <Button
-                  type="submit"
-                  variant="editorial"
-                  size="pill"
-                  className="w-full"
+        <div className="relative">
+          {!submitted ? (
+            <form onSubmit={onSubmit} className="flex flex-col gap-3">
+              <label className="acw-field">
+                <span>Your email</span>
+                <input
+                  type="email"
+                  placeholder="her@email.com"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setError("");
+                  }}
+                />
+              </label>
+              {error && (
+                <div className="text-[13px] text-destructive">{error}</div>
+              )}
+              <Button
+                type="submit"
+                variant="editorial"
+                size="pill"
+                className="mt-3 w-full"
+              >
+                Begin <ArrowRight />
+              </Button>
+              <small className="mt-3 block text-[11px] leading-snug text-muted-foreground">
+                Unsubscribe anytime. We write gently and infrequently.
+              </small>
+            </form>
+          ) : (
+            <div className="flex flex-col items-center gap-4 py-10 text-center">
+              <div className="text-gold">
+                <svg
+                  viewBox="0 0 60 60"
+                  width="60"
+                  height="60"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
                 >
-                  Begin <ArrowRight />
-                </Button>
-                <small className="block text-[11px] leading-snug text-muted-foreground">
-                  By beginning you agree to our gentle, infrequent letters.
-                  Unsubscribe anytime.
-                </small>
-              </form>
-            ) : (
-              <div className="flex flex-col items-center gap-4 py-10 text-center">
-                <div className="text-gold">
-                  <svg
-                    viewBox="0 0 60 60"
-                    width="60"
-                    height="60"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                  >
-                    <circle cx="30" cy="30" r="28" />
-                    <path d="M18 30 L26 38 L42 22" />
-                  </svg>
-                </div>
-                <h3 className="font-display text-[32px] text-forest">
-                  Welcome, sister.
-                </h3>
-                <p className="text-[14px] text-ink-2">
-                  Your first letter arrives this Sunday.
-                </p>
-                <em className="font-display text-[16px] italic text-gold">
-                  Until then — peace.
-                </em>
+                  <circle cx="30" cy="30" r="28" />
+                  <path d="M18 30 L26 38 L42 22" />
+                </svg>
               </div>
-            )}
-          </CardContent>
-        </Card>
+              <h3 className="font-display text-[32px] text-forest">Welcome.</h3>
+              <p className="text-[14px] text-ink-2">
+                Your first letter arrives this Sunday.
+              </p>
+              <em className="font-display text-[16px] italic text-gold">
+                Until then — peace.
+              </em>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
