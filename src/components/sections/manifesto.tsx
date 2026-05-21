@@ -22,69 +22,56 @@ export function Manifesto() {
   return (
     <section
       ref={ref}
-      className="relative bg-cream-2 px-6 py-32 md:px-12 md:py-44"
+      className="relative bg-cream-1 px-6 py-40 md:px-12 md:py-52"
     >
-      <div className="mx-auto max-w-[1080px] text-center">
-        {/* Parallax ornament */}
+      <div className="mx-auto max-w-[1100px] text-center">
+        {/* Parallax crown ornament */}
         <div
-          className="mx-auto h-14 w-14 text-gold"
+          className="mx-auto mb-12 h-16 w-16 text-gold"
           style={{ transform: `translateY(${(1 - p) * 40}px)`, opacity: p }}
         >
           <svg
             viewBox="0 0 60 60"
-            width="56"
-            height="56"
+            width="60"
+            height="60"
             fill="none"
             stroke="currentColor"
             strokeWidth="0.6"
           >
-            <circle cx="30" cy="30" r="29" />
-            <path
-              d="M18 24 Q22 18 26 22 Q22 26 18 24 Z M34 24 Q38 18 42 22 Q38 26 34 24 Z"
-              fill="currentColor"
-              opacity="0.3"
-            />
-            <path d="M20 36 Q30 44 40 36" />
+            <path d="M6 44 L12 18 L22 32 L30 12 L38 32 L48 18 L54 44 Z" />
+            <line x1="6" y1="44" x2="54" y2="44" />
+            <circle cx="12" cy="18" r="1.5" fill="currentColor" />
+            <circle cx="30" cy="12" r="1.5" fill="currentColor" />
+            <circle cx="48" cy="18" r="1.5" fill="currentColor" />
           </svg>
         </div>
 
-        {/* Section label — matches the pattern used everywhere else */}
-        <div className="acw-section-label mt-10 justify-center">
-          <span className="acw-num">IV.</span>
-          <span>Who is A Certain Woman?</span>
-        </div>
-
-        {/* Gold hairline */}
-        <div className="acw-rule-line mx-auto mt-6" />
-
-        {/* Big editorial pull quote */}
-        <h2 className="acw-display acw-display--center relative mt-12">
+        <h2 className="relative font-display text-[clamp(40px,7vw,108px)] leading-none tracking-[-0.02em] text-forest">
           <span
             aria-hidden
-            className="pointer-events-none absolute -top-16 left-1/2 translate-x-[-200px] font-display text-[140px] italic leading-none text-gold/20 md:translate-x-[-260px]"
+            className="pointer-events-none absolute -left-2 -top-6 font-display text-[1.4em] italic leading-none text-gold/40"
           >
             &ldquo;
           </span>
+          <span className="block">For the woman</span>
           <span className="block">
-            She is the one who <em>rises</em>
+            who is <em className="italic text-gold">healing quietly.</em>
           </span>
           <span className="block">
-            after the <em>fire</em>.
+            The woman <em className="italic text-gold">rebuilding</em>
           </span>
+          <span className="block">her voice — and the one</span>
           <span className="block">
-            <em>Crowned</em>, not conquered.
+            leading while still <em className="italic text-gold">becoming.</em>
           </span>
         </h2>
 
-        {/* Body */}
-        <p className="mx-auto mt-14 max-w-[620px] text-[15px] leading-[1.85] text-ink-2">
-          She is not shaped by pressure, comparison or the broken places she has
-          survived. She is a woman becoming whole again — rooted in God, led by
-          grace, guided by wisdom and rising with purpose.
+        <p className="mx-auto mt-14 max-w-[580px] text-[18px] leading-[1.6] text-muted-foreground">
+          Your crown was never lost. Only waiting to be reclaimed.
         </p>
 
-        <div className="mt-10 font-display text-[16px] italic text-gold">
-          — A Certain Woman
+        <div className="mt-8 font-display text-[18px] italic text-gold">
+          — The ACW Movement Statement
         </div>
       </div>
     </section>
