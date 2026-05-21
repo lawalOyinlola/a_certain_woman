@@ -14,11 +14,10 @@ import { Button } from "@/components/ui/button";
 const marqueeItems = [
   "BECOMING",
   "HEALING",
-  "DISCERNING",
-  "WALKING IN DIGNITY",
-  "LED BY GRACE",
-  "REBUILDING WITH WISDOM",
-  "A CERTAIN WOMAN",
+  "LEADING",
+  "RESTORED",
+  "SEEN",
+  "CROWNED WITH PURPOSE",
 ];
 
 export function Hero() {
@@ -57,7 +56,7 @@ export function Hero() {
         {/* Eyebrow */}
         <div className="acw-fade flex-center gap-4 text-[11px] uppercase tracking-[0.32em] text-gold">
           <Crown />
-          <span>EST. FEB 2026 · A SISTERHOOD OF BECOMING</span>
+          <span>EST. FEB 2026 · A FAITH-ROOTED WOMEN&apos;S MOVEMENT</span>
           <Crown flip />
         </div>
 
@@ -81,20 +80,24 @@ export function Hero() {
           <span className="acw-rule-line" />
         </div>
 
-        <p className="mx-auto mt-4 max-w-[600px] text-balance text-[15px] leading-[1.7] text-ink-2">
-          A sisterhood for women in every season of becoming — healing with
-          grace, rising in purpose and guided by the life God has called them to
-          build.
+        <p className="mx-auto mt-4 max-w-[640px] text-balance text-[15px] leading-[1.7] text-ink-2">
+          A faith-rooted women&apos;s movement for healing, leadership, and
+          becoming. Restoring identity. Nurturing healing. Raising leaders.
+          Creating safe spaces where women are seen, heard, healed, and
+          crowned with purpose.
         </p>
 
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
           <Button asChild variant="editorial" size="pill">
-            <Link href="#join">
-              Join the sisterhood <ArrowRight />
+            <Link href="/partner">
+              Join the Movement <ArrowRight />
             </Link>
           </Button>
           <Button asChild variant="editorialOutline" size="pill">
-            <Link href="#story">Read her story</Link>
+            <Link href="/partner">Partner With Us</Link>
+          </Button>
+          <Button asChild variant="editorialOutline" size="pill">
+            <Link href="/programs">Explore Programs</Link>
           </Button>
         </div>
 
