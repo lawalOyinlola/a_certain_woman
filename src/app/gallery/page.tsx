@@ -1,10 +1,13 @@
+import type { Metadata } from "next";
 import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
 import { Gallery } from "@/components/sections/gallery";
 
-export const metadata = {
-  title: "Gallery — A Certain Woman",
-  description: "The gathering, in pictures.",
+export const metadata: Metadata = {
+  title: "Gallery",
+  description:
+    "Moments of healing, leadership, sisterhood, and celebration — the gathering, in pictures.",
+  alternates: { canonical: "/gallery" },
 };
 
 export default function GalleryPage() {
