@@ -4,11 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ACWEvent } from "@/lib/data/events";
 import { Play } from "@/components/site/icons";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 export function EventDetail({ event }: { event: ACWEvent }) {
   const [lb, setLb] = useState<number | null>(null);
@@ -23,7 +19,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
         setLb((k) =>
           k === null
             ? null
-            : (k - 1 + event.photos.length) % event.photos.length
+            : (k - 1 + event.photos.length) % event.photos.length,
         );
     };
     window.addEventListener("keydown", onKey);
@@ -55,7 +51,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
       </header>
 
       <div className="mx-auto mt-12 max-w-[1280px]">
-        <div className="relative aspect-[16/9] overflow-hidden rounded-md border border-border">
+        <div className="relative aspect-video overflow-hidden rounded-md border border-border">
           <Image
             src={event.cover}
             alt={event.title}
@@ -106,7 +102,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
             onClick={() => setVideoOpen(true)}
             className="group relative mt-3 block w-full overflow-hidden rounded-md border border-border"
           >
-            <div className="relative aspect-[21/9]">
+            <div className="relative aspect-21/9">
               <Image
                 src={event.cover}
                 alt="Play recap"
@@ -135,7 +131,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
             <button
               key={k}
               onClick={() => setLb(k)}
-              className="group relative aspect-[4/5] overflow-hidden rounded-md border border-border bg-cream-2"
+              className="group relative aspect-4/5 overflow-hidden rounded-md border border-border bg-cream-2"
             >
               <Image
                 src={p}
@@ -157,7 +153,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
           <DialogTitle className="sr-only">Photo</DialogTitle>
           {lb !== null && (
             <div className="relative">
-              <div className="relative aspect-[4/3] w-full">
+              <div className="relative aspect-4/3 w-full">
                 <Image
                   src={event.photos[lb]}
                   alt={`${event.title} photo ${lb + 1}`}
@@ -180,7 +176,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
                   setLb((k) =>
                     k === null
                       ? null
-                      : (k - 1 + event.photos.length) % event.photos.length
+                      : (k - 1 + event.photos.length) % event.photos.length,
                   )
                 }
                 className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-cream-1/90 px-3 py-2 text-forest hover:bg-gold hover:text-cream-1"
@@ -191,7 +187,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
               <button
                 onClick={() =>
                   setLb((k) =>
-                    k === null ? null : (k + 1) % event.photos.length
+                    k === null ? null : (k + 1) % event.photos.length,
                   )
                 }
                 className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-cream-1/90 px-3 py-2 text-forest hover:bg-gold hover:text-cream-1"
