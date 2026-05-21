@@ -1,26 +1,32 @@
 import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
 import { Hero } from "@/components/sections/hero";
-import { About } from "@/components/sections/about";
+import { Welcome } from "@/components/sections/welcome";
+import { WhoWeServe } from "@/components/sections/who-we-serve";
 import { Pillars } from "@/components/sections/pillars";
-import { Quotes } from "@/components/sections/quotes";
+import { Experiences } from "@/components/sections/experiences";
 import { Manifesto } from "@/components/sections/manifesto";
+import { Founder } from "@/components/sections/founder";
 import { Events } from "@/components/sections/events";
-import { Gallery } from "@/components/sections/gallery";
+import { StoriesPreview } from "@/components/sections/stories";
+import { Anthem } from "@/components/sections/anthem";
 import { Join } from "@/components/sections/join";
 
 export default function HomePage() {
   return (
     <>
       <Nav />
-      <main>
+      <main id="top">
         <Hero />
-        <About />
+        <Welcome />
+        <WhoWeServe />
         <Pillars />
-        <Quotes />
+        <Experiences />
         <Manifesto />
+        <Founder />
         <Events />
-        <Gallery />
+        <StoriesPreview />
+        <Anthem />
         <Join />
       </main>
       <Footer />
