@@ -56,7 +56,7 @@ export function Hero() {
         {/* Eyebrow */}
         <div className="acw-fade flex-center gap-4 text-[11px] uppercase tracking-[0.32em] text-gold">
           <Crown />
-          <span>EST. FEB 2026 · A FAITH-ROOTED WOMEN&apos;S MOVEMENT</span>
+          <span>A FAITH-ROOTED WOMEN&apos;S MOVEMENT</span>
           <Crown flip />
         </div>
 
@@ -80,11 +80,9 @@ export function Hero() {
           <span className="acw-rule-line" />
         </div>
 
-        <p className="mx-auto mt-4 max-w-[640px] text-balance text-[15px] leading-[1.7] text-ink-2">
-          A faith-rooted women&apos;s movement for healing, leadership, and
-          becoming. Restoring identity. Nurturing healing. Raising leaders.
-          Creating safe spaces where women are seen, heard, healed, and
-          crowned with purpose.
+        <p className="mx-auto max-w-[640px] text-balance text-[15px] leading-[1.7] text-ink-2">
+          Restoring identity. Nurturing healing. Raising leaders. Creating safe
+          spaces where women are seen, heard, healed, and crowned with purpose.
         </p>
 
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
@@ -97,7 +95,7 @@ export function Hero() {
             <Link href="/partner">Partner With Us</Link>
           </Button>
           <Button asChild variant="editorialOutline" size="pill">
-            <Link href="/programs">Explore Programs</Link>
+            <Link href="/events">View Upcoming Events</Link>
           </Button>
         </div>
 
