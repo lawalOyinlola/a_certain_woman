@@ -29,6 +29,11 @@ const PERSONAS = [
     title: "The Community Woman",
     body: "For mothers, caregivers, widows, single parents, survivors, mentors, and everyday women carrying responsibility with grace.",
   },
+  {
+    n: "06",
+    title: "& Allies, Mentors, Partners",
+    body: "For everyone who walks alongside her — pastors, sponsors, volunteers, and friends investing in her becoming.",
+  },
 ];
 
 export function WhoWeServe() {
@@ -42,10 +47,7 @@ export function WhoWeServe() {
         entries.forEach((e) => {
           if (e.isIntersecting) {
             const idx = Number((e.target as HTMLElement).dataset.idx);
-            setTimeout(
-              () => setActive((p) => Math.max(p, idx)),
-              idx * 100
-            );
+            setTimeout(() => setActive((p) => Math.max(p, idx)), idx * 80);
           }
         });
       },
@@ -56,46 +58,40 @@ export function WhoWeServe() {
   }, []);
 
   return (
-    <section
-      id="who"
-      className="bg-cream-2 px-6 py-32 md:px-12 md:py-36"
-    >
-      <div className="mx-auto mb-16 grid max-w-[1320px] items-end gap-16 md:grid-cols-[1fr_2fr] md:gap-16">
-        <div>
+    <section id="who" className="bg-cream-1 px-6 py-32 md:px-12 md:py-36">
+      <div className="mx-auto mb-16 grid max-w-[1320px] items-end gap-10 md:mb-24 md:grid-cols-[1.5fr_1fr] md:gap-16">
+        <div className="flex flex-col gap-7">
           <div className="acw-section-label">
             <span className="acw-num">II.</span>
             <span>Who we serve</span>
           </div>
+          <h2 className="acw-display">
+            For every woman
+            <br />
+            <em>still becoming.</em>
+          </h2>
         </div>
-        <h2 className="acw-display">
-          For every woman
-          <br />
-          <em>still becoming.</em>
-        </h2>
+        <p className="font-display italic text-[18px] leading-snug text-ink-2 md:max-w-[340px] md:justify-self-end md:text-right">
+          Women in every season — healing, rising, leading, becoming.
+        </p>
       </div>
 
-      <div ref={ref} className="mx-auto max-w-[1320px]">
+      <div
+        ref={ref}
+        className="mx-auto grid max-w-[1320px] grid-cols-1 gap-x-14 gap-y-14 sm:grid-cols-2 md:grid-cols-3"
+      >
         {PERSONAS.map((p, i) => (
           <article
             key={p.n}
             data-idx={i}
-            className={cn("acw-row", active >= i ? "is-in" : "is-out")}
+            className={cn(
+              "acw-persona-card transition-all duration-700 ease-out",
+              active >= i ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+            )}
           >
-            <span className="acw-row-num">{p.n}</span>
-            <h3 className="acw-row-title">{p.title}</h3>
-            <p className="acw-row-body">{p.body}</p>
-            <span className="acw-row-tick">
-              <svg
-                width="22"
-                height="14"
-                viewBox="0 0 22 14"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.2"
-              >
-                <path d="M1 7h20M16 1l5 6-5 6" />
-              </svg>
-            </span>
+            <span className="acw-persona-num">{p.n}</span>
+            <h3 className="acw-persona-title mt-4">{p.title}</h3>
+            <p className="acw-persona-body mt-5">{p.body}</p>
           </article>
         ))}
       </div>
