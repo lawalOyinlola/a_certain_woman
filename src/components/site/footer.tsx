@@ -53,7 +53,7 @@ export function Footer() {
 
         {/* Tagline */}
         <div className="my-8 text-center font-display text-[18px] italic tracking-wider text-gold-2">
-          <em> Reclaiming Crowns. Restoring Hearts.</em>
+          <em> Restoring Hearts. Reclaiming Crowns</em>
         </div>
 
         <Separator className="bg-cream-1/15" />
