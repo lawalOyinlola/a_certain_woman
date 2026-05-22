@@ -56,10 +56,7 @@ export function Anthem() {
   };
 
   return (
-    <section
-      id="anthem"
-      className="bg-cream-1 px-6 py-32 md:px-12 md:py-36"
-    >
+    <section id="anthem" className="bg-cream-1 px-6 py-32 md:px-12 md:py-36">
       <div className="mx-auto grid max-w-[1320px] items-center gap-12 md:grid-cols-[1fr_1.3fr] md:gap-20">
         <div>
           <div className="acw-section-label">
@@ -78,7 +75,11 @@ export function Anthem() {
         </div>
 
         <div className="acw-anthem-player-glow relative grid items-center gap-8 overflow-hidden bg-forest p-9 text-cream-1 md:grid-cols-[120px_1fr]">
-          <audio ref={audioRef} src="/assets/anthem.mp3" preload="metadata" />
+          <audio
+            ref={audioRef}
+            src="/assets/ACW_anthem.mp3"
+            preload="metadata"
+          />
           <div
             className="acw-anthem-disc mx-auto md:mx-0"
             data-playing={playing}
@@ -105,7 +106,7 @@ export function Anthem() {
                 ACW · TRACK 01
               </small>
               <strong className="font-display text-[28px] font-normal tracking-[-0.01em] text-cream-1">
-                Naimbana Street
+                A Certain Woman
               </strong>
               <em className="font-display text-[16px] italic text-cream-1/65">
                 — The Movement Anthem
