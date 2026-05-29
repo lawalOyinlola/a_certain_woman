@@ -4,8 +4,7 @@ import { Footer } from "@/components/site/footer";
 import { EventsBrowser } from "./events-browser";
 import { EVENTS, isUpcoming, type ACWEvent } from "@/lib/data/events";
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://acertainwoman.org";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://acertainwoman.org";
 
 function eventToJsonLd(event: ACWEvent) {
   const upcoming = isUpcoming(event);
