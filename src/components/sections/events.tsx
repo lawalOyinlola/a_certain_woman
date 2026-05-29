@@ -220,8 +220,7 @@ function FeaturedEvent({ event, mode }: { event: ACWEvent; mode: Mode }) {
           {event.date} · {event.location}
         </small>
         <h3 className="mt-4 font-display text-[clamp(40px,4.5vw,72px)] leading-[1.02] tracking-[-0.015em] text-forest">
-          {event.title}.{" "}
-          <em className="text-gold">{event.subtitle}</em>
+          {event.title}. <em className="text-gold">{event.subtitle}</em>
         </h3>
         {event.theme && (
           <p className="mt-3 font-display text-[17px] italic text-gold">
@@ -288,8 +287,7 @@ function UpcomingCard({ event }: { event: ACWEvent }) {
           {event.location}
         </small>
         <h4 className="mt-2 font-display text-[26px] leading-[1.05] text-forest">
-          {event.title}.{" "}
-          <em className="text-gold">{event.subtitle}</em>
+          {event.title}. <em className="text-gold">{event.subtitle}</em>
         </h4>
         <span className="mt-4 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-forest transition-[gap,color] duration-200 group-hover:gap-3 group-hover:text-gold">
           View details <ArrowRightThin />
@@ -351,7 +349,7 @@ function ArchiveCard({ event }: { event: ACWEvent }) {
           sizes="(min-width: 768px) 25vw, 50vw"
           className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-forest/70 via-forest/10 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-forest/70 via-forest/10 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 px-4 py-4 text-cream-1">
           <small className="block text-[9px] uppercase tracking-[0.3em] text-cream-1/80">
             {formatShortDate(event)}
