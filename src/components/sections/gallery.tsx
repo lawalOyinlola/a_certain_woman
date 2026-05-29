@@ -2,23 +2,132 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { PHOTOS } from "@/lib/data/events";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { EVENTS, type ACWEvent } from "@/lib/data/events";
 import { Play, ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
-type LightboxState = number | "video" | null;
+type MediaItem =
+  | {
+      kind: "photo";
+      src: string;
+      alt: string;
+      caption: string;
+      eventId?: string;
+      eventTitle?: string;
+    }
+  | {
+      kind: "video";
+      src: string;
+      poster?: string;
+      duration?: string;
+      title: string;
+      eventId: string;
+      eventTitle: string;
+    };
+
+const UNCATEGORIZED: MediaItem[] = [
+  {
+    kind: "photo",
+    src: "/photos/01.jpg",
+    alt: "A Certain Woman group photo with banners",
+    caption: "The gathering. Guests, founders, and friends.",
+  },
+  {
+    kind: "photo",
+    src: "/photos/02.jpg",
+    alt: "Sister sharing testimony at the mic",
+    caption: "A testimony, softly spoken",
+  },
+  {
+    kind: "photo",
+    src: "/photos/05.jpg",
+    alt: "The volunteer team in white",
+    caption: "The volunteer team. Sisters who served.",
+  },
+];
+
+const UNCATEGORIZED_ID = "__uncat__";
+
+function buildMedia(): MediaItem[] {
+  const fromEvents = EVENTS.flatMap<MediaItem>((e) => {
+    const photos: MediaItem[] = e.photos.map((src, idx) => ({
+      kind: "photo",
+      src,
+      alt: `${e.title}, photo ${idx + 1}`,
+      caption: `${e.title} · ${e.location}`,
+      eventId: e.id,
+      eventTitle: e.title,
+    }));
+    const videos: MediaItem[] = (e.videos ?? []).map((v) => ({
+      kind: "video",
+      src: v.src,
+      poster: v.poster ?? e.cover,
+      duration: v.duration,
+      title: v.title ?? "Recap film",
+      eventId: e.id,
+      eventTitle: e.title,
+    }));
+    return [...videos, ...photos];
+  });
+  return [...fromEvents, ...UNCATEGORIZED];
+}
+
+function spanForIndex(idx: number, kind: MediaItem["kind"]): string {
+  if (kind === "video") return "col-span-2 row-span-2";
+  const pattern = ["", "row-span-2", "", "col-span-2", "", "row-span-2"] as const;
+  return pattern[idx % pattern.length];
+}
 
 export function Gallery({ compact = false }: { compact?: boolean }) {
-  const [lb, setLb] = useState<LightboxState>(null);
+  const media = useMemo(() => buildMedia(), []);
+  const eventsWithMedia = useMemo<ACWEvent[]>(
+    () =>
+      EVENTS.filter((e) => e.photos.length > 0 || (e.videos?.length ?? 0) > 0),
+    [],
+  );
 
-  const close = () => setLb(null);
+  const counts = useMemo(() => {
+    const map = new Map<string, number>();
+    map.set("__all__", media.length);
+    map.set(UNCATEGORIZED_ID, UNCATEGORIZED.length);
+    for (const m of media) {
+      if (m.eventId) map.set(m.eventId, (map.get(m.eventId) ?? 0) + 1);
+    }
+    return map;
+  }, [media]);
+
+  const [filter, setFilter] = useState<string>("__all__");
+  const [lb, setLb] = useState<number | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const visible = useMemo(() => {
+    if (filter === "__all__") return media;
+    if (filter === UNCATEGORIZED_ID) return media.filter((m) => !m.eventId);
+    return media.filter((m) => m.eventId === filter);
+  }, [media, filter]);
+
+  const selectFilter = (next: string) => {
+    setFilter(next);
+    setLb(null);
+  };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (lb === null) return;
+      if (e.key === "ArrowRight")
+        setLb((k) => (k === null ? null : (k + 1) % visible.length));
+      if (e.key === "ArrowLeft")
+        setLb((k) =>
+          k === null ? null : (k - 1 + visible.length) % visible.length,
+        );
+      if (e.key === "Escape") setLb(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lb, visible.length]);
 
   return (
     <section id="gallery" className="relative px-6 py-24 md:px-12 md:py-36">
@@ -34,71 +143,93 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
             <em>the room.</em>
           </h2>
           <p className="mx-auto mt-6 max-w-[640px] text-[15px] leading-[1.8] text-muted-foreground">
-            Faces, voices, and quiet corners from our gatherings — the
+            Faces, voices, and quiet corners from our gatherings. The
             sisterhood, captured.
           </p>
         </div>
       )}
 
-      <div
-        className={cn(
-          "mx-auto mt-16 grid max-w-[1280px] auto-rows-[240px] grid-cols-2 gap-3 md:grid-cols-4 md:auto-rows-[260px]"
-        )}
-      >
-        {/* Video tile */}
-        <button
-          onClick={() => setLb("video")}
-          className="group relative col-span-2 row-span-2 overflow-hidden rounded-md border border-border bg-cream-2"
-        >
-          <Image
-            src={PHOTOS[0].src}
-            alt="Play recap video"
-            fill
-            sizes="(min-width: 768px) 50vw, 100vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+      {/* Filter chips */}
+      {eventsWithMedia.length > 0 && (
+        <div className="mx-auto mt-12 flex max-w-[1280px] flex-wrap items-center gap-2 border-y border-border py-4">
+          <FilterChip
+            label="All"
+            count={counts.get("__all__") ?? 0}
+            active={filter === "__all__"}
+            onClick={() => selectFilter("__all__")}
           />
-          <div className="absolute inset-0 bg-forest/30" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-cream-1">
-            <div className="text-cream-1">
-              <Play size={72} />
-            </div>
-            <div className="mt-5 text-center">
-              <small className="block text-[10px] uppercase tracking-[0.3em] text-cream-1/70">
-                FILM
-              </small>
-              <span className="mt-1 block font-display text-[18px] italic">
-                Recap · 02:14
-              </span>
-            </div>
-          </div>
-        </button>
-
-        {PHOTOS.map((p, i) => (
-          <button
-            key={i}
-            onClick={() => setLb(i)}
-            className={cn(
-              "group relative overflow-hidden rounded-md border border-border bg-cream-2",
-              p.span === "wide" && "col-span-2",
-              p.span === "tall" && "row-span-2"
-            )}
-          >
-            <Image
-              src={p.src}
-              alt={p.alt}
-              fill
-              sizes="(min-width: 768px) 25vw, 50vw"
-              className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          {eventsWithMedia.map((e) => (
+            <FilterChip
+              key={e.id}
+              label={e.title}
+              count={counts.get(e.id) ?? 0}
+              active={filter === e.id}
+              onClick={() => selectFilter(e.id)}
             />
-            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-linear-to-t from-forest/80 to-transparent p-4 text-cream-1 opacity-0 transition-opacity group-hover:opacity-100">
-              <small className="font-display text-[14px] italic">
-                {String(i + 1).padStart(2, "0")}
-              </small>
-              <span className="text-[12px] leading-snug">{p.caption}</span>
-            </div>
-          </button>
-        ))}
-      </div>
+          ))}
+          <FilterChip
+            label="Sisterhood"
+            count={counts.get(UNCATEGORIZED_ID) ?? 0}
+            active={filter === UNCATEGORIZED_ID}
+            onClick={() => selectFilter(UNCATEGORIZED_ID)}
+          />
+        </div>
+      )}
+
+      {visible.length === 0 ? (
+        <div className="mx-auto max-w-[600px] py-24 text-center">
+          <small className="acw-section-label-mini justify-center">EMPTY</small>
+          <p className="font-display text-[26px] italic text-forest">
+            Nothing here yet.
+          </p>
+        </div>
+      ) : (
+        <div className="mx-auto mt-8 grid max-w-[1280px] auto-rows-[240px] grid-cols-2 gap-3 md:auto-rows-[260px] md:grid-cols-4">
+          {visible.map((m, i) => (
+            <button
+              key={`${m.kind}-${m.src}-${i}`}
+              onClick={() => setLb(i)}
+              className={cn(
+                "group relative overflow-hidden rounded-md border border-border bg-cream-2 outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 active:brightness-90 transition-[filter] duration-150",
+                spanForIndex(i, m.kind),
+              )}
+            >
+              <Image
+                src={m.kind === "video" ? (m.poster ?? m.src) : m.src}
+                alt={m.kind === "photo" ? m.alt : m.title}
+                fill
+                sizes="(min-width: 768px) 25vw, 50vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+              />
+
+              {m.kind === "video" && (
+                <>
+                  <div className="absolute inset-0 bg-forest/30" />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-cream-1">
+                    <Play size={56} />
+                    <small className="mt-3 text-[10px] uppercase tracking-[0.3em] text-cream-1/80">
+                      FILM
+                    </small>
+                    <span className="mt-1 font-display text-[18px] italic">
+                      {m.title}
+                      {m.duration ? ` · ${m.duration}` : ""}
+                    </span>
+                  </div>
+                </>
+              )}
+
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-linear-to-t from-forest/80 to-transparent p-4 text-cream-1 opacity-0 transition-opacity group-hover:opacity-100">
+                <small className="font-display text-[14px] italic">
+                  {String(i + 1).padStart(2, "0")}
+                </small>
+                <span className="text-right text-[12px] leading-snug">
+                  {m.kind === "photo" ? m.caption : m.eventTitle}
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="mt-12 flex justify-center">
         {!compact ? (
@@ -109,55 +240,71 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
           </Button>
         ) : (
           <Button asChild variant="editorialOutline" size="pill">
-            <Link href="/#story">Back to the story</Link>
+            <Link href="/events">Browse all events</Link>
           </Button>
         )}
       </div>
 
-      <Dialog open={lb !== null} onOpenChange={(o) => !o && close()}>
+      <Dialog
+        open={lb !== null}
+        onOpenChange={(o) => {
+          if (!o) {
+            videoRef.current?.pause();
+            setLb(null);
+          }
+        }}
+      >
         <DialogContent className="max-w-5xl border-border bg-cream-1 p-0">
           <DialogTitle className="sr-only">
-            {lb === "video" ? "Recap film" : "Photo"}
+            {lb !== null && visible[lb]
+              ? visible[lb].kind === "photo"
+                ? "Photo"
+                : "Recap film"
+              : "Media"}
           </DialogTitle>
-          {lb === "video" ? (
-            <div className="flex aspect-video flex-col items-center justify-center bg-forest p-12 text-cream-1">
-              <Play size={72} />
-              <p className="mt-6 max-w-md text-center text-[14px] leading-snug text-cream-1/80">
-                Drop your recap video file at{" "}
-                <code className="font-mono text-gold-2">/public/video.mp4</code>{" "}
-                — it will play here.
-              </p>
-            </div>
-          ) : typeof lb === "number" ? (
+          {lb !== null && visible[lb] && (
             <div className="relative">
-              <div className="relative aspect-4/3 w-full">
-                <Image
-                  src={PHOTOS[lb].src}
-                  alt={PHOTOS[lb].alt}
-                  fill
-                  className="object-contain"
-                  sizes="100vw"
+              {visible[lb].kind === "video" ? (
+                <video
+                  ref={videoRef}
+                  src={visible[lb].src}
+                  poster={visible[lb].poster}
+                  controls
+                  autoPlay
+                  className="aspect-video w-full bg-forest"
                 />
-              </div>
+              ) : (
+                <div className="relative aspect-4/3 w-full bg-cream-2">
+                  <Image
+                    src={visible[lb].src}
+                    alt={visible[lb].alt}
+                    fill
+                    className="object-contain"
+                    sizes="100vw"
+                  />
+                </div>
+              )}
               <div className="flex items-center justify-between gap-6 border-t border-border px-6 py-4 text-[12px] text-ink-2">
                 <em className="font-display text-[18px] text-forest">
-                  {PHOTOS[lb].caption}
+                  {visible[lb].kind === "photo"
+                    ? visible[lb].caption
+                    : visible[lb].title}
                 </em>
                 <small className="uppercase tracking-[0.28em] text-muted-foreground">
                   {String(lb + 1).padStart(2, "0")} /{" "}
-                  {String(PHOTOS.length).padStart(2, "0")}
+                  {String(visible.length).padStart(2, "0")}
                 </small>
               </div>
               <button
                 aria-label="Previous"
                 onClick={() =>
                   setLb((p) =>
-                    typeof p === "number"
-                      ? (p - 1 + PHOTOS.length) % PHOTOS.length
-                      : p
+                    p === null
+                      ? null
+                      : (p - 1 + visible.length) % visible.length,
                   )
                 }
-                className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-cream-1/90 px-3 py-2 text-forest backdrop-blur-sm transition-colors hover:bg-gold hover:text-cream-1"
+                className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-cream-1/90 px-3 py-2 text-forest backdrop-blur-sm transition-colors hover:bg-gold hover:text-cream-1 active:bg-gold/80 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
               >
                 ‹
               </button>
@@ -165,17 +312,54 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
                 aria-label="Next"
                 onClick={() =>
                   setLb((p) =>
-                    typeof p === "number" ? (p + 1) % PHOTOS.length : p
+                    p === null ? null : (p + 1) % visible.length,
                   )
                 }
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-cream-1/90 px-3 py-2 text-forest backdrop-blur-sm transition-colors hover:bg-gold hover:text-cream-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-cream-1/90 px-3 py-2 text-forest backdrop-blur-sm transition-colors hover:bg-gold hover:text-cream-1 active:bg-gold/80 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
               >
                 ›
               </button>
             </div>
-          ) : null}
+          )}
         </DialogContent>
       </Dialog>
     </section>
+  );
+}
+
+function FilterChip({
+  label,
+  count,
+  active,
+  onClick,
+}: {
+  label: string;
+  count: number;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={active}
+      className={cn(
+        "cursor-pointer inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.22em] transition-colors outline-none",
+        "focus-visible:ring-2 focus-visible:ring-gold/60",
+        "active:scale-[0.97]",
+        active
+          ? "border-forest bg-forest text-cream-1 active:bg-[#162b1f]"
+          : "border-border bg-transparent text-muted-foreground hover:border-gold hover:text-forest active:bg-cream-2",
+      )}
+    >
+      <span>{label}</span>
+      <span
+        className={cn(
+          "font-display text-[12px] italic",
+          active ? "text-gold-2" : "text-gold",
+        )}
+      >
+        {count}
+      </span>
+    </button>
   );
 }
