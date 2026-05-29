@@ -13,6 +13,10 @@ import { StoriesPreview } from "@/components/sections/stories";
 import { Anthem } from "@/components/sections/anthem";
 import { Join } from "@/components/sections/join";
 
+// Revalidate hourly so date-driven UI (Men Who Stand badge, upcoming/past
+// event split) stays current without a full rebuild.
+export const revalidate = 3600;
+
 export default function HomePage() {
   return (
     <>
