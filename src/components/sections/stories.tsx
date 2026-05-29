@@ -6,14 +6,14 @@ const STORIES = [
     cat: "HEALING",
     title: "She Was Not Forgotten",
     excerpt:
-      "The story of a woman who waited in silence for years — and the morning grace finally spoke her name.",
+      "The story of a woman who waited in silence for years, and the morning grace finally spoke her name.",
     read: "6 min read",
   },
   {
     cat: "LEADERSHIP",
     title: "The Woman Who Began Again",
     excerpt:
-      "After loss, after failure, after the room emptied — she stood up and built the room she had needed.",
+      "After loss, after failure, after the room emptied, she stood up and built the room she had needed.",
     read: "4 min read",
   },
   {
@@ -27,13 +27,10 @@ const STORIES = [
 
 export function StoriesPreview() {
   return (
-    <section
-      id="stories"
-      className="bg-cream-2 px-6 py-32 md:px-12 md:py-36"
-    >
+    <section id="stories" className="bg-cream-2 px-6 py-32 md:px-12 md:py-36">
       <div className="mx-auto mb-14 max-w-[1320px]">
         <div className="acw-section-label">
-          <span className="acw-num">VII.</span>
+          <span className="acw-num">|</span>
           <span>Stories of becoming</span>
         </div>
         <div className="mt-6 grid items-end gap-16 md:grid-cols-[1.2fr_1fr]">
