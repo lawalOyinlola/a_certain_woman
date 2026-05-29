@@ -5,6 +5,7 @@ import { Welcome } from "@/components/sections/welcome";
 import { WhoWeServe } from "@/components/sections/who-we-serve";
 import { Pillars } from "@/components/sections/pillars";
 import { Experiences } from "@/components/sections/experiences";
+import { MenWhoStand } from "@/components/sections/men-who-stand";
 import { Manifesto } from "@/components/sections/manifesto";
 import { Founder } from "@/components/sections/founder";
 import { Events } from "@/components/sections/events";
@@ -22,6 +23,7 @@ export default function HomePage() {
         <WhoWeServe />
         <Pillars />
         <Experiences />
+        <MenWhoStand />
         <Manifesto />
         <Founder />
         <Events />
