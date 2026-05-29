@@ -49,7 +49,7 @@ export function EventsBrowser({
   initialQuery?: string;
 }) {
   const [tab, setTab] = useState<Tab>(initialTab);
-  const [query, setQuery] = useState(initialQuery);
+  const [query, setQuery] = useState(initialQuery ?? "");
   const debouncedQuery = useDebouncedValue(query, 250);
 
   const { upcoming, past, all } = useMemo(() => {
