@@ -8,8 +8,19 @@ import { StoriesGrid } from "./stories-grid";
 export const metadata: Metadata = {
   title: "Stories of Becoming",
   description:
-    "Stories of becoming — healing, leadership, community, and founder reflections from the women of A Certain Woman.",
+    "Testimonies, reflections, and journal posts from A Certain Woman. Stories of healing, leadership, community, and founder reflections from women across Sierra Leone.",
   alternates: { canonical: "/stories" },
+  openGraph: {
+    title: "Stories of Becoming | A Certain Woman",
+    description:
+      "Healing, leadership, community, and founder reflections from the women of A Certain Woman.",
+    url: "/stories",
+  },
+  twitter: {
+    title: "Stories of Becoming | A Certain Woman",
+    description:
+      "Testimonies, reflections, and journal posts from the women of ACW.",
+  },
 };
 
 export default function StoriesPage() {
