@@ -60,7 +60,7 @@ export function Anthem() {
       <div className="mx-auto grid max-w-[1320px] items-center gap-12 md:grid-cols-[1fr_1.3fr] md:gap-20">
         <div>
           <div className="acw-section-label">
-            <span className="acw-num">VIII.</span>
+            <span className="acw-num">|</span>
             <span>The Anthem</span>
           </div>
           <h2 className="acw-display mt-6">
@@ -69,8 +69,8 @@ export function Anthem() {
             for the <em>becoming.</em>
           </h2>
           <p className="mt-7 max-w-[420px] text-[17px] leading-[1.65] text-muted-foreground">
-            Every movement has a sound. This is ours — a quiet hymn for the
-            woman who is healing, rising, and reclaiming her crown.
+            Every movement has a sound. Ours is a quiet hymn for the woman
+            who is healing, rising, and reclaiming her crown.
           </p>
         </div>
 
@@ -109,7 +109,7 @@ export function Anthem() {
                 A Certain Woman
               </strong>
               <em className="font-display text-[16px] italic text-cream-1/65">
-                — The Movement Anthem
+                From the Movement Anthem
               </em>
             </div>
 
