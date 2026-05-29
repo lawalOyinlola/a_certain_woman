@@ -21,28 +21,28 @@ const ALL_STORIES = [
     excerpt:
       "A woman who waited in silence for years, and the morning grace finally spoke her name.",
     read: "6 min",
-    img: "/photos/02.jpg",
+    img: "/media/Faith_and_Flowers/KCS_9573.jpg",
   },
   {
     cat: "Leadership",
     title: "The Woman Who Began Again",
     excerpt: "After loss, after failure, she built the room she had needed.",
     read: "4 min",
-    img: "/photos/03.jpg",
+    img: "/media/ACW_launch/KCS_3653.jpg",
   },
   {
     cat: "Founder Reflections",
     title: "Healing Is Holy Work",
     excerpt: "A letter to the woman who is tired of pretending she is fine.",
     read: "5 min",
-    img: "/photos/05.jpg",
+    img: "/media/Crown_Table/KCS_2051.jpg",
   },
   {
     cat: "Healing",
     title: "When a Woman Reclaims Her Crown",
     excerpt: "On the slow, sacred work of remembering what you were named.",
     read: "7 min",
-    img: "/photos/04.jpg",
+    img: "/media/Faith_and_Flowers/KCS_9605.jpg",
   },
   {
     cat: "Community",
@@ -50,21 +50,21 @@ const ALL_STORIES = [
     excerpt:
       "How an ordinary Saturday brunch became a doorway to restoration.",
     read: "5 min",
-    img: "/photos/01.jpg",
+    img: "/media/Crown_Table/KCS_2197.jpg",
   },
   {
     cat: "Journal",
     title: "Becoming Is Still Beautiful",
     excerpt: "A meditation on the in-between seasons no one applauds.",
     read: "3 min",
-    img: "/photos/02.jpg",
+    img: "/media/ACW_launch/KCS_3558.jpg",
   },
   {
     cat: "Leadership",
     title: "Seen by God, Seen Again",
     excerpt: "On stepping into rooms you once thought were not for you.",
     read: "6 min",
-    img: "/photos/03.jpg",
+    img: "/media/Faith_and_Flowers/KCS_9594.jpg",
   },
 ];
 
