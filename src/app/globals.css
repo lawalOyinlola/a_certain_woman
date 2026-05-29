@@ -276,7 +276,7 @@
 
   /* Persona / Pillar row — stacked editorial row pattern (shared) */
   .acw-row {
-    @apply grid items-baseline border-b border-border transition-all duration-300 gap-12 py-11 grid-cols-[100px_minmax(260px,1.3fr)_2fr_22px];
+    @apply grid items-baseline border-b border-border transition-all duration-300 gap-12 py-11 grid-cols-[100px_minmax(260px,1.3fr)_2fr];
   }
   .acw-row.is-in {
     @apply opacity-100 translate-y-0;
@@ -328,13 +328,19 @@
     @apply grid border-y grid-cols-5 border-cream-2/18;
   }
   .acw-exp-tab {
-    @apply text-left transition-colors duration-200 relative px-[18px] py-6 border-r border-cream-2/15 text-cream-2/60;
+    @apply cursor-pointer text-left transition-colors duration-200 relative px-[18px] py-6 border-r border-cream-2/15 text-cream-2/60 outline-none;
   }
   .acw-exp-tab:last-child {
     @apply border-r-0;
   }
   .acw-exp-tab:hover {
-    @apply text-cream-1 bg-gold-2/6;
+    @apply text-cream-1 bg-gold-2/8;
+  }
+  .acw-exp-tab:active {
+    @apply bg-gold-2/15;
+  }
+  .acw-exp-tab:focus-visible {
+    @apply ring-2 ring-inset ring-gold-2/60;
   }
   .acw-exp-tab.is-active {
     @apply text-gold-2;
