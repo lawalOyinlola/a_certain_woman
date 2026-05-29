@@ -104,6 +104,20 @@ export function Footer() {
             />
           </div>
         </div>
+
+        {/* Builder credit */}
+        <div className="mt-6 text-center text-[10px] uppercase tracking-[0.24em] text-cream-1/30">
+          <span>Site by </span>
+          <a
+            href="https://www.lawaloyinlola.com/"
+            target="_blank"
+            rel="noopener noreferrer me"
+            className="transition-colors hover:text-gold-2 focus-visible:text-gold-2"
+            aria-label="LAWAL Oyinlola, portfolio (opens in a new tab)"
+          >
+            LAWAL
+          </a>
+        </div>
       </div>
     </footer>
   );
