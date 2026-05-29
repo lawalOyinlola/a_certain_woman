@@ -21,33 +21,40 @@ const siteUrl =
 const siteName = "A Certain Woman";
 const siteTagline = "Restoring Hearts. Reclaiming Crowns.";
 const siteDescription =
-  "A faith-rooted women's movement — healing the heart, restoring the home, awakening the woman God always called her to be. Programs, events, and stories of becoming from Freetown, Sierra Leone.";
+  "A Certain Woman is a faith-rooted movement based in Freetown, Sierra Leone. We center the restoration of women and engage the men, families, and communities who shape their lives. Through sacred gatherings, healing circles, leadership programs, mentorship, and the Men Who Stand initiative, we work toward a future where every person is healed, honored, and whole.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteName} — ${siteTagline}`,
-    template: `%s — ${siteName}`,
+    default: `${siteName} | ${siteTagline}`,
+    template: `%s | ${siteName}`,
   },
   description: siteDescription,
   applicationName: siteName,
   keywords: [
     "A Certain Woman",
-    "women's movement",
-    "Christian women",
-    "faith-rooted",
-    "healing",
-    "restoration",
-    "women's leadership",
-    "women's ministry",
-    "Sierra Leone",
-    "Freetown",
+    "ACW",
+    "A Certain Woman Sierra Leone",
+    "faith-rooted women's movement",
+    "Christian women Sierra Leone",
+    "women's ministry Freetown",
+    "women's healing circles",
+    "women's leadership Sierra Leone",
     "Namaari Inanna Kargbo",
     "Identity Academy",
-    "Faith and Flowers",
-    "Crown Table",
-    "women empowerment",
-    "girls mentorship",
+    "Faith and Flowers brunch",
+    "Crown Table Spotlight Breakfast",
+    "Healed and Held summit",
+    "Men Who Stand",
+    "Men Who Stand initiative",
+    "responsible fatherhood Sierra Leone",
+    "positive masculinity",
+    "male engagement initiative",
+    "Christian women conference Sierra Leone",
+    "girls mentorship Freetown",
+    "Restoring Hearts Reclaiming Crowns",
+    "women empowerment West Africa",
+    "family wellbeing Sierra Leone",
   ],
   authors: [{ name: "Namaari Inanna Kargbo" }],
   creator: "Namaari Inanna Kargbo",
@@ -70,7 +77,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName,
-    title: `${siteName} — ${siteTagline}`,
+    title: `${siteName} | ${siteTagline}`,
     description: siteDescription,
     url: siteUrl,
     locale: "en_US",
@@ -79,13 +86,13 @@ export const metadata: Metadata = {
         url: "/assets/og-image.png",
         width: 1200,
         height: 630,
-        alt: `${siteName} — ${siteTagline}`,
+        alt: `${siteName}. ${siteTagline}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteName} — ${siteTagline}`,
+    title: `${siteName} | ${siteTagline}`,
     description: siteDescription,
     creator: "@acertainwoman",
     images: ["/assets/og-image.png"],
@@ -111,6 +118,136 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "NGO",
+  "@id": `${siteUrl}/#organization`,
+  name: siteName,
+  alternateName: "ACW",
+  url: siteUrl,
+  logo: {
+    "@type": "ImageObject",
+    url: `${siteUrl}/assets/logo.png`,
+    width: 512,
+    height: 512,
+  },
+  image: `${siteUrl}/assets/og-image.png`,
+  description: siteDescription,
+  slogan: siteTagline,
+  email: "info@acertainwoman.org",
+  founder: {
+    "@type": "Person",
+    name: "Namaari Inanna Kargbo",
+    jobTitle: "Founder & Custodian",
+  },
+  foundingLocation: {
+    "@type": "Place",
+    name: "Freetown, Sierra Leone",
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Freetown",
+    addressRegion: "Western Area",
+    addressCountry: "SL",
+  },
+  areaServed: [
+    { "@type": "Country", name: "Sierra Leone" },
+    { "@type": "Place", name: "West Africa" },
+  ],
+  knowsAbout: [
+    "Women's spiritual formation",
+    "Identity restoration",
+    "Faith-rooted healing",
+    "Women's leadership development",
+    "Sisterhood and mentorship",
+    "Christian women's gatherings",
+    "Girls' mentorship",
+    "Responsible fatherhood and positive masculinity",
+    "Family wellbeing and male engagement",
+    "Community restoration",
+  ],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Programs",
+    itemListElement: [
+      {
+        "@type": "Service",
+        name: "Identity Academy",
+        description:
+          "A structured pathway for healing, identity, confidence, and leadership for women and girls.",
+        provider: { "@id": `${siteUrl}/#organization` },
+      },
+      {
+        "@type": "Service",
+        name: "Faith & Flowers",
+        description:
+          "A sacred wellness brunch experience for rest, reflection, worship, and renewal.",
+        provider: { "@id": `${siteUrl}/#organization` },
+      },
+      {
+        "@type": "Service",
+        name: "Crown Table Spotlight Breakfast",
+        description:
+          "An invitation-only leadership and recognition experience honoring women of impact, legacy, and purpose.",
+        provider: { "@id": `${siteUrl}/#organization` },
+      },
+      {
+        "@type": "Service",
+        name: "Women's Healing Circles",
+        description:
+          "Safe, intimate spaces for reflection, prayer, release, and restoration.",
+        provider: { "@id": `${siteUrl}/#organization` },
+      },
+      {
+        "@type": "Service",
+        name: "Community Outreach",
+        description:
+          "Compassion-led initiatives supporting vulnerable women, mothers, girls, and families.",
+        provider: { "@id": `${siteUrl}/#organization` },
+      },
+      {
+        "@type": "Service",
+        name: "Men Who Stand",
+        description:
+          "ACW's male engagement program for responsible fatherhood, positive masculinity, family leadership, and legacy-building. Built on the conviction that family wellbeing is strengthened when men also rise in responsibility, healing, and purpose.",
+        provider: { "@id": `${siteUrl}/#organization` },
+      },
+    ],
+  },
+};
+
+const websiteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${siteUrl}/#website`,
+  url: siteUrl,
+  name: siteName,
+  alternateName: "ACW",
+  description: siteDescription,
+  inLanguage: "en",
+  publisher: { "@id": `${siteUrl}/#organization` },
+  about: { "@id": `${siteUrl}/#organization` },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${siteUrl}/events?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+  creator: {
+    "@type": "Person",
+    name: "Lawal Oyinlola",
+    alternateName: "LAWAL",
+    url: "https://www.lawaloyinlola.com/",
+    sameAs: [
+      "https://www.lawaloyinlola.com/",
+      "https://www.linkedin.com/in/lawaloyinlola",
+      "https://github.com/lawalOyinlola",
+    ],
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -118,6 +255,18 @@ export default function RootLayout({
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="min-h-screen bg-background text-foreground antialiased">
         {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationLd),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteLd),
+          }}
+        />
       </body>
     </html>
   );
