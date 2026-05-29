@@ -10,8 +10,19 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "Partner With Us",
   description:
-    "Six partnership pathways — sponsor an event, fund the Identity Academy, partner as a church, company, or government to support the restoration of women and girls.",
+    "Partner with A Certain Woman to support women and girls in Sierra Leone. Sponsor an event, fund the Identity Academy, or collaborate as a church, company, NGO, or government partner.",
   alternates: { canonical: "/partner" },
+  openGraph: {
+    title: "Partner With Us | A Certain Woman",
+    description:
+      "Sponsor an event, fund the Identity Academy, or partner as a church, company, or government. Build restoration for women and girls in Sierra Leone alongside ACW.",
+    url: "/partner",
+  },
+  twitter: {
+    title: "Partner With Us | A Certain Woman",
+    description:
+      "Sponsor an event, fund the Identity Academy, or partner as a church, company, or government.",
+  },
 };
 
 const OPPS = [
@@ -90,7 +101,7 @@ export default function PartnerPage() {
           <div className="mx-auto max-w-[1120px]">
             <div className="mb-14 flex flex-col items-center text-center">
               <div className="acw-section-label">
-                <span className="acw-num">I.</span>
+                <span className="acw-num">|</span>
                 <span>Partnership pathways</span>
               </div>
               <h2 className="acw-page-h2 mt-6">
@@ -117,7 +128,7 @@ export default function PartnerPage() {
             <div className="acw-twoup">
               <div className="acw-twoup-left">
                 <div className="acw-section-label">
-                  <span className="acw-num">II.</span>
+                  <span className="acw-num">|</span>
                   <span>Why partner</span>
                 </div>
                 <h2 className="acw-page-h2 mt-6">
@@ -148,11 +159,14 @@ export default function PartnerPage() {
         </section>
 
         {/* Support / give */}
-        <section id="support" className="bg-cream-1 px-6 py-24 md:px-12 md:py-28">
+        <section
+          id="support"
+          className="bg-cream-1 px-6 py-24 md:px-12 md:py-28"
+        >
           <div className="mx-auto max-w-[1120px]">
             <div className="mb-12 flex flex-col items-center text-center">
               <div className="acw-section-label">
-                <span className="acw-num">III.</span>
+                <span className="acw-num">|</span>
                 <span>Support our work</span>
               </div>
               <h2 className="acw-page-h2 mt-6">
