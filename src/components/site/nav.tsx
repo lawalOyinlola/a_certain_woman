@@ -9,7 +9,7 @@ const items: Array<[string, string]> = [
   ["About", "/about"],
   ["Our Work", "/our-work"],
   ["Programs", "/programs"],
-  // ["Events", "/events"],
+  ["Events", "/events"],
   ["Partner", "/partner"],
   // ["Stories", "/stories"],
   ["Contact", "/contact"],
