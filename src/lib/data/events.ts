@@ -52,7 +52,7 @@ const launchPhotos = [
   "KCS_3754",
   "KCS_3756",
   "KCS_3774",
-].map((n) => `/photos/ACW_launch/${n}.jpg`);
+].map((n) => `/media/ACW_launch/${n}.jpg`);
 
 const crownTablePhotos = [
   "KCS_2197",
@@ -70,7 +70,7 @@ const crownTablePhotos = [
   "KCS_2241",
   "KCS_2306",
   "KCS_2378",
-].map((n) => `/photos/Crown_Table/${n}.jpg`);
+].map((n) => `/media/Crown_Table/${n}.jpg`);
 
 const faithFlowersPhotos = [
   "KCS_9594",
@@ -109,7 +109,34 @@ const faithFlowersPhotos = [
   "KCS_9791",
   "KCS_9794",
   "KCS_9842",
-].map((n) => `/photos/Faith_and_Flowers/${n}.jpg`);
+].map((n) => `/media/Faith_and_Flowers/${n}.jpg`);
+
+const mothersDayPhotos = [
+  "KCS_4982",
+  "KCS_4987",
+  "KCS_4989",
+  "KCS_4991",
+  "KCS_4993",
+  "KCS_4999",
+  "KCS_5002",
+  "KCS_5007",
+  "KCS_5022",
+  "KCS_5038",
+  "KCS_5041",
+  "KCS_5050",
+  "KCS_5055",
+  "KCS_5057",
+  "KCS_5061",
+  "KCS_5067",
+  "KCS_5069",
+  "KCS_5073",
+  "KCS_5098",
+  "KCS_5112",
+  "KCS_5157",
+  "KCS_5158",
+  "KCS_5160",
+  "KCS_5162",
+].map((n) => `/media/mothers_day_she_is_seen/${n}.jpg`);
 
 export const EVENTS: ACWEvent[] = [
   {
@@ -121,7 +148,7 @@ export const EVENTS: ACWEvent[] = [
     theme: "God's grace in every season",
     venue: "The Church of Jesus Christ of Latter-day Saints.",
     location: "Freetown, Sierra Leone",
-    cover: "/photos/ACW_launch/KCS_3486.jpg",
+    cover: "/media/ACW_launch/KCS_3486.jpg",
     blurb:
       "The room where it all began. Our official launch and summit, gathered under one theme: healing is possible, purpose is still alive, and no season is wasted in the hands of God. A day of worship, reflection, teaching, and the quiet unveiling of A Certain Woman: restoring hearts, reclaiming crowns, raising women who are healed, whole, and ready to serve.",
     photos: launchPhotos,
@@ -138,14 +165,14 @@ export const EVENTS: ACWEvent[] = [
     tags: ["Edition I"],
     venue: "The Country Lodge Hotel",
     location: "Freetown, Sierra Leone",
-    cover: "/photos/Crown_Table/KCS_2197.jpg",
+    cover: "/media/Crown_Table/KCS_2197.jpg",
     blurb:
       "One of our signature fellowship experiences. An intimate table where women gather to share, to heal, and to be reminded that they are daughters of worth, dignity, and divine assignment. Conversations, mentorship, prayer, sisterhood; burdens gently laid down, crowns spiritually lifted, women empowered to rise with confidence, wisdom, and grace.",
     photos: crownTablePhotos,
     videos: [
       {
-        src: "/photos/Crown_Table/Spotlight_breakfast_series.mp4",
-        poster: "/photos/Crown_Table/KCS_2030.jpg",
+        src: "/media/Crown_Table/Spotlight_breakfast_series.mp4",
+        poster: "/media/Crown_Table/KCS_2030.jpg",
         title: "Spotlight Breakfast Series",
       },
     ],
@@ -162,14 +189,14 @@ export const EVENTS: ACWEvent[] = [
     tags: ["Edition I"],
     venue: "The Lead",
     location: "Freetown, Sierra Leone",
-    cover: "/photos/Faith_and_Flowers/KCS_9594.jpg",
+    cover: "/media/Faith_and_Flowers/KCS_9594.jpg",
     blurb:
       "A refreshing, beautifully curated experience that gathers spiritual reflection, creativity, and emotional renewal at one table. Through faith conversations, prayer, floral moments, and intentional fellowship, a quiet invitation to pause, breathe, bloom, and return to yourself. Just like flowers bloom in their appointed season, healing, growth, and beauty are still possible through God's grace.",
     photos: faithFlowersPhotos,
     videos: [
       {
-        src: "/photos/Faith_and_Flowers/VIDEO-2026-05-06-13-53-18.mp4",
-        poster: "/photos/Faith_and_Flowers/KCS_9573.jpg",
+        src: "/media/Faith_and_Flowers/VIDEO-2026-05-06-13-53-18.mp4",
+        poster: "/media/Faith_and_Flowers/KCS_9573.jpg",
         title: "Faith & Flowers · Recap",
       },
     ],
@@ -186,10 +213,17 @@ export const EVENTS: ACWEvent[] = [
     tags: ["Outreach"],
     venue: "Susan's Bay",
     location: "Freetown, Sierra Leone",
-    cover: "/photos/Faith_and_Flowers/KCS_9605.jpg",
+    cover: "/media/mothers_day_she_is_seen/KCS_5061.jpg",
     blurb:
       "A Mother's Day held in the heart of Susan's Bay, for the mothers who give quietly and are too rarely seen. A morning of honor, encouragement, and care, carrying dignity to women who pour out for their children and communities every day. Because she is seen, she is valued, and she is loved.",
-    photos: [],
+    photos: mothersDayPhotos,
+    videos: [
+      {
+        src: "/media/mothers_day_she_is_seen/VIDEO-2026-05-21-10-21-26.mp4",
+        poster: "/media/mothers_day_she_is_seen/KCS_4989.jpg",
+        title: "She is Seen · Recap",
+      },
+    ],
     speakers: [],
     program: [],
   },
@@ -203,7 +237,7 @@ export const EVENTS: ACWEvent[] = [
     theme: "Restoring strength. Redefining manhood. Building legacy.",
     tags: ["Launch"],
     location: "Freetown, Sierra Leone",
-    cover: "/a_man_who_stand_cover.jpg",
+    cover: "/media/a_man_who_stands/Man_stands_event_banner_202605291622.jpeg",
     blurb:
       "A three-day celebration marking the launch of Men Who Stand, anchored in one verse: “Be on your guard; stand firm in the faith; be courageous; be strong” (1 Corinthians 16:13). Three days for men who are willing to heal, to be present, and to build something different. Honesty, faith, and the quiet work of becoming a man of character, legacy, and purpose.",
     photos: [],
