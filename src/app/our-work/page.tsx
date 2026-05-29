@@ -8,8 +8,19 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Our Work",
   description:
-    "Wellbeing, identity, leadership, motherhood, and outreach — the work A Certain Woman is doing for women and girls in Sierra Leone and beyond.",
+    "How A Certain Woman supports women and girls in Sierra Leone: identity restoration, emotional healing, leadership development, motherhood support, community outreach, and faith-based mentorship.",
   alternates: { canonical: "/our-work" },
+  openGraph: {
+    title: "Our Work | A Certain Woman",
+    description:
+      "Identity, healing, leadership, motherhood, and outreach. The faith-rooted work A Certain Woman is doing for women and girls in Sierra Leone and West Africa.",
+    url: "/our-work",
+  },
+  twitter: {
+    title: "Our Work | A Certain Woman",
+    description:
+      "Identity, healing, leadership, motherhood, and outreach for women and girls in Sierra Leone.",
+  },
 };
 
 const AREAS = [
@@ -99,7 +110,7 @@ export default function OurWorkPage() {
               <em>Leadership.</em>
             </>
           }
-          sub="A Certain Woman works at the intersection of faith, healing, identity, leadership, wellness, advocacy, and community transformation — supporting women and girls emotionally, spiritually, socially, and practically."
+          sub="A Certain Woman works at the intersection of faith, healing, identity, leadership, wellness, advocacy, and community transformation. We support women and girls emotionally, spiritually, socially, and practically."
         />
 
         {AREAS.map((a, i) => (
