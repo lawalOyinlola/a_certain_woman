@@ -28,31 +28,8 @@ type MediaItem =
       eventTitle: string;
     };
 
-const UNCATEGORIZED: MediaItem[] = [
-  {
-    kind: "photo",
-    src: "/photos/01.jpg",
-    alt: "A Certain Woman group photo with banners",
-    caption: "The gathering. Guests, founders, and friends.",
-  },
-  {
-    kind: "photo",
-    src: "/photos/02.jpg",
-    alt: "Sister sharing testimony at the mic",
-    caption: "A testimony, softly spoken",
-  },
-  {
-    kind: "photo",
-    src: "/photos/05.jpg",
-    alt: "The volunteer team in white",
-    caption: "The volunteer team. Sisters who served.",
-  },
-];
-
-const UNCATEGORIZED_ID = "__uncat__";
-
 function buildMedia(): MediaItem[] {
-  const fromEvents = EVENTS.flatMap<MediaItem>((e) => {
+  return EVENTS.flatMap<MediaItem>((e) => {
     const photos: MediaItem[] = e.photos.map((src, idx) => ({
       kind: "photo",
       src,
@@ -72,7 +49,6 @@ function buildMedia(): MediaItem[] {
     }));
     return [...videos, ...photos];
   });
-  return [...fromEvents, ...UNCATEGORIZED];
 }
 
 function spanForIndex(idx: number, kind: MediaItem["kind"]): string {
@@ -92,7 +68,6 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
   const counts = useMemo(() => {
     const map = new Map<string, number>();
     map.set("__all__", media.length);
-    map.set(UNCATEGORIZED_ID, UNCATEGORIZED.length);
     for (const m of media) {
       if (m.eventId) map.set(m.eventId, (map.get(m.eventId) ?? 0) + 1);
     }
@@ -105,7 +80,6 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
 
   const visible = useMemo(() => {
     if (filter === "__all__") return media;
-    if (filter === UNCATEGORIZED_ID) return media.filter((m) => !m.eventId);
     return media.filter((m) => m.eventId === filter);
   }, [media, filter]);
 
@@ -167,12 +141,6 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
               onClick={() => selectFilter(e.id)}
             />
           ))}
-          <FilterChip
-            label="Sisterhood"
-            count={counts.get(UNCATEGORIZED_ID) ?? 0}
-            active={filter === UNCATEGORIZED_ID}
-            onClick={() => selectFilter(UNCATEGORIZED_ID)}
-          />
         </div>
       )}
 
@@ -184,7 +152,7 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
           </p>
         </div>
       ) : (
-        <div className="mx-auto mt-8 grid max-w-[1280px] auto-rows-[240px] grid-cols-2 gap-3 md:auto-rows-[260px] md:grid-cols-4">
+        <div className="mx-auto mt-8 grid max-w-[1280px] grid-flow-dense auto-rows-[240px] grid-cols-2 gap-3 md:auto-rows-[260px] md:grid-cols-4">
           {visible.map((m, i) => (
             <button
               key={`${m.kind}-${m.src}-${i}`}
