@@ -1,15 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { ACWEvent, getEventStatus } from "@/lib/data/events";
 import { Play } from "@/components/site/icons";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Lightbox, type LightboxItem } from "@/components/ui/lightbox";
 
 export function EventDetail({ event }: { event: ACWEvent }) {
   const [lb, setLb] = useState<number | null>(null);
-  const [videoIdx, setVideoIdx] = useState<number | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   const hasProgram = event.program.length > 0;
   const hasSpeakers = event.speakers.length > 0;
@@ -17,21 +15,25 @@ export function EventDetail({ event }: { event: ACWEvent }) {
   const hasVideos = (event.videos?.length ?? 0) > 0;
   const status = getEventStatus(event);
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (lb === null) return;
-      if (e.key === "ArrowRight")
-        setLb((k) => (k === null ? null : (k + 1) % event.photos.length));
-      if (e.key === "ArrowLeft")
-        setLb((k) =>
-          k === null
-            ? null
-            : (k - 1 + event.photos.length) % event.photos.length,
-        );
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [lb, event.photos.length]);
+  // Videos first so they appear before photos in the lightbox sequence
+  const lightboxItems: LightboxItem[] = useMemo(() => {
+    const videos: LightboxItem[] = (event.videos ?? []).map((v) => ({
+      kind: "video",
+      src: v.src,
+      poster: v.poster ?? event.cover,
+      caption: v.title ?? "Recap film",
+    }));
+    const photos: LightboxItem[] = event.photos.map((src, i) => ({
+      kind: "photo",
+      src,
+      alt: `${event.title} photo ${i + 1}`,
+      caption: event.title,
+    }));
+    return [...videos, ...photos];
+  }, [event]);
+
+  // Photo grid starts at offset after videos
+  const videoCount = event.videos?.length ?? 0;
 
   return (
     <article
@@ -140,18 +142,13 @@ export function EventDetail({ event }: { event: ACWEvent }) {
             {event.videos!.map((v, i) => (
               <button
                 key={i}
-                onClick={() => setVideoIdx(i)}
+                onClick={() => setLb(i)}
                 className={
                   "group relative block w-full overflow-hidden rounded-md border border-border outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 active:brightness-90 transition-[filter] duration-150 " +
                   (i === 0 ? "" : "md:col-start-2")
                 }
               >
-                <div
-                  className={
-                    "relative " +
-                    (i === 0 ? "aspect-21/9" : "aspect-4/3")
-                  }
-                >
+                <div className={"relative " + (i === 0 ? "aspect-21/9" : "aspect-4/3")}>
                   <Image
                     src={v.poster ?? event.cover}
                     alt={v.title ?? `${event.title} film ${i + 1}`}
@@ -183,7 +180,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
             {event.photos.map((p, k) => (
               <button
                 key={k}
-                onClick={() => setLb(k)}
+                onClick={() => setLb(videoCount + k)}
                 className="group relative aspect-4/5 overflow-hidden rounded-md border border-border bg-cream-2 outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 active:brightness-90 transition-[filter] duration-150"
               >
                 <Image
@@ -213,88 +210,12 @@ export function EventDetail({ event }: { event: ACWEvent }) {
         </div>
       )}
 
-      <Dialog open={lb !== null} onOpenChange={(o) => !o && setLb(null)}>
-        <DialogContent className="max-w-5xl border-border bg-cream-1 p-0">
-          <DialogTitle className="sr-only">Photo</DialogTitle>
-          {lb !== null && hasPhotos && (
-            <div className="relative">
-              <div className="relative aspect-4/3 w-full">
-                <Image
-                  src={event.photos[lb]}
-                  alt={`${event.title} photo ${lb + 1}`}
-                  fill
-                  className="object-contain"
-                  sizes="100vw"
-                />
-              </div>
-              <div className="flex items-center justify-between gap-6 border-t border-border px-6 py-4">
-                <em className="font-display text-[18px] text-forest">
-                  {event.title}
-                </em>
-                <small className="text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
-                  {String(lb + 1).padStart(2, "0")} /{" "}
-                  {String(event.photos.length).padStart(2, "0")}
-                </small>
-              </div>
-              <button
-                onClick={() =>
-                  setLb((k) =>
-                    k === null
-                      ? null
-                      : (k - 1 + event.photos.length) % event.photos.length,
-                  )
-                }
-                className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-cream-1/90 px-3 py-2 text-forest transition-colors hover:bg-gold hover:text-cream-1 active:bg-gold/80 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
-                aria-label="Previous"
-              >
-                ‹
-              </button>
-              <button
-                onClick={() =>
-                  setLb((k) =>
-                    k === null ? null : (k + 1) % event.photos.length,
-                  )
-                }
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-cream-1/90 px-3 py-2 text-forest transition-colors hover:bg-gold hover:text-cream-1 active:bg-gold/80 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
-                aria-label="Next"
-              >
-                ›
-              </button>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        open={videoIdx !== null}
-        onOpenChange={(o) => {
-          if (!o) {
-            videoRef.current?.pause();
-            setVideoIdx(null);
-          }
-        }}
-      >
-        <DialogContent className="max-w-5xl border-border bg-forest p-0 text-cream-1">
-          <DialogTitle className="sr-only">
-            {videoIdx !== null && event.videos?.[videoIdx]?.title
-              ? event.videos[videoIdx].title
-              : "Recap film"}
-          </DialogTitle>
-          {videoIdx !== null && event.videos?.[videoIdx] && (
-            <video
-              ref={videoRef}
-              src={event.videos[videoIdx].src}
-              poster={event.videos[videoIdx].poster ?? event.cover}
-              controls
-              autoPlay
-              className="aspect-video w-full bg-forest"
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+      <Lightbox
+        items={lightboxItems}
+        index={lb}
+        onClose={() => setLb(null)}
+        onNavigate={setLb}
+      />
     </article>
   );
 }
