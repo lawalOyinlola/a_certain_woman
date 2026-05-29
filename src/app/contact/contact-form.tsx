@@ -41,7 +41,7 @@ export function ContactForm() {
           Thank you for writing. Someone from our team will reply soon.
         </p>
         <em className="mt-4 block font-display text-[17px] italic text-gold">
-          Until then — peace.
+          Until then, peace.
         </em>
       </div>
     );
