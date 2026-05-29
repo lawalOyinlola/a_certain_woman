@@ -99,7 +99,7 @@ export function MenWhoStand({ withLabel = true }: { withLabel?: boolean }) {
           <div className="relative">
             <div className="relative overflow-hidden rounded-md border border-border">
               <Image
-                src="/a_man_who_stand_cover.jpg"
+                src="/media/a_man_who_stands/pdf/a_man_who_stand_cover.jpg"
                 alt="Men Who Stand devotional cover"
                 width={600}
                 height={800}
@@ -110,7 +110,7 @@ export function MenWhoStand({ withLabel = true }: { withLabel?: boolean }) {
 
             {/* Download link */}
             <a
-              href="/Men Who Stand Final Devotional For May.pdf"
+              href="/media/a_man_who_stands/pdf/Men%20Who%20Stand%20Final%20Devotional%20For%20May.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="acw-link-arrow mt-5 inline-flex"
