@@ -19,14 +19,14 @@ const ALL_STORIES = [
     cat: "Healing",
     title: "She Was Not Forgotten",
     excerpt:
-      "A woman who waited in silence for years — and the morning grace finally spoke her name.",
+      "A woman who waited in silence for years, and the morning grace finally spoke her name.",
     read: "6 min",
     img: "/photos/02.jpg",
   },
   {
     cat: "Leadership",
     title: "The Woman Who Began Again",
-    excerpt: "After loss, after failure — she built the room she had needed.",
+    excerpt: "After loss, after failure, she built the room she had needed.",
     read: "4 min",
     img: "/photos/03.jpg",
   },
