@@ -42,14 +42,11 @@ export function Pillars() {
         entries.forEach((e) => {
           if (e.isIntersecting) {
             const idx = Number((e.target as HTMLElement).dataset.idx);
-            setTimeout(
-              () => setActive((p) => Math.max(p, idx)),
-              idx * 110
-            );
+            setTimeout(() => setActive((p) => Math.max(p, idx)), idx * 110);
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
     ref.current.querySelectorAll("[data-idx]").forEach((el) => io.observe(el));
     return () => io.disconnect();
@@ -62,7 +59,7 @@ export function Pillars() {
     >
       <div className="mx-auto mb-20 flex max-w-[760px] flex-col items-center text-center">
         <div className="acw-section-label">
-          <span className="acw-num">III.</span>
+          <span className="acw-num">|</span>
           <span>What she is built on</span>
         </div>
         <h2 className="acw-display acw-display--center mt-6">
@@ -71,7 +68,7 @@ export function Pillars() {
           of transformation.
         </h2>
         <p className="mt-7 max-w-[540px] text-[17px] leading-[1.65] text-muted-foreground">
-          The shape of restoration is built — daily, tenderly, on five sacred
+          The shape of restoration is built daily, tenderly, on five sacred
           foundations.
         </p>
       </div>
@@ -86,18 +83,6 @@ export function Pillars() {
             <span className="acw-row-num">{p.n}</span>
             <h3 className="acw-row-title">{p.title}</h3>
             <p className="acw-row-body">{p.body}</p>
-            <span className="acw-row-tick">
-              <svg
-                width="22"
-                height="14"
-                viewBox="0 0 22 14"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.2"
-              >
-                <path d="M1 7h20M16 1l5 6-5 6" />
-              </svg>
-            </span>
           </article>
         ))}
       </div>
