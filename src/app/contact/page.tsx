@@ -8,8 +8,19 @@ import { ContactForm } from "./contact-form";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Write to A Certain Woman — to join the movement, partner with us, attend an event, or share your story.",
+    "Get in touch with A Certain Woman in Freetown, Sierra Leone. Write to join the movement, partner with us, attend an event, invite ACW to collaborate, or share your story.",
   alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact | A Certain Woman",
+    description:
+      "Write to A Certain Woman in Freetown, Sierra Leone. Join the movement, partner with us, attend an event, or share your story.",
+    url: "/contact",
+  },
+  twitter: {
+    title: "Contact | A Certain Woman",
+    description:
+      "Write to ACW in Freetown, Sierra Leone. Join, partner, attend, or share.",
+  },
 };
 
 export default function ContactPage() {
@@ -18,13 +29,13 @@ export default function ContactPage() {
       <Nav />
       <main id="top">
         <PageHero
-          eyebrow="CONTACT  ·  WE'D LOVE TO HEAR FROM YOU"
+          eyebrow="CONTACT US ·  WE'D LOVE TO HEAR FROM YOU"
           title={
             <>
               Write to <em>us.</em>
             </>
           }
-          sub="Whether you want to join the movement, partner with us, invite ACW to collaborate, support an outreach, attend an event, or share your story — you are welcome here."
+          sub="Whether you want to join the movement, partner with us, invite ACW to collaborate, support an outreach, attend an event, or share your story, you are welcome here."
         />
 
         <section className="bg-cream-1 px-6 py-24 md:px-12 md:py-28">
@@ -42,7 +53,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <small>WHATSAPP</small>
-                <span>+232 — — —</span>
+                <span>Coming soon</span>
               </div>
               <div>
                 <small>SOCIAL</small>
