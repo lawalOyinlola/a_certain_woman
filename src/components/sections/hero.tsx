@@ -36,7 +36,7 @@ export function Hero() {
     >
       {/* parallax sprigs */}
       <div
-        className="pointer-events-none absolute top-20 -left-16 h-[360px] w-[240px] text-forest opacity-30"
+        className="pointer-events-none absolute top-12 -left-36 h-[600px] w-[400px] text-forest opacity-30"
         style={{
           transform: `translate3d(0, ${scrollY * 0.15}px, 0) rotate(-12deg)`,
         }}
@@ -44,7 +44,7 @@ export function Hero() {
         <Sprig />
       </div>
       <div
-        className="pointer-events-none absolute -bottom-10 -right-20 h-[360px] w-[240px] text-forest opacity-30"
+        className="pointer-events-none absolute -bottom-10 -right-24 h-[390px] w-[260px] text-forest opacity-30"
         style={{
           transform: `translate3d(0, ${scrollY * -0.1}px, 0) rotate(168deg)`,
         }}
@@ -63,7 +63,7 @@ export function Hero() {
         {/* Tagline — stacked mega */}
         <div className="flex-center flex-col">
           <div className="acw-tagline-small acw-rise acw-rise-delay-1 text-muted-foreground">
-            She is not just a woman
+            She is not just a woman, she is ...
           </div>
           <h1 className="acw-tagline-mega">
             <span className="acw-rise acw-rise-delay-2 block">A Certain</span>
