@@ -26,6 +26,9 @@ function matches(e: ACWEvent, q: string): boolean {
     e.location,
     e.blurb,
     e.date,
+    e.theme ?? "",
+    e.venue ?? "",
+    ...(e.tags ?? []),
     ...e.speakers,
     ...e.program.map((p) => p.item),
   ]
@@ -38,9 +41,15 @@ function matches(e: ACWEvent, q: string): boolean {
     .every((term) => haystack.includes(term));
 }
 
-export function EventsBrowser({ initialTab = "upcoming" as Tab }) {
+export function EventsBrowser({
+  initialTab = "upcoming" as Tab,
+  initialQuery = "",
+}: {
+  initialTab?: Tab;
+  initialQuery?: string;
+}) {
   const [tab, setTab] = useState<Tab>(initialTab);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
   const debouncedQuery = useDebouncedValue(query, 250);
 
   const { upcoming, past, all } = useMemo(() => {
@@ -138,8 +147,8 @@ function EmptyState({ query, tab }: { query: string; tab: Tab }) {
       <p className="font-display text-[clamp(28px,3vw,40px)] italic leading-tight text-forest">
         {query ? (
           <>
-            No events match{" "}
-            <em className="text-gold">&ldquo;{query}&rdquo;</em>.
+            No events match <em className="text-gold">&ldquo;{query}&rdquo;</em>
+            .
           </>
         ) : tab === "upcoming" ? (
           <>The calendar is quiet, for now.</>
