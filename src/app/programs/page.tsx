@@ -6,6 +6,9 @@ import { Experiences } from "@/components/sections/experiences";
 import { MenWhoStand } from "@/components/sections/men-who-stand";
 import { Join } from "@/components/sections/join";
 
+// Revalidate hourly so the Men Who Stand date badge stays current.
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Programs",
   description:
