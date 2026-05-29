@@ -16,7 +16,7 @@ const PATHS = [
   {
     kind: "PARTNER",
     title: "Partner With Us",
-    body: "Churches, companies, NGOs, and government partners — build restoration alongside ACW.",
+    body: "Churches, companies, NGOs, and government partners. Build restoration alongside ACW.",
     cta: "Become a Partner",
     href: "/partner",
   },
@@ -52,7 +52,7 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
       <div className="mx-auto mb-20 flex max-w-[760px] flex-col items-center text-center">
         {withLabel && (
           <div className="acw-section-label">
-            <span className="acw-num">IX.</span>
+            <span className="acw-num">|</span>
             <span>An invitation</span>
           </div>
         )}
@@ -64,7 +64,7 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
         <p className="mt-7 max-w-[620px] text-[17px] leading-[1.65] text-muted-foreground">
           Whether you are a woman seeking healing, a leader desiring to mentor
           others, a church or organization looking to collaborate, or a donor
-          wanting to support transformational work — A Certain Woman welcomes
+          wanting to support transformational work. A Certain Woman welcomes
           you.
         </p>
       </div>
@@ -171,7 +171,7 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
                 Your first letter arrives this Sunday.
               </p>
               <em className="font-display text-[16px] italic text-gold">
-                Until then — peace.
+                Until then, peace.
               </em>
             </div>
           )}
