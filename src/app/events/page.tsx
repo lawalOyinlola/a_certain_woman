@@ -72,14 +72,14 @@ export const metadata: Metadata = {
   },
 };
 
-type SearchParams = Promise<{ tab?: string }>;
+type SearchParams = Promise<{ tab?: string; q?: string }>;
 
 export default async function EventsPage({
   searchParams,
 }: {
   searchParams: SearchParams;
 }) {
-  const { tab } = await searchParams;
+  const { tab, q } = await searchParams;
   const explicit =
     tab === "past" || tab === "all" || tab === "upcoming" ? tab : null;
   const initialTab = explicit ?? ("all" as const);
@@ -109,7 +109,7 @@ export default async function EventsPage({
         </header>
 
         <div className="mx-auto mt-16 max-w-[1280px] px-6 md:px-12">
-          <EventsBrowser initialTab={initialTab} />
+          <EventsBrowser initialTab={initialTab} initialQuery={q} />
         </div>
       </main>
       <Footer />
