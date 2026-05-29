@@ -10,7 +10,8 @@ const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://acertainwoman.org";
 
 function eventLine(e: (typeof EVENTS)[number]) {
-  return `- [${e.title}: ${e.subtitle}](${siteUrl}/events#${e.id}) (${e.date}, ${e.location}): ${e.blurb}`;
+  const place = e.venue ? `${e.venue}, ${e.location}` : e.location;
+  return `- [${e.title}: ${e.subtitle}](${siteUrl}/events#${e.id}) (${e.date}, ${place}): ${e.blurb}`;
 }
 
 function buildContent() {
