@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { EVENTS, type ACWEvent } from "@/lib/data/events";
 import { Play, ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Lightbox, type LightboxItem } from "@/components/ui/lightbox";
 import { cn } from "@/lib/utils";
 
 type MediaItem =
@@ -76,7 +76,6 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
 
   const [filter, setFilter] = useState<string>("__all__");
   const [lb, setLb] = useState<number | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   const visible = useMemo(() => {
     if (filter === "__all__") return media;
@@ -88,20 +87,11 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
     setLb(null);
   };
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (lb === null) return;
-      if (e.key === "ArrowRight")
-        setLb((k) => (k === null ? null : (k + 1) % visible.length));
-      if (e.key === "ArrowLeft")
-        setLb((k) =>
-          k === null ? null : (k - 1 + visible.length) % visible.length,
-        );
-      if (e.key === "Escape") setLb(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [lb, visible.length]);
+  const lightboxItems: LightboxItem[] = visible.map((m) =>
+    m.kind === "video"
+      ? { kind: "video", src: m.src, poster: m.poster, caption: m.eventTitle }
+      : { kind: "photo", src: m.src, alt: m.alt, caption: m.caption },
+  );
 
   return (
     <section id="gallery" className="relative px-6 py-24 md:px-12 md:py-36">
@@ -213,84 +203,12 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
         )}
       </div>
 
-      <Dialog
-        open={lb !== null}
-        onOpenChange={(o) => {
-          if (!o) {
-            videoRef.current?.pause();
-            setLb(null);
-          }
-        }}
-      >
-        <DialogContent className="max-w-5xl border-border bg-cream-1 p-0">
-          <DialogTitle className="sr-only">
-            {lb !== null && visible[lb]
-              ? visible[lb].kind === "photo"
-                ? "Photo"
-                : "Recap film"
-              : "Media"}
-          </DialogTitle>
-          {lb !== null && visible[lb] && (
-            <div className="relative">
-              {visible[lb].kind === "video" ? (
-                <video
-                  ref={videoRef}
-                  src={visible[lb].src}
-                  poster={visible[lb].poster}
-                  controls
-                  autoPlay
-                  className="aspect-video w-full bg-forest"
-                />
-              ) : (
-                <div className="relative aspect-4/3 w-full bg-cream-2">
-                  <Image
-                    src={visible[lb].src}
-                    alt={visible[lb].alt}
-                    fill
-                    className="object-contain"
-                    sizes="100vw"
-                  />
-                </div>
-              )}
-              <div className="flex items-center justify-between gap-6 border-t border-border px-6 py-4 text-[12px] text-ink-2">
-                <em className="font-display text-[18px] text-forest">
-                  {visible[lb].kind === "photo"
-                    ? visible[lb].caption
-                    : visible[lb].title}
-                </em>
-                <small className="uppercase tracking-[0.28em] text-muted-foreground">
-                  {String(lb + 1).padStart(2, "0")} /{" "}
-                  {String(visible.length).padStart(2, "0")}
-                </small>
-              </div>
-              <button
-                aria-label="Previous"
-                onClick={() =>
-                  setLb((p) =>
-                    p === null
-                      ? null
-                      : (p - 1 + visible.length) % visible.length,
-                  )
-                }
-                className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-cream-1/90 px-3 py-2 text-forest backdrop-blur-sm transition-colors hover:bg-gold hover:text-cream-1 active:bg-gold/80 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
-              >
-                ‹
-              </button>
-              <button
-                aria-label="Next"
-                onClick={() =>
-                  setLb((p) =>
-                    p === null ? null : (p + 1) % visible.length,
-                  )
-                }
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-cream-1/90 px-3 py-2 text-forest backdrop-blur-sm transition-colors hover:bg-gold hover:text-cream-1 active:bg-gold/80 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
-              >
-                ›
-              </button>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <Lightbox
+        items={lightboxItems}
+        index={lb}
+        onClose={() => setLb(null)}
+        onNavigate={setLb}
+      />
     </section>
   );
 }
