@@ -27,7 +27,7 @@ export function Founder({ withLabel = true }: { withLabel?: boolean }) {
         <div>
           {withLabel && (
             <div className="acw-section-label">
-              <span className="acw-num">V.</span>
+              <span className="acw-num">|</span>
               <span>From the Founder</span>
             </div>
           )}
@@ -49,7 +49,7 @@ export function Founder({ withLabel = true }: { withLabel?: boolean }) {
           <div className="mt-10 flex flex-col gap-5 text-[16px] leading-[1.7] text-ink-2">
             <p>
               A Certain Woman was born from a deep conviction that women need
-              more than motivation — they need spaces of restoration, dignity,
+              more than motivation. They need spaces of restoration, dignity,
               truth, healing, and becoming.
             </p>
             <p>
