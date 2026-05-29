@@ -31,8 +31,7 @@ export const EXPERIENCES = [
     sub: "A Breakfast Honoring Women of Impact",
     blurb:
       "Invitation-only leadership breakfast celebrating women of resilience, service, quiet impact, legacy, and purpose.",
-    bestFor:
-      "Women leaders, mentors, professionals, advocates, legacy women.",
+    bestFor: "Women leaders, mentors, professionals, advocates, legacy women.",
     features: [
       "Honoree recognition",
       "Leadership conversation",
@@ -66,7 +65,7 @@ export const EXPERIENCES = [
     title: "Women's Healing Circles",
     sub: "Safe Spaces for Prayer & Release",
     blurb:
-      "Intimate gatherings where women share, listen, pray, reflect, and find strength in community — with care and confidentiality.",
+      "Intimate gatherings where women share, listen, pray, reflect, and find strength in community, with care and confidentiality.",
     bestFor:
       "Women navigating grief, emotional fatigue, transition, or renewal.",
     features: [
@@ -84,9 +83,8 @@ export const EXPERIENCES = [
     title: "Community Outreach",
     sub: "Compassion Beyond the Room",
     blurb:
-      "Restoration extended into communities — supporting women, mothers, girls, and families through practical care and dignity.",
-    bestFor:
-      "Vulnerable women, mothers, girls, families, community groups.",
+      "Restoration extended into communities, supporting women, mothers, girls, and families through practical care and dignity.",
+    bestFor: "Vulnerable women, mothers, girls, families, community groups.",
     features: [
       "Mother's Day support",
       "Girls' dignity packs",
@@ -110,7 +108,7 @@ export function Experiences({ withLabel = true }: { withLabel?: boolean }) {
       {withLabel && (
         <div className="mx-auto mb-14 flex max-w-[760px] flex-col items-center text-center">
           <div className="acw-section-label acw-section-label--light">
-            <span className="acw-num">IV.</span>
+            <span className="acw-num">|</span>
             <span>Signature experiences</span>
           </div>
           <h2 className="acw-display acw-display--center mt-6 text-cream-1">
@@ -119,7 +117,7 @@ export function Experiences({ withLabel = true }: { withLabel?: boolean }) {
             <em className="text-gold-2">we&apos;ve built.</em>
           </h2>
           <p className="mt-7 max-w-[640px] text-[17px] leading-[1.65] text-cream-1/70">
-            Every ACW experience is designed with intention — from the words
+            Every ACW experience is designed with intention, from the words
             spoken, to the table prepared, to the atmosphere created.
           </p>
         </div>
@@ -138,10 +136,7 @@ export function Experiences({ withLabel = true }: { withLabel?: boolean }) {
         ))}
       </div>
 
-      <article
-        key={cur.id}
-        className="acw-fade mx-auto mt-14 max-w-[1100px]"
-      >
+      <article key={cur.id} className="acw-fade mx-auto mt-14 max-w-[1100px]">
         <div className="flex items-center justify-center gap-5 text-cream-1/60">
           <span className="font-display text-[22px] italic text-gold-2">
             {cur.n}
