@@ -50,6 +50,8 @@ export const metadata: Metadata = {
     "responsible fatherhood Sierra Leone",
     "positive masculinity",
     "male engagement initiative",
+    "She's Seen Mother's Day celebration",
+    "Mother's Day outreach Freetown",
     "Christian women conference Sierra Leone",
     "girls mentorship Freetown",
     "Restoring Hearts Reclaiming Crowns",
