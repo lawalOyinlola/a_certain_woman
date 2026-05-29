@@ -32,7 +32,7 @@ const PERSONAS = [
   {
     n: "06",
     title: "& Allies, Mentors, Partners",
-    body: "For everyone who walks alongside her — pastors, sponsors, volunteers, and friends investing in her becoming.",
+    body: "For everyone who walks alongside her. Pastors, sponsors, volunteers, and friends investing in her becoming.",
   },
 ];
 
@@ -51,7 +51,7 @@ export function WhoWeServe() {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
     ref.current.querySelectorAll("[data-idx]").forEach((el) => io.observe(el));
     return () => io.disconnect();
@@ -62,7 +62,7 @@ export function WhoWeServe() {
       <div className="mx-auto mb-16 grid max-w-[1320px] items-end gap-10 md:mb-24 md:grid-cols-[1.5fr_1fr] md:gap-16">
         <div className="flex flex-col gap-7">
           <div className="acw-section-label">
-            <span className="acw-num">II.</span>
+            <span className="acw-num">|</span>
             <span>Who we serve</span>
           </div>
           <h2 className="acw-display">
@@ -72,7 +72,8 @@ export function WhoWeServe() {
           </h2>
         </div>
         <p className="font-display italic text-[18px] leading-snug text-ink-2 md:max-w-[340px] md:justify-self-end md:text-right">
-          Women in every season — healing, rising, leading, becoming.
+          {/* <p className="text-[16px] leading-[1.65] text-muted-foreground"> */}
+          Women in every season: healing, rising, leading, becoming.
         </p>
       </div>
 
@@ -86,7 +87,9 @@ export function WhoWeServe() {
             data-idx={i}
             className={cn(
               "acw-persona-card transition-all duration-700 ease-out",
-              active >= i ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+              active >= i
+                ? "translate-y-0 opacity-100"
+                : "translate-y-4 opacity-0",
             )}
           >
             <span className="acw-persona-num">{p.n}</span>
