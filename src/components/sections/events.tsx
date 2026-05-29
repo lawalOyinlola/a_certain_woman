@@ -194,7 +194,6 @@ function buildStats(event: ACWEvent, mode: Mode) {
 
 function FeaturedEvent({ event, mode }: { event: ACWEvent; mode: Mode }) {
   const stats = buildStats(event, mode);
-  const badge = mode === "upcoming" ? "Next" : "Latest";
   const primaryLabel = mode === "upcoming" ? "Event details" : "View the recap";
 
   return (
@@ -208,17 +207,32 @@ function FeaturedEvent({ event, mode }: { event: ACWEvent; mode: Mode }) {
             sizes="(min-width: 1024px) 50vw, 100vw"
             className="object-cover"
           />
-          <span className="absolute left-5 top-5 rounded-full bg-cream-1/90 px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-forest backdrop-blur-sm">
-            {badge}
-          </span>
+          {mode === "upcoming" && (
+            <span className="absolute left-5 top-5 rounded-full bg-forest/90 px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-cream-1 backdrop-blur-sm">
+              Next
+            </span>
+          )}
           <div className="pointer-events-none absolute inset-4 border border-cream-1/30" />
         </div>
       </div>
 
       <div className="flex flex-col justify-center">
         <small className="text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
-          {event.date} · {event.location}
+          {event.date} · {event.venue ? `${event.venue} · ` : ""}
+          {event.location}
         </small>
+        {event.tags && event.tags.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {event.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-gold/40 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-gold"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
         <h3 className="mt-4 font-display text-[clamp(40px,4.5vw,72px)] leading-[1.02] tracking-[-0.015em] text-forest">
           {event.title}. <em className="text-gold">{event.subtitle}</em>
         </h3>
@@ -254,7 +268,7 @@ function FeaturedEvent({ event, mode }: { event: ACWEvent; mode: Mode }) {
             </Link>
           </Button>
           {mode === "upcoming" && (
-            <Link href="/partner" className="acw-link-arrow">
+            <Link href="/contact" className="acw-link-arrow">
               Reserve a seat
             </Link>
           )}
@@ -284,7 +298,7 @@ function UpcomingCard({ event }: { event: ACWEvent }) {
       </div>
       <div className="px-6 py-6">
         <small className="block text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-          {event.location}
+          {event.venue ?? event.location}
         </small>
         <h4 className="mt-2 font-display text-[26px] leading-[1.05] text-forest">
           {event.title}. <em className="text-gold">{event.subtitle}</em>
