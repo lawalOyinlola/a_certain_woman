@@ -8,8 +8,19 @@ import { Join } from "@/components/sections/join";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Why we exist, who we are, and the story behind A Certain Woman — a faith-rooted women's movement built on identity, healing, leadership, and purpose.",
+    "The story, vision, and values behind A Certain Woman. Founded by Namaari Inanna Kargbo in Freetown, Sierra Leone, ACW is a faith-rooted women's movement built on identity, healing, leadership, and purpose.",
   alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About A Certain Woman",
+    description:
+      "The story, vision, and values behind A Certain Woman. A faith-rooted women's movement founded in Freetown, Sierra Leone, restoring identity, healing hearts, and raising women into the calling God placed on their lives.",
+    url: "/about",
+  },
+  twitter: {
+    title: "About A Certain Woman",
+    description:
+      "Founded by Namaari Inanna Kargbo in Freetown, Sierra Leone. A faith-rooted women's movement restoring identity, healing hearts, and raising leaders.",
+  },
 };
 
 const VALUES = [
@@ -83,7 +94,7 @@ export default function AboutPage() {
             <div className="acw-twoup">
               <div className="acw-twoup-left">
                 <div className="acw-section-label">
-                  <span className="acw-num">I.</span>
+                  <span className="acw-num">|</span>
                   <span>Why the name</span>
                 </div>
                 <h2 className="acw-page-h2 mt-6">
@@ -100,13 +111,13 @@ export default function AboutPage() {
                   sees her.
                 </p>
                 <p>
-                  A Certain Woman represents every woman whose story matters —
-                  the woman who has survived silently, served faithfully, loved
+                  A Certain Woman represents every woman whose story matters.
+                  The woman who has survived silently, served faithfully, loved
                   deeply, fallen, risen, waited, prayed, rebuilt, and continued.
                 </p>
                 <p className="acw-founder-emph">
-                  She is not just a woman. She is a certain woman. Seen.
-                  Called. Restored. Crowned.
+                  She is not just a woman. She is a certain woman. Seen. Called.
+                  Restored. Crowned.
                 </p>
               </div>
             </div>
@@ -119,7 +130,7 @@ export default function AboutPage() {
             <div className="acw-twoup">
               <div className="acw-twoup-left">
                 <div className="acw-section-label">
-                  <span className="acw-num">II.</span>
+                  <span className="acw-num">|</span>
                   <span>Vision &amp; Mission</span>
                 </div>
                 <h2 className="acw-page-h2 mt-6">
@@ -166,7 +177,7 @@ export default function AboutPage() {
           <div className="mx-auto max-w-[1120px]">
             <div className="flex flex-col items-center text-center">
               <div className="acw-section-label">
-                <span className="acw-num">III.</span>
+                <span className="acw-num">|</span>
                 <span>Our values</span>
               </div>
               <h2 className="acw-page-h2 mt-6">
@@ -203,7 +214,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <Join withLabel={false} />
+        <Join />
       </main>
       <Footer />
     </>
