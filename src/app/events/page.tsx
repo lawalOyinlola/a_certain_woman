@@ -2,12 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
 import { EventsBrowser } from "./events-browser";
-import {
-  EVENTS,
-  getUpcomingEvents,
-  isUpcoming,
-  type ACWEvent,
-} from "@/lib/data/events";
+import { EVENTS, isUpcoming, type ACWEvent } from "@/lib/data/events";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://acertainwoman.org";
@@ -32,9 +27,10 @@ function eventToJsonLd(event: ACWEvent) {
     image: [`${siteUrl}${event.cover}`],
     location: {
       "@type": "Place",
-      name: event.location,
+      name: event.venue ?? event.location,
       address: {
         "@type": "PostalAddress",
+        streetAddress: event.venue,
         addressLocality: event.location.split(",")[0]?.trim() ?? event.location,
         addressCountry: event.location.toLowerCase().includes("sierra leone")
           ? "SL"
@@ -86,9 +82,7 @@ export default async function EventsPage({
   const { tab } = await searchParams;
   const explicit =
     tab === "past" || tab === "all" || tab === "upcoming" ? tab : null;
-  const fallback =
-    getUpcomingEvents().length > 0 ? ("upcoming" as const) : ("past" as const);
-  const initialTab = explicit ?? fallback;
+  const initialTab = explicit ?? ("all" as const);
 
   const eventsJsonLd = EVENTS.map(eventToJsonLd);
 
