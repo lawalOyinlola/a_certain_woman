@@ -40,11 +40,27 @@ export function EventDetail({ event }: { event: ACWEvent }) {
     >
       <header className="mx-auto max-w-[1100px] text-center">
         <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
-          <span className="rounded-full bg-cream-2 px-3 py-1.5 text-forest">
-            {status}
-          </span>
+          {status !== "PAST" && (
+            <span className="rounded-full bg-forest px-3 py-1.5 text-cream-1">
+              {status}
+            </span>
+          )}
+          {event.tags?.map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full border border-gold/40 px-3 py-1.5 text-gold"
+            >
+              {tag}
+            </span>
+          ))}
           <span>{event.date}</span>
           <span>·</span>
+          {event.venue && (
+            <>
+              <span>{event.venue}</span>
+              <span>·</span>
+            </>
+          )}
           <span>{event.location}</span>
         </div>
         <h2 className="acw-display mt-6">
