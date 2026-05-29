@@ -15,6 +15,8 @@ export type ACWEvent = {
   title: string;
   subtitle: string;
   theme?: string;
+  tags?: string[];
+  venue?: string;
   location: string;
   cover: string;
   blurb: string;
@@ -117,6 +119,7 @@ export const EVENTS: ACWEvent[] = [
     title: "Healed & Held",
     subtitle: "The Official Launch & Summit",
     theme: "God's grace in every season",
+    venue: "The Church of Jesus Christ of Latter-day Saints.",
     location: "Freetown, Sierra Leone",
     cover: "/photos/ACW_launch/KCS_3486.jpg",
     blurb:
@@ -127,11 +130,13 @@ export const EVENTS: ACWEvent[] = [
   },
   {
     id: "crown-table-spotlight-2026",
-    date: "April 25, 2026",
-    dateISO: "2026-04-25",
+    date: "March 28, 2026",
+    dateISO: "2026-03-28",
     title: "The Crown Table",
     subtitle: "Spotlight Breakfast",
     theme: "Honoring her bloom · crowned in her season",
+    tags: ["Edition I"],
+    venue: "The Country Lodge Hotel",
     location: "Freetown, Sierra Leone",
     cover: "/photos/Crown_Table/KCS_2197.jpg",
     blurb:
@@ -149,11 +154,13 @@ export const EVENTS: ACWEvent[] = [
   },
   {
     id: "faith-and-flowers-2026",
-    date: "May 6, 2026",
-    dateISO: "2026-05-06",
+    date: "April 25, 2026",
+    dateISO: "2026-04-25",
     title: "Faith & Flowers",
     subtitle: "A Sacred Wellness Brunch",
     theme: "Pause · Breathe · Bloom",
+    tags: ["Edition I"],
+    venue: "The Lead",
     location: "Freetown, Sierra Leone",
     cover: "/photos/Faith_and_Flowers/KCS_9594.jpg",
     blurb:
@@ -166,6 +173,40 @@ export const EVENTS: ACWEvent[] = [
         title: "Faith & Flowers · Recap",
       },
     ],
+    speakers: [],
+    program: [],
+  },
+  {
+    id: "mothers-day-shes-seen-2026",
+    date: "May 10, 2026",
+    dateISO: "2026-05-10",
+    title: "She is Seen",
+    subtitle: "A Mother's Day Celebration",
+    theme: "Honoring the women who carry us",
+    tags: ["Outreach"],
+    venue: "Susan's Bay",
+    location: "Freetown, Sierra Leone",
+    cover: "/photos/Faith_and_Flowers/KCS_9605.jpg",
+    blurb:
+      "A Mother's Day held in the heart of Susan's Bay, for the mothers who give quietly and are too rarely seen. A morning of honor, encouragement, and care, carrying dignity to women who pour out for their children and communities every day. Because she is seen, she is valued, and she is loved.",
+    photos: [],
+    speakers: [],
+    program: [],
+  },
+  {
+    id: "men-who-stand-launch-2026",
+    date: "June 19–21, 2026",
+    dateISO: "2026-06-19",
+    endDateISO: "2026-06-21",
+    title: "Men Who Stand",
+    subtitle: "The Launch",
+    theme: "Restoring strength. Redefining manhood. Building legacy.",
+    tags: ["Launch"],
+    location: "Freetown, Sierra Leone",
+    cover: "/a_man_who_stand_cover.jpg",
+    blurb:
+      "A three-day celebration marking the launch of Men Who Stand, anchored in one verse: “Be on your guard; stand firm in the faith; be courageous; be strong” (1 Corinthians 16:13). Three days for men who are willing to heal, to be present, and to build something different. Honesty, faith, and the quiet work of becoming a man of character, legacy, and purpose.",
+    photos: [],
     speakers: [],
     program: [],
   },
@@ -205,4 +246,33 @@ export function getEventStatus(
   if (!isUpcoming(e, now)) return "PAST";
   const upcoming = getUpcomingEvents(now);
   return upcoming[0]?.id === e.id ? "NEXT" : "UPCOMING";
+}
+
+export type EventBadgeState = "today" | "upcoming" | "past";
+
+export function getEventBadgeState(
+  eventId: string,
+  now: Date = new Date(),
+): { state: EventBadgeState; label: string } {
+  const event = EVENTS.find((e) => e.id === eventId);
+  if (!event) return { state: "past", label: "" };
+
+  const today = startOfDay(now);
+  const [y, m, d] = event.dateISO.split("-").map(Number);
+  const startDay = new Date(y, (m ?? 1) - 1, d ?? 1);
+  const endDay = endOfEventDate(event);
+
+  // After the event has fully passed: show nothing.
+  if (today.getTime() > endDay.getTime()) return { state: "past", label: "" };
+
+  // During the event (single or multi-day): happening now.
+  if (today.getTime() >= startDay.getTime())
+    return { state: "today", label: "Happening Now" };
+
+  // Before the event: show the start date.
+  const label = startDay.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+  });
+  return { state: "upcoming", label };
 }
