@@ -36,7 +36,7 @@ export function Manifesto() {
             height="60"
             fill="none"
             stroke="currentColor"
-            strokeWidth="0.6"
+            strokeWidth="1.2"
           >
             <path d="M6 44 L12 18 L22 32 L30 12 L38 32 L48 18 L54 44 Z" />
             <line x1="6" y1="44" x2="54" y2="44" />
@@ -60,9 +60,16 @@ export function Manifesto() {
           <span className="block">
             The woman <em className="italic text-gold">rebuilding</em>
           </span>
-          <span className="block">her voice — and the one</span>
+          <span className="block">her voice, and the one</span>
           <span className="block">
             leading while still <em className="italic text-gold">becoming.</em>
+          </span>
+
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -right-2 -bottom-24 font-display text-[1.4em] italic leading-none text-gold/40 scale-x-[-1]"
+          >
+            &ldquo;
           </span>
         </h2>
 
@@ -71,7 +78,7 @@ export function Manifesto() {
         </p>
 
         <div className="mt-8 font-display text-[18px] italic text-gold">
-          — The ACW Movement Statement
+          From the ACW Movement Statement
         </div>
       </div>
     </section>
