@@ -46,7 +46,9 @@ const schema = z
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const raw = await req.json();
+    const body =
+      raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {};
 
     // Sanitize all string fields before validation
     const sanitized = {
@@ -64,13 +66,14 @@ export async function POST(req: Request) {
     const result = schema.safeParse(sanitized);
 
     if (!result.success) {
-      const firstIssue = result.error.issues[0]?.message ?? "Invalid submission.";
+      const firstIssue =
+        result.error.issues[0]?.message ?? "Invalid submission.";
       return NextResponse.json({ error: firstIssue }, { status: 400 });
     }
 
     const data = result.data;
 
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: `A Certain Woman <${process.env.RESEND_FROM_EMAIL}>`,
       to: process.env.CONTACT_TO_EMAIL!,
       replyTo: data.email ?? undefined,
@@ -78,6 +81,14 @@ export async function POST(req: Request) {
       html: contactEmailHtml(data),
       text: contactEmailText(data),
     });
+
+    if (error) {
+      console.error("Resend failed to send contact email:", error);
+      return NextResponse.json(
+        { error: "Failed to send message. Please try again." },
+        { status: 502 },
+      );
+    }
 
     return NextResponse.json({ ok: true });
   } catch {
