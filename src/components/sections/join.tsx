@@ -29,19 +29,38 @@ const PATHS = [
   },
 ];
 
+type NewsletterStatus = "idle" | "loading" | "success" | "error";
+
 export function Join({ withLabel = true }: { withLabel?: boolean }) {
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<NewsletterStatus>("idle");
   const [error, setError] = useState("");
 
-  const onSubmit: React.ComponentProps<"form">["onSubmit"] = (e) => {
+  const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Please enter a valid email.");
+    setError("");
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setError("Please enter a valid email address.");
       return;
     }
-    setError("");
-    setSubmitted(true);
+
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j.error ?? "Subscription failed.");
+      }
+      setStatus("success");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setStatus("error");
+    }
   };
 
   return (
@@ -122,7 +141,7 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
         </div>
 
         <div className="relative">
-          {!submitted ? (
+          {status !== "success" ? (
             <form onSubmit={onSubmit} className="flex flex-col gap-3">
               <label className="acw-field">
                 <span>Your email</span>
@@ -144,8 +163,10 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
                 variant="editorial"
                 size="pill"
                 className="mt-3 w-full"
+                disabled={status === "loading"}
               >
-                Begin <ArrowRight />
+                {status === "loading" ? "Sending..." : "Begin"}
+                {status !== "loading" && <ArrowRight />}
               </Button>
               <small className="mt-3 block text-[11px] leading-snug text-muted-foreground">
                 Unsubscribe anytime. We write gently and infrequently.
