@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Serif_Display, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { AnnouncementBanner } from "@/components/site/announcement-banner";
 import "./globals.css";
 
 const display = DM_Serif_Display({
@@ -257,6 +258,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="min-h-screen bg-background text-foreground antialiased">
+        <AnnouncementBanner />
         {children}
         <Analytics />
         <script
