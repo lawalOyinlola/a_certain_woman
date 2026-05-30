@@ -3,6 +3,14 @@
 import { useState } from "react";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
+import { FormField, FieldInput, FieldTextarea } from "@/components/ui/form-field";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const REASONS = [
   "Join the Movement",
@@ -15,11 +23,73 @@ const REASONS = [
   "General Inquiry",
 ];
 
+type Status = "idle" | "loading" | "success" | "error";
+
 export function ContactForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [serverError, setServerError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [reason, setReason] = useState(REASONS[0]);
 
-  if (submitted) {
+  const validate = (fd: FormData) => {
+    const errs: Record<string, string> = {};
+    const name = (fd.get("name") as string).trim();
+    const email = (fd.get("email") as string).trim();
+    const phone = (fd.get("phone") as string).trim();
+    const message = (fd.get("message") as string).trim();
+
+    if (name.length < 2) errs.name = "Please enter your name.";
+    if (!email && !phone)
+      errs.email = "Please provide an email or phone number.";
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      errs.email = "Invalid email address.";
+    if (message.length < 10)
+      errs.message = "Message must be at least 10 characters.";
+    return errs;
+  };
+
+  const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFieldErrors({});
+    setServerError("");
+
+    const fd = new FormData(e.currentTarget);
+    const errs = validate(fd);
+    if (Object.keys(errs).length) {
+      setFieldErrors(errs);
+      return;
+    }
+
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: (fd.get("name") as string).trim(),
+          email: (fd.get("email") as string).trim() || undefined,
+          phone: (fd.get("phone") as string).trim() || undefined,
+          organization: (fd.get("organization") as string).trim() || undefined,
+          reason,
+          message: (fd.get("message") as string).trim(),
+        }),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j.error ?? "Submission failed.");
+      }
+      setStatus("success");
+    } catch (err) {
+      setServerError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.",
+      );
+      setStatus("error");
+    }
+  };
+
+  if (status === "success") {
     return (
       <div className="mx-auto max-w-[520px] py-12 text-center">
         <div className="text-gold">
@@ -48,47 +118,77 @@ export function ContactForm() {
   }
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        setSubmitted(true);
-      }}
-      className="acw-contact-form"
-    >
-      <label className="acw-field">
-        <span>Full Name</span>
-        <input type="text" placeholder="Her name" required />
-      </label>
-      <label className="acw-field">
-        <span>Email Address</span>
-        <input type="email" placeholder="her@email.com" required />
-      </label>
-      <label className="acw-field">
-        <span>Phone / WhatsApp</span>
-        <input type="tel" placeholder="+232 ..." />
-      </label>
-      <label className="acw-field">
-        <span>Organization (optional)</span>
-        <input type="text" placeholder="Church, NGO, company..." />
-      </label>
-      <label className="acw-field acw-field--full">
-        <span>Reason for Contact</span>
-        <select value={reason} onChange={(e) => setReason(e.target.value)}>
-          {REASONS.map((r) => (
-            <option key={r}>{r}</option>
-          ))}
-        </select>
-      </label>
-      <label className="acw-field acw-field--full">
-        <span>Message</span>
-        <textarea
-          placeholder="Tell us a little about why you're writing..."
-          required
+    <form onSubmit={onSubmit} noValidate className="acw-contact-form">
+      <FormField label="Full Name" error={fieldErrors.name}>
+        <FieldInput name="name" type="text" placeholder="Her name" />
+      </FormField>
+
+      <FormField
+        label="Email Address"
+        error={fieldErrors.email}
+        hint="Email or phone — at least one is required."
+      >
+        <FieldInput name="email" type="email" placeholder="her@email.com" />
+      </FormField>
+
+      <FormField label="Phone / WhatsApp">
+        <FieldInput name="phone" type="tel" placeholder="+232 ..." />
+      </FormField>
+
+      <FormField label="Organization (optional)">
+        <FieldInput
+          name="organization"
+          type="text"
+          placeholder="Church, NGO, company..."
         />
-      </label>
+      </FormField>
+
+      {/* Reason — underline-styled Select */}
+      <FormField label="Reason for Contact" full>
+        <Select
+          value={reason}
+          onValueChange={(v) => v !== null && setReason(v)}
+        >
+          <SelectTrigger className="w-full rounded-none border-0 border-b border-border bg-transparent py-3 h-auto text-[16px] font-sans text-ink shadow-none ring-0 focus-visible:ring-0 focus-visible:border-gold hover:border-gold/60 transition-colors duration-200 data-placeholder:text-muted-foreground data-placeholder:opacity-50 data-placeholder:italic [&>svg]:text-muted-foreground">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="bg-cream-1 border-border shadow-[0_8px_32px_-8px_rgba(31,38,32,0.18)]">
+            {REASONS.map((r) => (
+              <SelectItem
+                key={r}
+                value={r}
+                className="font-sans text-[14px] text-ink cursor-pointer focus:bg-cream-2 focus:text-forest"
+              >
+                {r}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </FormField>
+
+      <FormField label="Message" error={fieldErrors.message} full>
+        <FieldTextarea
+          name="message"
+          placeholder="Tell us a little about why you're writing..."
+        />
+      </FormField>
+
+      {serverError && (
+        <p className="acw-field--full font-sans text-[13px] text-destructive">
+          {serverError}
+        </p>
+      )}
+
       <div className="acw-field--full">
-        <Button type="submit" variant="editorial" size="pill" className="w-full">
-          Send Message <ArrowRight />
+        <Button
+          type="submit"
+          variant="editorial"
+          size="pill"
+          className="w-full"
+          disabled={status === "loading"}
+        >
+          {status === "loading" ? "Sending..." : "Send Message"}
+          {status !== "loading" && <ArrowRight />}
         </Button>
       </div>
     </form>
