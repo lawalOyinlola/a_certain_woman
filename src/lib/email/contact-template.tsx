@@ -34,7 +34,7 @@ export function contactEmailHtml(d: ContactEmailData): string {
   </div>
   <div class="body">
     <p class="label">From</p>
-    <p class="value">${d.name} &lt;${d.email}&gt;</p>
+    <p class="value">${d.email ? `${d.name} &lt;${d.email}&gt;` : d.name}</p>
 
     ${d.email ? `<p class="label">Email</p><p class="value">${d.email}</p>` : ""}
     ${d.phone ? `<p class="label">Phone / WhatsApp</p><p class="value">${d.phone}</p>` : ""}
@@ -57,7 +57,7 @@ export function contactEmailText(d: ContactEmailData): string {
     "A CERTAIN WOMAN — New Contact Form Submission",
     "=".repeat(48),
     `Name:    ${d.name}`,
-    `Email:   ${d.email}`,
+    d.email ? `Email:   ${d.email}` : null,
     d.phone ? `Phone:   ${d.phone}` : null,
     d.organization ? `Org:     ${d.organization}` : null,
     `Reason:  ${d.reason}`,
