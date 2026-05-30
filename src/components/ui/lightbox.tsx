@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { Dialog } from "@base-ui/react/dialog";
 
 export type LightboxItem =
   | { kind: "photo"; src: string; alt: string; caption?: string }
@@ -25,43 +25,48 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
 
   useEffect(() => {
     if (index === null) return;
+    // Escape, focus trap, and scroll-lock are handled by the modal Dialog below.
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight" && index !== null)
+      // Let a focused video player keep its native arrow-key seeking.
+      const inVideo = e
+        .composedPath()
+        .some((el) => el instanceof HTMLVideoElement);
+      if (inVideo) return;
+
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
         onNavigate((index + 1) % total);
-      if (e.key === "ArrowLeft" && index !== null)
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
         onNavigate((index - 1 + total) % total);
+      }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [index, total, onClose, onNavigate]);
+  }, [index, total, onNavigate]);
 
   // Pause video when navigating away
   useEffect(() => {
     if (current?.kind !== "video") videoRef.current?.pause();
   }, [current]);
 
-  // Prevent body scroll while open
-  useEffect(() => {
-    if (index !== null) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [index]);
-
-  if (index === null || !current) return null;
-
-  return createPortal(
-    <div
-      role="dialog"
-      aria-modal
-      aria-label={current.caption ?? (current.kind === "video" ? "Video" : "Photo")}
-      className="fixed inset-0 z-[9999] flex flex-col bg-ink/95 backdrop-blur-sm"
+  return (
+    <Dialog.Root
+      open={index !== null}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
     >
+      <Dialog.Portal>
+        <Dialog.Popup
+          aria-label={
+            current?.caption ??
+            (current?.kind === "video" ? "Video" : "Photo")
+          }
+          className="fixed inset-0 z-[9999] flex flex-col bg-ink/95 backdrop-blur-sm outline-none"
+        >
+          {index !== null && current && (
+            <>
       {/* Top bar */}
       <div className="flex shrink-0 items-center justify-between px-4 py-4 md:px-8">
         <span className="font-display text-[13px] italic text-cream-1/50">
@@ -174,7 +179,10 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
           </p>
         </div>
       )}
-    </div>,
-    document.body,
+            </>
+          )}
+        </Dialog.Popup>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
