@@ -3,7 +3,11 @@
 import { useState } from "react";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
-import { FormField, FieldInput, FieldTextarea } from "@/components/ui/form-field";
+import {
+  FormField,
+  FieldInput,
+  FieldTextarea,
+} from "@/components/ui/form-field";
 import {
   Select,
   SelectContent,
@@ -119,8 +123,19 @@ export function ContactForm() {
 
   return (
     <form onSubmit={onSubmit} noValidate className="acw-contact-form">
-      <FormField label="Full Name" error={fieldErrors.name}>
-        <FieldInput name="name" type="text" placeholder="Her name" />
+      <FormField
+        label="Full Name"
+        htmlFor="contact-name"
+        error={fieldErrors.name}
+      >
+        <FieldInput
+          id="contact-name"
+          name="name"
+          type="text"
+          placeholder="Her name"
+          aria-invalid={Boolean(fieldErrors.name)}
+          aria-describedby={fieldErrors.name ? "contact-name-error" : undefined}
+        />
       </FormField>
 
       <FormField
