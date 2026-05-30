@@ -52,8 +52,12 @@
   --acw-muted: #6f6857;
   --acw-green: #1f3d2b;
   --acw-green-2: #2c5239;
-  --acw-gold: #b6914a;
+  /* Text-safe gold: passes WCAG AA (>=4.5:1) on cream backgrounds.
+     The lighter #b6914a brand gold failed contrast on cream at any size. */
+  --acw-gold: #806427;
   --acw-gold-2: #d4ae6b;
+  /* Original brand gold, kept for non-text accent surfaces (see --accent). */
+  --acw-gold-accent: #b6914a;
   --acw-rule: rgba(31, 38, 32, 0.18);
 
   /* shadcn variables mapped to ACW */
@@ -69,7 +73,8 @@
   --secondary-foreground: var(--acw-ink);
   --muted: var(--acw-cream-2);
   --muted-foreground: var(--acw-muted);
-  --accent: var(--acw-gold);
+  /* Bright gold here so dark (ink) accent-foreground text stays >=4.5:1. */
+  --accent: var(--acw-gold-accent);
   --accent-foreground: var(--acw-ink);
   --destructive: oklch(0.577 0.245 27.325);
   --border: var(--acw-rule);

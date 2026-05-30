@@ -86,7 +86,7 @@ export function Footer() {
         <Separator className="mt-14 bg-cream-1/15" />
 
         {/* Legal bar */}
-        <div className="mt-8 flex flex-col items-center justify-between gap-3 text-[11px] uppercase tracking-[0.2em] text-cream-1/50 md:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-between gap-3 text-[11px] uppercase tracking-[0.2em] text-cream-1/70 md:flex-row">
           <span>
             A faith-rooted women&apos;s movement restoring identity, healing
             hearts, raising leaders.
@@ -106,7 +106,7 @@ export function Footer() {
         </div>
 
         {/* Builder credit */}
-        <div className="mt-6 text-center text-[10px] uppercase tracking-[0.24em] text-cream-1/30">
+        <div className="mt-6 text-center text-[10px] uppercase tracking-[0.24em] text-cream-1/60">
           <span>Site by </span>
           <a
             href="https://www.lawaloyinlola.com/"
