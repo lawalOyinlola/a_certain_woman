@@ -111,7 +111,7 @@ function SectionHeader({ mode }: { mode: Mode }) {
   }
 
   return (
-    <div className="text-center">
+    <div data-reveal className="text-center">
       <div className="acw-section-label justify-center">
         <span className="acw-num">|</span>
         <span>Where she gathers</span>
