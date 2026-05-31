@@ -1,0 +1,186 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import { ArrowRight } from "@/components/site/icons";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { WOMEN_PROGRAMS, type WomenProgram } from "@/lib/data/programs";
+
+/** Eyebrow + title + blurb — the part shown before the tabs on mobile. */
+function ProgramHead({ p }: { p: WomenProgram }) {
+  return (
+    <>
+      <div className="flex items-center justify-center gap-5 text-cream-1/60">
+        <span className="font-display text-[22px] italic text-gold-2">
+          {p.n}
+        </span>
+        <span className="h-px w-10 bg-cream-1/30" />
+        <span className="text-[11px] uppercase tracking-[0.3em]">{p.sub}</span>
+      </div>
+
+      <h3 className="acw-exp-title mt-6">
+        <em>{p.title}.</em>
+      </h3>
+
+      <p className="mx-auto mt-7 max-w-[680px] text-center text-[17px] leading-[1.65] text-cream-1/80">
+        {p.blurb}
+      </p>
+    </>
+  );
+}
+
+/** Key features + best-for + CTA grid. */
+function ProgramBody({ p }: { p: WomenProgram }) {
+  return (
+    <div className="grid gap-16 border-t border-cream-1/20 pt-12 md:grid-cols-2">
+      <div>
+        <small className="block text-[11px] uppercase tracking-[0.32em] text-gold-2">
+          KEY FEATURES
+        </small>
+        <ul className="acw-exp-features mt-6">
+          {p.features.map((f, i) => (
+            <li key={i}>{f}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <small className="block text-[11px] uppercase tracking-[0.32em] text-gold-2">
+          BEST FOR
+        </small>
+        <p className="mt-6 text-[17px] leading-[1.6] text-cream-1/80">
+          {p.bestFor}
+        </p>
+        <Button
+          asChild
+          size="pill"
+          className="mt-7 bg-gold-2 text-forest hover:bg-cream-1"
+        >
+          <Link href={p.href}>
+            {p.cta} <ArrowRight />
+          </Link>
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+/** Hand-drawn levitating hint nudging users to click the tabs. */
+function ProgramsHint() {
+  return (
+    <div className="acw-programs-hint" aria-hidden>
+      <span
+        className="acw-programs-hint-text"
+        style={{ fontFamily: "var(--font-hand)" }}
+      >
+        click to view each program
+      </span>
+      <svg
+        width="50"
+        height="38"
+        viewBox="0 0 50 38"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {/* curve from near the text, sweeping down to the tabs */}
+        <path d="M2 4C20 6 38 12 41 32" />
+        {/* arrowhead — tip (41,32) is exactly the curve's endpoint */}
+        <path d="M33 26 L41 32 L47 24" />
+      </svg>
+    </div>
+  );
+}
+
+export function WomenPrograms({
+  withLabel = true,
+  layout = "tabs",
+}: {
+  withLabel?: boolean;
+  layout?: "tabs" | "stacked";
+}) {
+  const [active, setActive] = useState(0);
+  const [interacted, setInteracted] = useState(false);
+  const cur = WOMEN_PROGRAMS[active];
+
+  return (
+    <section
+      id="programs"
+      className="acw-bg-forest relative px-6 py-32 md:px-12 md:py-40"
+    >
+      {withLabel && (
+        <div className="mx-auto mb-14 flex max-w-[760px] flex-col items-center text-center">
+          <div className="acw-section-label acw-section-label--light">
+            <span className="acw-num">|</span>
+            <span>Signature programs</span>
+          </div>
+          <h2 className="acw-display acw-display--center mt-6 text-cream-1">
+            The rooms
+            <br />
+            <em className="text-gold-2">we&apos;ve built.</em>
+          </h2>
+          <p className="mt-7 max-w-[640px] text-[17px] leading-[1.65] text-cream-1/70">
+            Every ACW experience is designed with intention, from the words
+            spoken, to the table prepared, to the atmosphere created.
+          </p>
+        </div>
+      )}
+
+      {layout === "tabs" ? (
+        <div className="mx-auto flex max-w-[1320px] flex-col">
+          {/* Tabs — below the active title on mobile, above it on desktop */}
+          <div className="acw-exp-tab-bar relative order-2 md:order-1">
+            {!interacted && <ProgramsHint />}
+            {WOMEN_PROGRAMS.map((e, i) => (
+              <button
+                key={e.id}
+                className={cn("acw-exp-tab", active === i && "is-active")}
+                onClick={() => {
+                  setActive(i);
+                  setInteracted(true);
+                }}
+              >
+                <span className="acw-exp-tab-n">{e.n}</span>
+                <span className="acw-exp-tab-title">{e.title}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Active program — title & description (first on mobile) */}
+          <div
+            key={cur.id + "-head"}
+            className="acw-fade order-1 mx-auto mb-12 w-full max-w-[1100px] md:order-2 md:mt-14 md:mb-0"
+          >
+            <ProgramHead p={cur} />
+          </div>
+
+          {/* Active program — key features & best for */}
+          <div
+            key={cur.id + "-body"}
+            className="acw-fade order-3 mx-auto mt-12 w-full max-w-[1100px] md:mt-14"
+          >
+            <ProgramBody p={cur} />
+          </div>
+        </div>
+      ) : (
+        // Stacked — every program shown in full so visitors scroll through each.
+        <div className="mx-auto max-w-[1100px] space-y-28 md:space-y-36">
+          {WOMEN_PROGRAMS.map((p) => (
+            <article
+              key={p.id}
+              id={p.id}
+              className="scroll-mt-28 md:scroll-mt-32"
+            >
+              <ProgramHead p={p} />
+              <div className="mt-12 md:mt-14">
+                <ProgramBody p={p} />
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
