@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 const CATS = [
   "All",
@@ -72,9 +73,10 @@ export function StoriesGrid() {
   const [cat, setCat] = useState<(typeof CATS)[number]>("All");
   const filtered =
     cat === "All" ? ALL_STORIES : ALL_STORIES.filter((s) => s.cat === cat);
+  const ref = useGsapReveal<HTMLDivElement>({ batch: true, stagger: 0.08 });
 
   return (
-    <div className="mx-auto max-w-[1320px]">
+    <div ref={ref} className="mx-auto max-w-[1320px]">
       <div className="mb-16 flex flex-wrap justify-center gap-2 border-b border-border pb-6">
         {CATS.map((c) => (
           <button
@@ -96,6 +98,7 @@ export function StoriesGrid() {
         {filtered.map((s) => (
           <article
             key={s.title}
+            data-reveal
             className="group flex flex-col overflow-hidden border border-border bg-cream-1 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold hover:shadow-[0_28px_60px_-28px_rgba(31,38,32,0.18)]"
           >
             <div className="relative aspect-4/3 overflow-hidden">
