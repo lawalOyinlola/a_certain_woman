@@ -1,9 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { getEventBadgeState } from "@/lib/data/events";
 import { MEN_PROGRAM as MEN } from "@/lib/data/programs";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 const COVER_IMAGE = "/media/a_man_who_stands/pdf/a_man_who_stand_cover.jpg";
 
@@ -16,15 +19,17 @@ export function MenWhoStand({
 }) {
   const badge = getEventBadgeState(MEN.eventId);
   const dev = MEN.devotional;
+  const ref = useGsapReveal<HTMLElement>({ stagger: 0.13 });
 
   return (
     <section
+      ref={ref}
       id="men-who-stand"
       className="relative bg-cream-2 px-6 py-32 md:px-12 md:py-40"
     >
       <div className="mx-auto max-w-[1120px]">
         {withLabel && (
-          <div className="mb-14 flex flex-col items-center text-center">
+          <div data-reveal className="mb-14 flex flex-col items-center text-center">
             <div className="acw-section-label">
               <span className="acw-num">{MEN.n}.</span>
               <span>{MEN.eyebrow}</span>
@@ -38,7 +43,7 @@ export function MenWhoStand({
           </div>
         )}
 
-        <div className="acw-twoup">
+        <div data-reveal className="acw-twoup">
           <div className="acw-twoup-body">
             <p className="text-[17px] text-ink-2">{MEN.blurb}</p>
             <p className="font-display text-[18px] italic text-muted-foreground">
