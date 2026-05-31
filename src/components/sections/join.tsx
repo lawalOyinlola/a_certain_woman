@@ -10,7 +10,7 @@ const PATHS = [
     kind: "JOIN",
     title: "Join the Movement",
     body: "Receive our quiet letters, find a circle near you, and gather with women becoming whole.",
-    cta: "Begin",
+    cta: "Join the Movement",
     href: "/contact",
   },
   {
@@ -142,13 +142,18 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
 
         <div className="relative">
           {status !== "success" ? (
-            <form onSubmit={onSubmit} className="flex flex-col gap-3">
+            <form
+              onSubmit={onSubmit}
+              className="flex flex-col gap-3"
+              aria-busy={status === "loading"}
+            >
               <label className="acw-field">
                 <span>Your email</span>
                 <input
                   type="email"
                   placeholder="her@email.com"
                   value={email}
+                  disabled={status === "loading"}
                   onChange={(e) => {
                     setEmail(e.target.value);
                     setError("");
@@ -165,7 +170,7 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
                 className="mt-3 w-full"
                 disabled={status === "loading"}
               >
-                {status === "loading" ? "Sending..." : "Begin"}
+                {status === "loading" ? "Sending…" : "Subscribe"}
                 {status !== "loading" && <ArrowRight />}
               </Button>
               <small className="mt-3 block text-[11px] leading-snug text-muted-foreground">
