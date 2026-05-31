@@ -98,7 +98,7 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
       {!compact && (
         <div className="mx-auto max-w-[1280px] text-center">
           <div className="acw-section-label justify-center">
-            <span className="acw-num">VI.</span>
+            <span className="acw-num">|</span>
             <span>The gathering, in pictures</span>
           </div>
           <h2 className="acw-display acw-display--center mt-6">

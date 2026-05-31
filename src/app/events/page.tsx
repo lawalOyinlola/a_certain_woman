@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
+import { PageHero } from "@/components/site/page-hero";
 import { EventsBrowser } from "./events-browser";
 import { EVENTS, isUpcoming, type ACWEvent } from "@/lib/data/events";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://acertainwoman.org";
+import { siteUrl } from "@/config/site";
 
 function eventToJsonLd(event: ACWEvent) {
   const upcoming = isUpcoming(event);
@@ -92,20 +92,16 @@ export default async function EventsPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventsJsonLd) }}
       />
       <Nav />
-      <main className="pt-32 md:pt-40">
-        <header className="mx-auto max-w-[1100px] px-6 text-center md:px-12">
-          <div className="acw-section-label justify-center">
-            <span className="acw-num">|</span>
-            <span>Where she gathers</span>
-          </div>
-          <h1 className="acw-display acw-display--center mt-6">
-            Every <em>gathering.</em>
-          </h1>
-          <p className="mx-auto mt-6 max-w-[640px] text-[15px] leading-[1.8] text-muted-foreground">
-            Every room we&apos;ve built, and every one we&apos;re building next.
-            Speakers, programs, and the women who were there.
-          </p>
-        </header>
+      <main id="top">
+        <PageHero
+          eyebrow="WHERE SHE GATHERS"
+          title={
+            <>
+              Every <em>gathering.</em>
+            </>
+          }
+          sub="Every room we've built, and every one we're building next. Speakers, programs, and the women who were there."
+        />
 
         <div className="mx-auto mt-16 max-w-[1280px] px-6 md:px-12">
           <EventsBrowser initialTab={initialTab} initialQuery={q} />
