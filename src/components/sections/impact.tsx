@@ -1,8 +1,10 @@
+"use client";
+
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 import { TOTAL_PROGRAMS } from "@/lib/data/programs";
 import { getPastEvents } from "@/lib/data/events";
 
 export function Impact() {
-  // Dynamic, real counts (revalidated hourly on the home page).
   const programs = String(TOTAL_PROGRAMS).padStart(2, "0");
   const gatherings = String(getPastEvents().length).padStart(2, "0");
 
@@ -31,32 +33,47 @@ export function Impact() {
     },
   ];
 
+  const headerRef = useGsapReveal<HTMLDivElement>({ stagger: 0.14 });
+  const gridRef = useGsapReveal<HTMLDivElement>({
+    targets: "[data-stat]",
+    stagger: 0.1,
+    from: { y: 30, opacity: 0 },
+    trigger: { start: "top 85%" },
+  });
+
   return (
     <section
       id="impact"
       className="acw-bg-forest relative px-6 py-32 md:px-12 md:py-40"
     >
-      <div className="mx-auto mb-16 flex max-w-[760px] flex-col items-center text-center">
-        <div className="acw-section-label acw-section-label--light">
+      <div
+        ref={headerRef}
+        className="mx-auto mb-16 flex max-w-[760px] flex-col items-center text-center"
+      >
+        <div data-reveal className="acw-section-label acw-section-label--light">
           <span className="acw-num">|</span>
           <span>Our impact so far</span>
         </div>
-        <h2 className="acw-display acw-display--center mt-6 text-cream-1">
+        <h2 data-reveal className="acw-display acw-display--center mt-6 text-cream-1">
           Growing,
           <br />
           <em className="text-gold-2">faithfully.</em>
         </h2>
-        <p className="mt-7 max-w-[600px] text-[17px] leading-[1.65] text-cream-1/70">
+        <p data-reveal className="mt-7 max-w-[600px] text-[17px] leading-[1.65] text-cream-1/70">
           A young movement, building with intention. These numbers are early,
           honest, and growing, every one a woman seen, a space made safe, a
           crown reclaimed.
         </p>
       </div>
 
-      <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-px overflow-hidden border border-cream-1/15 bg-cream-1/15 sm:grid-cols-2 lg:grid-cols-4">
+      <div
+        ref={gridRef}
+        className="mx-auto grid max-w-[1100px] grid-cols-1 gap-px overflow-hidden border border-cream-1/15 bg-cream-1/15 sm:grid-cols-2 lg:grid-cols-4"
+      >
         {stats.map((s) => (
           <div
             key={s.label}
+            data-stat
             className="flex flex-col items-center bg-forest px-6 py-12 text-center"
           >
             <span className="font-display text-[clamp(48px,6vw,72px)] leading-none text-gold-2">
