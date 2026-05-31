@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 function fmt(s: number) {
   if (!isFinite(s)) return "--:--";
@@ -55,10 +56,16 @@ export function Anthem() {
     a.currentTime = x * a.duration;
   };
 
+  const sectionRef = useGsapReveal<HTMLElement>({
+    stagger: 0.18,
+    from: { y: 40 },
+    trigger: { start: "top 82%" },
+  });
+
   return (
-    <section id="anthem" className="bg-cream-1 px-6 py-32 md:px-12 md:py-36">
+    <section ref={sectionRef} id="anthem" className="bg-cream-1 px-6 py-32 md:px-12 md:py-36">
       <div className="mx-auto grid max-w-[1320px] items-center gap-12 md:grid-cols-[1fr_1.3fr] md:gap-20">
-        <div>
+        <div data-reveal>
           <div className="acw-section-label">
             <span className="acw-num">|</span>
             <span>The Anthem</span>
@@ -74,7 +81,7 @@ export function Anthem() {
           </p>
         </div>
 
-        <div className="acw-anthem-player-glow relative grid items-center gap-8 overflow-hidden bg-forest p-9 text-cream-1 md:grid-cols-[120px_1fr]">
+        <div data-reveal className="acw-anthem-player-glow relative grid items-center gap-8 overflow-hidden bg-forest p-9 text-cream-1 md:grid-cols-[120px_1fr]">
           <audio
             ref={audioRef}
             src="/assets/ACW_anthem.mp3"
