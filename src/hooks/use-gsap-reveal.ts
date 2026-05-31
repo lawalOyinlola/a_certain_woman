@@ -17,6 +17,13 @@ type Options = {
   stagger?: number;
   /** ScrollTrigger overrides. */
   trigger?: Partial<ScrollTrigger.Vars>;
+  /**
+   * Reveal each target individually as it enters the viewport (via
+   * ScrollTrigger.batch). Ideal for grids and tall stacked lists so items
+   * animate progressively instead of all at once. `stagger` groups items
+   * that enter together.
+   */
+  batch?: boolean;
 };
 
 /**
@@ -40,14 +47,35 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
       const targets = el.querySelectorAll<HTMLElement>(sel);
       if (!targets.length) return;
 
+      const from = { y: 36, ...options.from };
+
+      // Per-element reveal — each target animates as it scrolls into view.
+      if (options.batch) {
+        gsap.set(targets, { opacity: 0, ...from });
+        ScrollTrigger.batch(targets, {
+          start: options.trigger?.start ?? "top 88%",
+          once: true,
+          onEnter: (group) =>
+            gsap.to(group, {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              stagger: options.stagger ?? 0.1,
+              overwrite: true,
+            }),
+        });
+        return;
+      }
+
+      // Single batched reveal — all targets stagger when the section enters.
       gsap.from(targets, {
         opacity: 0,
-        y: 36,
         duration: 0.9,
         ease: "power3.out",
         stagger: options.stagger ?? 0.12,
         clearProps: "opacity,transform",
-        ...options.from,
+        ...from,
         scrollTrigger: {
           trigger: el,
           start: "top 82%",
