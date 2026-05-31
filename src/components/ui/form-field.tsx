@@ -28,7 +28,7 @@ export function FormField({
         className,
       )}
     >
-      <div className="mb-2 flex items-baseline justify-between gap-3">
+      <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <label
           htmlFor={htmlFor}
           className="block text-[10px] uppercase tracking-[0.3em] text-muted-foreground"
@@ -36,7 +36,7 @@ export function FormField({
           {label}
         </label>
         {hint && (
-          <span className="font-display text-[11px] italic text-muted-foreground/70 shrink-0">
+          <span className="font-display text-[11px] italic text-muted-foreground/70">
             {hint}
           </span>
         )}
