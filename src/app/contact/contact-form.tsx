@@ -27,6 +27,18 @@ const REASONS = [
   "General Inquiry",
 ];
 
+// The submit button speaks to the chosen reason so the action feels specific.
+const SUBMIT_LABELS: Record<string, string> = {
+  "Join the Movement": "Send My Request to Join",
+  "Attend an Event": "Send Registration Request",
+  "Partner / Sponsor": "Send Partnership Inquiry",
+  "Media Inquiry": "Send Media Inquiry",
+  Volunteer: "Send Volunteer Interest",
+  "Invite ACW": "Send Invitation Request",
+  "Share My Story": "Share My Story",
+};
+const DEFAULT_SUBMIT_LABEL = "Send Message";
+
 type Status = "idle" | "loading" | "success" | "error";
 
 export function ContactForm() {
@@ -121,13 +133,18 @@ export function ContactForm() {
     );
   }
 
+  const isLoading = status === "loading";
+  const submitLabel = SUBMIT_LABELS[reason] ?? DEFAULT_SUBMIT_LABEL;
+
   return (
-    <form onSubmit={onSubmit} noValidate className="acw-contact-form">
-      <FormField
-        label="Full Name"
-        htmlFor="contact-name"
-        error={fieldErrors.name}
-      >
+    <form onSubmit={onSubmit} noValidate aria-busy={isLoading}>
+      {/* The fieldset is the grid AND disables every field while sending. */}
+      <fieldset disabled={isLoading} className="acw-contact-form">
+        <FormField
+          label="Full Name"
+          htmlFor="contact-name"
+          error={fieldErrors.name}
+        >
         <FieldInput
           id="contact-name"
           name="name"
@@ -163,6 +180,7 @@ export function ContactForm() {
         <Select
           value={reason}
           onValueChange={(v) => v !== null && setReason(v)}
+          disabled={isLoading}
         >
           <SelectTrigger className="w-full rounded-none border-0 border-b border-border bg-transparent py-3 h-auto text-[16px] font-sans text-ink shadow-none ring-0 focus-visible:ring-0 focus-visible:border-gold hover:border-gold/60 transition-colors duration-200 data-placeholder:text-muted-foreground data-placeholder:opacity-50 data-placeholder:italic [&>svg]:text-muted-foreground">
             <SelectValue />
@@ -194,18 +212,19 @@ export function ContactForm() {
         </p>
       )}
 
-      <div className="acw-field--full">
-        <Button
-          type="submit"
-          variant="editorial"
-          size="pill"
-          className="w-full"
-          disabled={status === "loading"}
-        >
-          {status === "loading" ? "Sending..." : "Send Message"}
-          {status !== "loading" && <ArrowRight />}
-        </Button>
-      </div>
+        <div className="acw-field--full">
+          <Button
+            type="submit"
+            variant="editorial"
+            size="pill"
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? "Sending…" : submitLabel}
+            {!isLoading && <ArrowRight />}
+          </Button>
+        </div>
+      </fieldset>
     </form>
   );
 }
