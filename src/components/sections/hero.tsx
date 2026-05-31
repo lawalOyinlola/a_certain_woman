@@ -74,18 +74,18 @@ export function Hero() {
         </div>
 
         {/* Rule with star */}
-        <div className="flex items-center justify-center gap-4 text-gold">
+        <div className="acw-rise acw-rise-delay-4 flex items-center justify-center gap-4 text-gold">
           <span className="acw-rule-line" />
           <Star />
           <span className="acw-rule-line" />
         </div>
 
-        <p className="mx-auto max-w-[640px] text-balance text-[15px] leading-[1.7] text-ink-2">
+        <p className="acw-rise acw-rise-delay-4 mx-auto max-w-[640px] text-balance text-[15px] leading-[1.7] text-ink-2">
           Restoring identity. Nurturing healing. Raising leaders. Creating safe
           spaces where women are seen, heard, healed, and crowned with purpose.
         </p>
 
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+        <div className="acw-rise acw-rise-delay-5 mt-7 flex flex-wrap items-center justify-center gap-3">
           <Button asChild variant="editorial" size="pill">
             <Link href="/contact">
               Join the Movement <ArrowRight />
@@ -100,7 +100,7 @@ export function Hero() {
         </div>
 
         {/* Marquee */}
-        <div className="mt-20 overflow-hidden border-y border-border py-4">
+        <div className="acw-rise acw-rise-delay-6 mt-20 overflow-hidden border-y border-border py-4">
           <div className="acw-marquee-track" aria-hidden>
             {[0, 1].map((i) => (
               <div key={i} className="flex shrink-0 items-center">

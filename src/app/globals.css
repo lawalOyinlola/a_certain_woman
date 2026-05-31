@@ -169,6 +169,15 @@
   .acw-rise-delay-3 {
     animation-delay: 0.55s;
   }
+  .acw-rise-delay-4 {
+    animation-delay: 0.7s;
+  }
+  .acw-rise-delay-5 {
+    animation-delay: 0.85s;
+  }
+  .acw-rise-delay-6 {
+    animation-delay: 1s;
+  }
   .acw-fade {
     animation: acw-fade 1s both;
   }
