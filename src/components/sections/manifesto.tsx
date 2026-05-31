@@ -18,23 +18,26 @@ export function Manifesto() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const ctx = gsap.context(() => {
-      // ── Crown parallax (replaces the manual scroll listener) ──────────────
-      gsap.fromTo(
-        ".manifesto-crown",
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 80%",
-            end: "center center",
-            scrub: reduced ? false : 1,
-            once: reduced,
+      // ── Crown parallax ────────────────────────────────────────────────────
+      if (reduced) {
+        gsap.set(".manifesto-crown", { opacity: 1, y: 0 });
+      } else {
+        gsap.fromTo(
+          ".manifesto-crown",
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            ease: "none",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 80%",
+              end: "center center",
+              scrub: 1,
+            },
           },
-        },
-      );
+        );
+      }
 
       // ── Line-by-line text reveal (scrubbed as you scroll through section) ──
       if (!reduced) {
@@ -56,18 +59,22 @@ export function Manifesto() {
       }
 
       // ── Tagline + attribution fade in after the quote ─────────────────────
-      gsap.from([".manifesto-tagline", ".manifesto-attr"], {
-        opacity: 0,
-        y: 20,
-        stagger: 0.12,
-        duration: 0.9,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".manifesto-tagline",
-          start: "top 88%",
-          once: true,
-        },
-      });
+      if (reduced) {
+        gsap.set([".manifesto-tagline", ".manifesto-attr"], { opacity: 1, y: 0 });
+      } else {
+        gsap.from([".manifesto-tagline", ".manifesto-attr"], {
+          opacity: 0,
+          y: 20,
+          stagger: 0.12,
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".manifesto-tagline",
+            start: "top 88%",
+            once: true,
+          },
+        });
+      }
     }, el);
 
     return () => ctx.revert();
