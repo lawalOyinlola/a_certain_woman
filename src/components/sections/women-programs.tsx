@@ -131,15 +131,34 @@ export function WomenPrograms({
       {layout === "tabs" ? (
         <div className="mx-auto flex max-w-[1320px] flex-col">
           {/* Tabs — below the active title on mobile, above it on desktop */}
-          <div className="acw-exp-tab-bar relative order-2 md:order-1">
+          <div
+            role="tablist"
+            aria-label="Signature programs"
+            className="acw-exp-tab-bar relative order-2 md:order-1"
+          >
             {!interacted && <ProgramsHint />}
             {WOMEN_PROGRAMS.map((e, i) => (
               <button
                 key={e.id}
+                id={`${e.id}-tab`}
+                role="tab"
+                aria-selected={active === i}
+                aria-controls={`${e.id}-panel`}
+                tabIndex={active === i ? 0 : -1}
                 className={cn("acw-exp-tab", active === i && "is-active")}
                 onClick={() => {
                   setActive(i);
                   setInteracted(true);
+                }}
+                onKeyDown={(ev) => {
+                  const last = WOMEN_PROGRAMS.length - 1;
+                  if (ev.key === "ArrowRight") {
+                    setActive((a) => (a < last ? a + 1 : 0));
+                    setInteracted(true);
+                  } else if (ev.key === "ArrowLeft") {
+                    setActive((a) => (a > 0 ? a - 1 : last));
+                    setInteracted(true);
+                  }
                 }}
               >
                 <span className="acw-exp-tab-n">{e.n}</span>
@@ -151,6 +170,9 @@ export function WomenPrograms({
           {/* Active program — title & description (first on mobile) */}
           <div
             key={cur.id + "-head"}
+            role="tabpanel"
+            id={`${cur.id}-panel`}
+            aria-labelledby={`${cur.id}-tab`}
             className="acw-fade order-1 mx-auto mb-12 w-full max-w-[1100px] md:order-2 md:mt-14 md:mb-0"
           >
             <ProgramHead p={cur} />
