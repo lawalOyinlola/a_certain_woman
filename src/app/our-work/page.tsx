@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
+import { Reveal } from "@/components/site/reveal";
 import { Join } from "@/components/sections/join";
 import { cn } from "@/lib/utils";
 
@@ -121,9 +122,9 @@ export default function OurWorkPage() {
               i % 2 ? "bg-cream-2" : "bg-cream-1"
             )}
           >
-            <div className="mx-auto max-w-[1120px]">
+            <Reveal className="mx-auto max-w-[1120px]">
               <div className="acw-twoup">
-                <div className="acw-twoup-left">
+                <div data-reveal className="acw-twoup-left">
                   <div className="acw-section-label">
                     <span className="acw-num">
                       {String(i + 1).padStart(2, "0")}.
@@ -132,7 +133,7 @@ export default function OurWorkPage() {
                   </div>
                   <h2 className="acw-page-h2 mt-6">{a.title}</h2>
                 </div>
-                <div className="acw-twoup-body">
+                <div data-reveal className="acw-twoup-body">
                   <p className="text-[18px] text-ink-2">{a.blurb}</p>
                   <ul className="acw-checklist">
                     {a.items.map((it) => (
@@ -141,7 +142,7 @@ export default function OurWorkPage() {
                   </ul>
                 </div>
               </div>
-            </div>
+            </Reveal>
           </section>
         ))}
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
+import { Reveal } from "@/components/site/reveal";
 import { Founder } from "@/components/sections/founder";
 import { Join } from "@/components/sections/join";
 
@@ -90,9 +91,9 @@ export default function AboutPage() {
 
         {/* Why the name */}
         <section className="bg-cream-1 px-6 py-24 md:px-12 md:py-28">
-          <div className="mx-auto max-w-[1120px]">
+          <Reveal className="mx-auto max-w-[1120px]">
             <div className="acw-twoup">
-              <div className="acw-twoup-left">
+              <div data-reveal className="acw-twoup-left">
                 <div className="acw-section-label">
                   <span className="acw-num">|</span>
                   <span>Why the name</span>
@@ -103,7 +104,7 @@ export default function AboutPage() {
                   <em>&ldquo;A Certain Woman?&rdquo;</em>
                 </h2>
               </div>
-              <div className="acw-twoup-body">
+              <div data-reveal className="acw-twoup-body">
                 <p>
                   In scripture and in life, many unnamed women carried stories
                   of pain, faith, courage, encounter, restoration, and
@@ -121,14 +122,14 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         {/* Vision & Mission */}
         <section className="bg-cream-2 px-6 py-24 md:px-12 md:py-28">
-          <div className="mx-auto max-w-[1120px]">
+          <Reveal className="mx-auto max-w-[1120px]">
             <div className="acw-twoup">
-              <div className="acw-twoup-left">
+              <div data-reveal className="acw-twoup-left">
                 <div className="acw-section-label">
                   <span className="acw-num">|</span>
                   <span>Vision &amp; Mission</span>
@@ -139,7 +140,7 @@ export default function AboutPage() {
                   are <em>going.</em>
                 </h2>
               </div>
-              <div className="acw-twoup-body">
+              <div data-reveal className="acw-twoup-body">
                 <small className="acw-section-label-mini">VISION</small>
                 <p>
                   To see women restored in identity, healed in heart,
@@ -169,13 +170,13 @@ export default function AboutPage() {
                 </ul>
               </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         {/* Values */}
         <section className="bg-cream-1 px-6 py-24 md:px-12 md:py-28">
-          <div className="mx-auto max-w-[1120px]">
-            <div className="flex flex-col items-center text-center">
+          <Reveal batch stagger={0.08} className="mx-auto max-w-[1120px]">
+            <div data-reveal className="flex flex-col items-center text-center">
               <div className="acw-section-label">
                 <span className="acw-num">|</span>
                 <span>Our values</span>
@@ -186,32 +187,35 @@ export default function AboutPage() {
             </div>
             <div className="mt-12 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
               {VALUES.map((v) => (
-                <div key={v.n} className="acw-value-card">
+                <div key={v.n} data-reveal className="acw-value-card">
                   <small className="acw-vc-num">{v.n}</small>
                   <h3>{v.title}</h3>
                   <p>{v.body}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <Founder withLabel={false} />
 
         {/* Closing */}
         <section className="bg-cream-2 px-6 py-24 md:px-12 md:py-28">
-          <div className="mx-auto max-w-[1120px] text-center">
-            <h2 className="acw-page-h2">
+          <Reveal className="mx-auto max-w-[1120px] text-center">
+            <h2 data-reveal className="acw-page-h2">
               <em>A Certain Woman</em>
               <br />
               is not only a platform.
             </h2>
-            <p className="mx-auto mt-8 max-w-[600px] font-display text-[18px] italic leading-[1.65] text-muted-foreground">
+            <p
+              data-reveal
+              className="mx-auto mt-8 max-w-[600px] font-display text-[18px] italic leading-[1.65] text-muted-foreground"
+            >
               It is a table. It is a covering. It is a mirror. It is a movement.
               <br />
               It is a call to every woman becoming whole.
             </p>
-          </div>
+          </Reveal>
         </section>
 
         <Join />
