@@ -1,8 +1,15 @@
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
+import {
+  siteTagline,
+  contact,
+  socials,
+  mailtoHref,
+  telHref,
+} from "@/config/site";
 
-const COLS = [
+const NAV_COLS = [
   {
     h: "Explore",
     items: [
@@ -22,23 +29,19 @@ const COLS = [
       ["Contact", "/contact"],
     ] as const,
   },
-  {
-    h: "Connect",
-    items: [
-      ["Freetown, Sierra Leone", ""],
-      ["info@acertainwoman.org", ""],
-      ["WhatsApp / Phone", ""],
-    ] as const,
-  },
-  {
-    h: "Follow softly",
-    items: [
-      ["Instagram", ""],
-      ["Facebook", ""],
-      ["TikTok", ""],
-    ] as const,
-  },
 ];
+
+// External / protocol links (mailto, tel, wa.me, social) rendered as <a>.
+const CONNECT = [
+  { label: contact.location, href: null },
+  { label: contact.email, href: mailtoHref },
+  { label: contact.phoneDisplay, href: telHref },
+  { label: "WhatsApp", href: contact.whatsappUrl, external: true },
+];
+
+const FOLLOW = [socials.instagram, socials.tiktok, socials.facebook].filter(
+  (s): s is NonNullable<typeof s> => s !== null,
+);
 
 export function Footer() {
   return (
@@ -53,14 +56,14 @@ export function Footer() {
 
         {/* Tagline */}
         <div className="my-8 text-center font-display text-[18px] italic tracking-wider text-gold-2">
-          <em> Restoring Hearts. Reclaiming Crowns</em>
+          <em>{siteTagline}</em>
         </div>
 
         <Separator className="bg-cream-1/15" />
 
-        {/* Nav columns */}
+        {/* Nav + contact columns */}
         <div className="mt-14 grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4">
-          {COLS.map((col) => (
+          {NAV_COLS.map((col) => (
             <div key={col.h}>
               <small className="block text-[11px] uppercase tracking-[0.32em] text-gold-2">
                 {col.h}
@@ -71,37 +74,85 @@ export function Footer() {
                     key={label}
                     className="transition-all hover:translate-x-1 hover:text-gold-2"
                   >
-                    {href ? (
-                      <Link href={href}>{label}</Link>
-                    ) : (
-                      <span>{label}</span>
-                    )}
+                    <Link href={href}>{label}</Link>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
+
+          {/* Connect */}
+          <div>
+            <small className="block text-[11px] uppercase tracking-[0.32em] text-gold-2">
+              Connect
+            </small>
+            <ul className="mt-5 space-y-2.5 font-display text-[22px] text-cream-1/85">
+              {CONNECT.map(({ label, href, external }) => (
+                <li
+                  key={label}
+                  className="transition-all hover:translate-x-1 hover:text-gold-2"
+                >
+                  {href ? (
+                    <a
+                      href={href}
+                      {...(external
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
+                    >
+                      {label}
+                    </a>
+                  ) : (
+                    <span>{label}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Follow */}
+          <div className="sm:col-span-2 md:col-span-1">
+            <small className="block text-[11px] uppercase tracking-[0.32em] text-gold-2">
+              Follow softly
+            </small>
+            <ul className="mt-5 space-y-2.5 font-display text-[22px] text-cream-1/85">
+              {FOLLOW.map((s) => (
+                <li
+                  key={s.label}
+                  className="transition-all hover:translate-x-1 hover:text-gold-2"
+                >
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer me"
+                    aria-label={`${s.label} — ${s.handle} (opens in a new tab)`}
+                  >
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <Separator className="mt-14 bg-cream-1/15" />
 
         {/* Legal bar */}
-        <div className="mt-8 flex flex-col items-center justify-between gap-3 text-[11px] uppercase tracking-[0.2em] text-cream-1/70 md:flex-row">
-          <span>
+        <div className="mt-8 flex flex-col items-center gap-4 text-center text-[11px] uppercase leading-relaxed tracking-[0.12em] text-cream-1/70">
+          <span className="max-w-4xl">
             A faith-rooted women&apos;s movement restoring identity, healing
-            hearts, raising leaders.
+            hearts, raising leaders, and reclaiming crowns.
           </span>
-          <div className="flex-center">
-            <span>
-              © {new Date().getFullYear()} A Certain Woman. All Rights Reserved.
-            </span>
+          <div className="flex items-center gap-2.5">
             <Image
               src="/assets/logo.png"
               alt="A Certain Woman"
               width={20}
               height={20}
-              className="h-5 w-5 object-contain transition-all"
+              className="h-5 w-5 object-contain"
             />
+            <span>
+              © {new Date().getFullYear()} A Certain Woman. All Rights Reserved.
+            </span>
           </div>
         </div>
 
