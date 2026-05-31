@@ -87,7 +87,7 @@ export function Hero() {
 
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
           <Button asChild variant="editorial" size="pill">
-            <Link href="/partner">
+            <Link href="/contact">
               Join the Movement <ArrowRight />
             </Link>
           </Button>
@@ -95,7 +95,7 @@ export function Hero() {
             <Link href="/partner">Partner With Us</Link>
           </Button>
           <Button asChild variant="editorialOutline" size="pill">
-            <Link href="/events">View Upcoming Events</Link>
+            <Link href="/programs">Explore Our Programs</Link>
           </Button>
         </div>
 

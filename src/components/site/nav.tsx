@@ -50,7 +50,7 @@ export function Nav() {
           />
         </Link>
 
-        <div className="hidden items-center gap-6 text-[11px] uppercase tracking-[0.18em] text-muted-foreground xl:flex">
+        <div className="hidden items-center gap-6 text-[11px] uppercase tracking-[0.18em] text-muted-foreground lg:flex">
           {items.map(([label, href]) => (
             <Link
               key={href}
@@ -63,7 +63,7 @@ export function Nav() {
         </div>
 
         <Link
-          href="/partner"
+          href="/contact"
           className="hidden whitespace-nowrap rounded-full border border-forest px-5 py-2.5 text-[11px] uppercase tracking-[0.18em] text-forest transition-colors hover:bg-forest hover:text-cream-1 md:inline-flex"
         >
           Join the Movement
@@ -72,7 +72,7 @@ export function Nav() {
         <button
           onClick={() => setOpen((o) => !o)}
           aria-label="Menu"
-          className="flex flex-col gap-[5px] p-2 xl:hidden"
+          className="flex flex-col gap-[5px] p-2 lg:hidden"
         >
           <span className="block h-px w-5 bg-forest" />
           <span className="block h-px w-5 bg-forest" />
@@ -83,7 +83,7 @@ export function Nav() {
       {open && (
         <div
           onClick={() => setOpen(false)}
-          className="absolute inset-x-0 top-full flex flex-col gap-4 border-t border-border bg-background px-6 py-6 font-display text-[22px] text-forest md:px-12 xl:hidden"
+          className="absolute inset-x-0 top-full flex flex-col gap-4 border-t border-border bg-background px-6 py-6 font-display text-[22px] text-forest md:px-12 lg:hidden"
         >
           {items.map(([label, href]) => (
             <Link
@@ -95,7 +95,7 @@ export function Nav() {
             </Link>
           ))}
           <Link
-            href="/partner"
+            href="/contact"
             className="mt-4 inline-flex w-fit rounded-full border border-forest px-5 py-2.5 text-[11px] uppercase tracking-[0.18em] text-forest transition-colors hover:bg-forest hover:text-cream-1"
           >
             Join the Movement
