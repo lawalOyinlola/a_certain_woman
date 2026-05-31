@@ -262,6 +262,22 @@
   }
 }
 
+@keyframes acw-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acw-programs-hint {
+    animation: none;
+  }
+}
+
 /* ============== NEW SECTION STYLES (v2 design) ============== */
 
 @layer components {
@@ -389,6 +405,18 @@
     .acw-exp-tab {
       @apply border-b border-cream-2/10;
     }
+  }
+
+  /* Hand-drawn "click to view" hint that levitates above the program tabs */
+  .acw-programs-hint {
+    @apply pointer-events-none absolute -top-12 right-16 z-10 flex items-end gap-1.5 text-gold-2 md:right-2/3;
+    animation: acw-float 2.6s ease-in-out infinite;
+  }
+  .acw-programs-hint-text {
+    @apply -rotate-3 text-[19px] leading-none md:text-[22px] mb-4;
+  }
+  .acw-programs-hint svg {
+    @apply mb-1 shrink-0;
   }
 
   /* Founder letter */
@@ -562,28 +590,26 @@
     @apply text-muted-foreground opacity-50 italic;
   }
 
+  /* Lives on a <fieldset> (the grid container). Mobile-first: one column on
+     phones, two from sm up. Resets fieldset's UA border/padding/min-width. */
   .acw-contact-form {
-    @apply grid grid-cols-2 gap-6 max-w-[760px] mx-auto;
+    @apply grid grid-cols-1 gap-6 mx-auto max-w-[760px] min-w-0 border-0 p-0 sm:grid-cols-2;
   }
   .acw-contact-form .acw-field--full {
-    @apply col-span-2;
+    @apply col-span-full;
   }
   .acw-contact-info {
-    @apply grid grid-cols-4 gap-8 mt-[100px] pt-12 border-t border-border text-center;
+    @apply grid grid-cols-1 gap-8 mt-20 pt-12 border-t border-border text-center sm:grid-cols-2 md:mt-[100px] md:grid-cols-4;
+  }
+  .acw-contact-info > div {
+    @apply min-w-0;
   }
   .acw-contact-info small {
     @apply block text-[10px] tracking-[0.32em] text-gold mb-3;
   }
   .acw-contact-info span {
-    @apply font-display italic text-[20px] text-forest;
-  }
-  @media (max-width: 960px) {
-    .acw-contact-form {
-      @apply grid-cols-1;
-    }
-    .acw-contact-info {
-      @apply grid-cols-2 gap-6;
-    }
+    /* anywhere lets long values (the email) wrap instead of overflowing. */
+    @apply font-display italic text-[20px] text-forest [overflow-wrap:anywhere];
   }
 }
 
