@@ -1,11 +1,23 @@
+"use client";
+
 import Image from "next/image";
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 export function Founder({ withLabel = true }: { withLabel?: boolean }) {
+  const ref = useGsapReveal<HTMLElement>({ stagger: 0.13 });
+
   return (
-    <section id="founder" className="bg-cream-1 px-6 py-32 md:px-12 md:py-40">
+    <section
+      ref={ref}
+      id="founder"
+      className="bg-cream-1 px-6 py-32 md:px-12 md:py-40"
+    >
       <div className="mx-auto grid max-w-[1320px] items-start gap-16 md:grid-cols-[1fr_1.4fr] md:gap-20">
-        {/* Portrait — sticky on desktop */}
-        <div className="md:sticky md:top-[120px]">
+        {/* Portrait — sticky on desktop, slides in from below */}
+        <div
+          data-reveal
+          className="md:sticky md:top-[120px]"
+        >
           <div className="relative border border-border bg-cream-2 p-4">
             <Image
               src="/assets/namaari_founder.jpg"
@@ -23,22 +35,22 @@ export function Founder({ withLabel = true }: { withLabel?: boolean }) {
           </div>
         </div>
 
-        {/* Letter */}
+        {/* Letter — staggered children */}
         <div>
           {withLabel && (
-            <div className="acw-section-label">
+            <div data-reveal className="acw-section-label">
               <span className="acw-num">|</span>
               <span>From the Founder</span>
             </div>
           )}
 
-          <h2 className="acw-display mt-6">
+          <h2 data-reveal className="acw-display mt-6">
             A letter
             <br />
             <em>from her hand.</em>
           </h2>
 
-          <blockquote className="acw-founder-quote mt-10">
+          <blockquote data-reveal className="acw-founder-quote mt-10">
             &ldquo;She is not forgotten.
             <br />
             She is not finished.
@@ -46,7 +58,10 @@ export function Founder({ withLabel = true }: { withLabel?: boolean }) {
             She is not ordinary.&rdquo;
           </blockquote>
 
-          <div className="mt-10 flex flex-col gap-5 text-[16px] leading-[1.7] text-ink-2">
+          <div
+            data-reveal
+            className="mt-10 flex flex-col gap-5 text-[16px] leading-[1.7] text-ink-2"
+          >
             <p>
               A Certain Woman was born from a deep conviction that women need
               more than motivation. They need spaces of restoration, dignity,
@@ -60,11 +75,11 @@ export function Founder({ withLabel = true }: { withLabel?: boolean }) {
             </p>
           </div>
 
-          <p className="acw-founder-emph mt-8">
+          <p data-reveal className="acw-founder-emph mt-8">
             She is seen. She is becoming. She is crowned for purpose.
           </p>
 
-          <div className="mt-12 border-t border-border pt-6">
+          <div data-reveal className="mt-12 border-t border-border pt-6">
             <div className="font-display text-[26px] italic text-forest">
               Namaari Inanna Kargbo
             </div>
