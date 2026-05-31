@@ -7,6 +7,7 @@ import { EVENTS, type ACWEvent } from "@/lib/data/events";
 import { Play, ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
 import { Lightbox, type LightboxItem } from "@/components/ui/lightbox";
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 import { cn } from "@/lib/utils";
 
 type MediaItem =
@@ -76,6 +77,9 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
 
   const [filter, setFilter] = useState<string>("__all__");
   const [lb, setLb] = useState<number | null>(null);
+  // One-time reveal of the initial tiles; later filter changes render
+  // instantly without re-animating.
+  const revealRef = useGsapReveal<HTMLElement>({ batch: true, stagger: 0.05 });
 
   const visible = useMemo(() => {
     if (filter === "__all__") return media;
@@ -94,9 +98,13 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
   );
 
   return (
-    <section id="gallery" className="relative px-6 py-24 md:px-12 md:py-36">
+    <section
+      ref={revealRef}
+      id="gallery"
+      className="relative px-6 py-24 md:px-12 md:py-36"
+    >
       {!compact && (
-        <div className="mx-auto max-w-[1280px] text-center">
+        <div data-reveal className="mx-auto max-w-[1280px] text-center">
           <div className="acw-section-label justify-center">
             <span className="acw-num">|</span>
             <span>The gathering, in pictures</span>
@@ -146,6 +154,7 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
           {visible.map((m, i) => (
             <button
               key={`${m.kind}-${m.src}-${i}`}
+              data-reveal
               onClick={() => setLb(i)}
               className={cn(
                 "group relative overflow-hidden rounded-md border border-border bg-cream-2 outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 active:brightness-90 transition-[filter] duration-150",
@@ -189,7 +198,7 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
         </div>
       )}
 
-      <div className="mt-12 flex justify-center">
+      <div data-reveal className="mt-12 flex justify-center">
         {!compact ? (
           <Button asChild variant="editorialOutline" size="pill">
             <Link href="/gallery">

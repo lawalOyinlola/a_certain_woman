@@ -6,6 +6,7 @@ import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { WOMEN_PROGRAMS, type WomenProgram } from "@/lib/data/programs";
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 /** Eyebrow + title + blurb — the part shown before the tabs on mobile. */
 function ProgramHead({ p }: { p: WomenProgram }) {
@@ -105,13 +106,25 @@ export function WomenPrograms({
   const [interacted, setInteracted] = useState(false);
   const cur = WOMEN_PROGRAMS[active];
 
+  // Stacked (/programs): reveal each program block as it enters. Tabs (home):
+  // stagger the heading and tab bar; the active panel keeps its own fade.
+  const revealRef = useGsapReveal<HTMLElement>(
+    layout === "stacked"
+      ? { batch: true, stagger: 0.1, from: { y: 44 } }
+      : { stagger: 0.14 },
+  );
+
   return (
     <section
+      ref={revealRef}
       id="programs"
       className="acw-bg-forest relative px-6 py-32 md:px-12 md:py-40"
     >
       {withLabel && (
-        <div className="mx-auto mb-14 flex max-w-[760px] flex-col items-center text-center">
+        <div
+          data-reveal
+          className="mx-auto mb-14 flex max-w-[760px] flex-col items-center text-center"
+        >
           <div className="acw-section-label acw-section-label--light">
             <span className="acw-num">|</span>
             <span>Signature programs</span>
@@ -132,6 +145,7 @@ export function WomenPrograms({
         <div className="mx-auto flex max-w-[1320px] flex-col">
           {/* Tabs — below the active title on mobile, above it on desktop */}
           <div
+            data-reveal
             role="tablist"
             aria-label="Signature programs"
             className="acw-exp-tab-bar relative order-2 md:order-1"
@@ -153,9 +167,11 @@ export function WomenPrograms({
                 onKeyDown={(ev) => {
                   const last = WOMEN_PROGRAMS.length - 1;
                   if (ev.key === "ArrowRight") {
+                    ev.preventDefault();
                     setActive((a) => (a < last ? a + 1 : 0));
                     setInteracted(true);
                   } else if (ev.key === "ArrowLeft") {
+                    ev.preventDefault();
                     setActive((a) => (a > 0 ? a - 1 : last));
                     setInteracted(true);
                   }
@@ -167,23 +183,18 @@ export function WomenPrograms({
             ))}
           </div>
 
-          {/* Active program — title & description (first on mobile) */}
+          {/* Full program panel — head + body in one tabpanel so both are owned by the active tab */}
           <div
-            key={cur.id + "-head"}
+            key={cur.id + "-panel"}
             role="tabpanel"
             id={`${cur.id}-panel`}
             aria-labelledby={`${cur.id}-tab`}
-            className="acw-fade order-1 mx-auto mb-12 w-full max-w-[1100px] md:order-2 md:mt-14 md:mb-0"
+            className="acw-fade order-1 mx-auto w-full max-w-[1100px] md:order-2 md:mt-14"
           >
             <ProgramHead p={cur} />
-          </div>
-
-          {/* Active program — key features & best for */}
-          <div
-            key={cur.id + "-body"}
-            className="acw-fade order-3 mx-auto mt-12 w-full max-w-[1100px] md:mt-14"
-          >
-            <ProgramBody p={cur} />
+            <div className="mt-12 md:mt-14">
+              <ProgramBody p={cur} />
+            </div>
           </div>
         </div>
       ) : (
@@ -193,6 +204,7 @@ export function WomenPrograms({
             <article
               key={p.id}
               id={p.id}
+              data-reveal
               className="scroll-mt-28 md:scroll-mt-32"
             >
               <ProgramHead p={p} />

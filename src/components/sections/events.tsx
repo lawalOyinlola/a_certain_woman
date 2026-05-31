@@ -7,6 +7,7 @@ import {
 } from "@/lib/data/events";
 import { ArrowRight, ArrowRightThin } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/site/reveal";
 
 type Mode = "upcoming" | "past";
 
@@ -33,13 +34,13 @@ export function Events() {
 
     return (
       <section id="events" className="relative px-6 py-24 md:px-12 md:py-36">
-        <div className="mx-auto max-w-[1280px]">
+        <Reveal batch className="mx-auto max-w-[1280px]">
           <SectionHeader mode="upcoming" />
 
           <FeaturedEvent event={next} mode="upcoming" />
 
           {moreUpcoming.length > 0 && (
-            <div className="mt-20">
+            <div data-reveal className="mt-20">
               <div className="flex items-end justify-between border-b border-border pb-4">
                 <small className="text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
                   Also on the calendar
@@ -62,7 +63,7 @@ export function Events() {
           )}
 
           <SeeAllCta />
-        </div>
+        </Reveal>
       </section>
     );
   }
@@ -73,7 +74,7 @@ export function Events() {
 
   return (
     <section id="events" className="relative px-6 py-24 md:px-12 md:py-36">
-      <div className="mx-auto max-w-[1280px]">
+      <Reveal batch className="mx-auto max-w-[1280px]">
         <SectionHeader mode="past" />
 
         <FeaturedEvent event={latest} mode="past" />
@@ -83,7 +84,7 @@ export function Events() {
         )}
 
         <SeeAllCta />
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -91,7 +92,7 @@ export function Events() {
 function SectionHeader({ mode }: { mode: Mode }) {
   if (mode === "upcoming") {
     return (
-      <div className="text-center">
+      <div data-reveal className="text-center">
         <div className="acw-section-label justify-center">
           <span className="acw-num">|</span>
           <span>Where she gathers</span>
@@ -130,7 +131,7 @@ function SectionHeader({ mode }: { mode: Mode }) {
 
 function SeeAllCta() {
   return (
-    <div className="mt-16 flex justify-center">
+    <div data-reveal className="mt-16 flex justify-center">
       <Button asChild variant="editorial" size="pill">
         <Link href="/events">
           See all events <ArrowRight />
@@ -197,7 +198,10 @@ function FeaturedEvent({ event, mode }: { event: ACWEvent; mode: Mode }) {
   const primaryLabel = mode === "upcoming" ? "Event details" : "View the recap";
 
   return (
-    <article className="mt-16 grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+    <article
+      data-reveal
+      className="mt-16 grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16"
+    >
       <div className="relative overflow-hidden rounded-md border border-border bg-cream-2">
         <div className="relative aspect-4/5">
           <Image
@@ -328,7 +332,7 @@ function ArchiveStrip({
           : "grid-cols-2 md:grid-cols-4";
 
   return (
-    <div className="mt-24">
+    <div data-reveal className="mt-24">
       <div className="flex items-end justify-between border-b border-border pb-4">
         <small className="text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
           {label}
