@@ -1,7 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Serif_Display, Manrope } from "next/font/google";
+import { DM_Serif_Display, Manrope, Caveat } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { AnnouncementBanner } from "@/components/site/announcement-banner";
+import {
+  siteUrl,
+  siteName,
+  siteTagline,
+  contact,
+  socialUrls,
+} from "@/config/site";
 import "./globals.css";
 
 const display = DM_Serif_Display({
@@ -17,11 +24,13 @@ const body = Manrope({
   weight: ["300", "400", "500", "600"],
 });
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://acertainwoman.org";
+// Handwritten accent — used for the "click to view" programs hint.
+const hand = Caveat({
+  variable: "--font-hand",
+  subsets: ["latin"],
+  weight: ["500", "600"],
+});
 
-const siteName = "A Certain Woman";
-const siteTagline = "Restoring Hearts. Reclaiming Crowns.";
 const siteDescription =
   "A Certain Woman is a faith-rooted movement based in Freetown, Sierra Leone. We center the restoration of women and engage the men, families, and communities who shape their lives. Through sacred gatherings, healing circles, leadership programs, mentorship, and the Men Who Stand initiative, we work toward a future where every person is healed, honored, and whole.";
 
@@ -138,7 +147,17 @@ const organizationLd = {
   image: `${siteUrl}/assets/og-image.png`,
   description: siteDescription,
   slogan: siteTagline,
-  email: "info@acertainwoman.org",
+  email: contact.email,
+  telephone: contact.phoneE164,
+  sameAs: socialUrls,
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "general inquiries",
+    email: contact.email,
+    telephone: contact.phoneE164,
+    areaServed: "SL",
+    availableLanguage: "en",
+  },
   founder: {
     "@type": "Person",
     name: "Namaari Inanna Kargbo",
@@ -256,7 +275,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html
+      lang="en"
+      className={`${display.variable} ${body.variable} ${hand.variable}`}
+    >
       <body className="min-h-screen bg-background text-foreground antialiased">
         <AnnouncementBanner />
         {children}

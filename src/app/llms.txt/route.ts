@@ -3,11 +3,9 @@ import {
   getPastEvents,
   getUpcomingEvents,
 } from "@/lib/data/events";
+import { siteUrl } from "@/config/site";
 
 export const dynamic = "force-static";
-
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://acertainwoman.org";
 
 function eventLine(e: (typeof EVENTS)[number]) {
   const place = e.venue ? `${e.venue}, ${e.location}` : e.location;
