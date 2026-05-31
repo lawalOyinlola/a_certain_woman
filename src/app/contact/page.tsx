@@ -4,6 +4,7 @@ import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
 import { Join } from "@/components/sections/join";
 import { ContactForm } from "./contact-form";
+import { contact, socials, mailtoHref } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -29,7 +30,7 @@ export default function ContactPage() {
       <Nav />
       <main id="top">
         <PageHero
-          eyebrow="CONTACT US ·  WE'D LOVE TO HEAR FROM YOU"
+          eyebrow="CONTACT US  ·  WE'D LOVE TO HEAR FROM YOU"
           title={
             <>
               Write to <em>us.</em>
@@ -45,19 +46,46 @@ export default function ContactPage() {
             <div className="acw-contact-info">
               <div>
                 <small>LOCATION</small>
-                <span>Freetown, Sierra Leone</span>
+                <span>{contact.location}</span>
               </div>
               <div>
                 <small>EMAIL</small>
-                <span>info@acertainwoman.org</span>
+                <span>
+                  <a
+                    href={mailtoHref}
+                    className="text-forest transition-colors hover:text-gold"
+                  >
+                    {contact.email}
+                  </a>
+                </span>
               </div>
               <div>
-                <small>WHATSAPP</small>
-                <span>Coming soon</span>
+                <small>PHONE / WHATSAPP</small>
+                <span>
+                  <a
+                    href={contact.whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-forest transition-colors hover:text-gold"
+                    aria-label={`Message A Certain Woman on WhatsApp at ${contact.phoneDisplay} (opens in a new tab)`}
+                  >
+                    {contact.phoneDisplay}
+                  </a>
+                </span>
               </div>
               <div>
                 <small>SOCIAL</small>
-                <span>@acertainwoman</span>
+                <span>
+                  <a
+                    href={socials.instagram.url}
+                    target="_blank"
+                    rel="noopener noreferrer me"
+                    className="text-forest transition-colors hover:text-gold"
+                    aria-label={`A Certain Woman on Instagram, ${socials.instagram.handle} (opens in a new tab)`}
+                  >
+                    {socials.instagram.handle}
+                  </a>
+                </span>
               </div>
             </div>
           </div>
