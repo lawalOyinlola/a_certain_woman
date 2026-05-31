@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 const PATHS = [
   {
@@ -35,6 +36,7 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<NewsletterStatus>("idle");
   const [error, setError] = useState("");
+  const revealRef = useGsapReveal<HTMLElement>({ batch: true, stagger: 0.1 });
 
   const onSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,10 +67,14 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
 
   return (
     <section
+      ref={revealRef}
       id="join"
       className="acw-bg-cream-up relative px-6 py-32 md:px-12 md:py-40"
     >
-      <div className="mx-auto mb-20 flex max-w-[760px] flex-col items-center text-center">
+      <div
+        data-reveal
+        className="mx-auto mb-20 flex max-w-[760px] flex-col items-center text-center"
+      >
         {withLabel && (
           <div className="acw-section-label">
             <span className="acw-num">|</span>
@@ -93,6 +99,7 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
         {PATHS.map((p) => (
           <article
             key={p.kind}
+            data-reveal
             className="flex flex-col gap-5 border border-border bg-cream-1 p-10 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold hover:shadow-[0_28px_60px_-28px_rgba(31,38,32,0.18)]"
           >
             <small className="text-[10px] uppercase tracking-[0.32em] text-gold">
@@ -122,7 +129,10 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
       </div>
 
       {/* Newsletter */}
-      <div className="relative mx-auto grid max-w-[1320px] gap-16 border border-border bg-cream-1 p-10 md:grid-cols-2 md:gap-16 md:p-16">
+      <div
+        data-reveal
+        className="relative mx-auto grid max-w-[1320px] gap-16 border border-border bg-cream-1 p-10 md:grid-cols-2 md:gap-16 md:p-16"
+      >
         <span
           aria-hidden
           className="pointer-events-none absolute inset-3 border border-border"
