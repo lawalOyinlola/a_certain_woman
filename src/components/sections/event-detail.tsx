@@ -5,9 +5,11 @@ import { useMemo, useState } from "react";
 import { ACWEvent, getEventStatus } from "@/lib/data/events";
 import { Play } from "@/components/site/icons";
 import { Lightbox, type LightboxItem } from "@/components/ui/lightbox";
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 export function EventDetail({ event }: { event: ACWEvent }) {
   const [lb, setLb] = useState<number | null>(null);
+  const ref = useGsapReveal<HTMLElement>({ batch: true, stagger: 0.08 });
 
   const hasProgram = event.program.length > 0;
   const hasSpeakers = event.speakers.length > 0;
@@ -37,10 +39,11 @@ export function EventDetail({ event }: { event: ACWEvent }) {
 
   return (
     <article
+      ref={ref}
       id={event.id}
       className="scroll-mt-32 border-b border-border py-20 last:border-none md:py-28"
     >
-      <header className="mx-auto max-w-[1100px] text-center">
+      <header data-reveal className="mx-auto max-w-[1100px] text-center">
         <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
           {status !== "PAST" && (
             <span className="rounded-full bg-forest px-3 py-1.5 text-cream-1">
@@ -83,7 +86,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
         </p>
       </header>
 
-      <div className="mx-auto mt-12 max-w-[1280px]">
+      <div data-reveal className="mx-auto mt-12 max-w-[1280px]">
         <div className="relative aspect-video overflow-hidden rounded-md border border-border">
           <Image
             src={event.cover}
@@ -96,7 +99,10 @@ export function EventDetail({ event }: { event: ACWEvent }) {
       </div>
 
       {(hasProgram || hasSpeakers) && (
-        <div className="mx-auto mt-16 grid max-w-[1100px] grid-cols-1 gap-12 px-2 md:grid-cols-2">
+        <div
+          data-reveal
+          className="mx-auto mt-16 grid max-w-[1100px] grid-cols-1 gap-12 px-2 md:grid-cols-2"
+        >
           {hasProgram && (
             <div>
               <small className="acw-section-label-mini">PROGRAM</small>
@@ -134,7 +140,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
       )}
 
       {hasVideos && (
-        <div className="mx-auto mt-16 max-w-[1100px]">
+        <div data-reveal className="mx-auto mt-16 max-w-[1100px]">
           <small className="acw-section-label-mini">
             FILM {event.videos!.length > 1 ? `· ${event.videos!.length} CLIPS` : ""}
           </small>
@@ -172,7 +178,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
       )}
 
       {hasPhotos && (
-        <div className="mx-auto mt-16 max-w-[1280px]">
+        <div data-reveal className="mx-auto mt-16 max-w-[1280px]">
           <small className="acw-section-label-mini">
             THE GALLERY · {event.photos.length} PHOTOS
           </small>
@@ -200,7 +206,10 @@ export function EventDetail({ event }: { event: ACWEvent }) {
       )}
 
       {!hasPhotos && !hasVideos && status !== "PAST" && (
-        <div className="mx-auto mt-12 max-w-[820px] border-t border-border pt-10 text-center">
+        <div
+          data-reveal
+          className="mx-auto mt-12 max-w-[820px] border-t border-border pt-10 text-center"
+        >
           <small className="acw-section-label-mini justify-center">
             STILL TO COME
           </small>
