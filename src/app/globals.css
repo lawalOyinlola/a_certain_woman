@@ -609,7 +609,7 @@
   }
   .acw-contact-info span {
     /* anywhere lets long values (the email) wrap instead of overflowing. */
-    @apply font-display italic text-[20px] text-forest [overflow-wrap:anywhere];
+    @apply font-display italic text-[20px] text-forest wrap-anywhere;
   }
 }
 
