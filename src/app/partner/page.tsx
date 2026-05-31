@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
+import { Reveal } from "@/components/site/reveal";
 import { Join } from "@/components/sections/join";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
@@ -98,8 +99,11 @@ export default function PartnerPage() {
 
         {/* Pathways */}
         <section className="bg-cream-1 px-6 py-24 md:px-12 md:py-28">
-          <div className="mx-auto max-w-[1120px]">
-            <div className="mb-14 flex flex-col items-center text-center">
+          <Reveal batch stagger={0.08} className="mx-auto max-w-[1120px]">
+            <div
+              data-reveal
+              className="mb-14 flex flex-col items-center text-center"
+            >
               <div className="acw-section-label">
                 <span className="acw-num">|</span>
                 <span>Partnership pathways</span>
@@ -112,21 +116,21 @@ export default function PartnerPage() {
             </div>
             <div className="mt-12 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
               {OPPS.map((o) => (
-                <div key={o.n} className="acw-value-card">
+                <div key={o.n} data-reveal className="acw-value-card">
                   <small className="acw-vc-num">{o.n}</small>
                   <h3>{o.title}</h3>
                   <p>{o.body}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </Reveal>
         </section>
 
         {/* Why partner */}
         <section className="bg-cream-2 px-6 py-24 md:px-12 md:py-28">
-          <div className="mx-auto max-w-[1120px]">
+          <Reveal className="mx-auto max-w-[1120px]">
             <div className="acw-twoup">
-              <div className="acw-twoup-left">
+              <div data-reveal className="acw-twoup-left">
                 <div className="acw-section-label">
                   <span className="acw-num">|</span>
                   <span>Why partner</span>
@@ -137,7 +141,7 @@ export default function PartnerPage() {
                   <em>partner</em> with ACW?
                 </h2>
               </div>
-              <div className="acw-twoup-body">
+              <div data-reveal className="acw-twoup-body">
                 <ul className="acw-checklist">
                   {WHY.map((w) => (
                     <li key={w}>{w}</li>
@@ -155,7 +159,7 @@ export default function PartnerPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         {/* Support / give */}
@@ -163,8 +167,11 @@ export default function PartnerPage() {
           id="support"
           className="bg-cream-1 px-6 py-24 md:px-12 md:py-28"
         >
-          <div className="mx-auto max-w-[1120px]">
-            <div className="mb-12 flex flex-col items-center text-center">
+          <Reveal className="mx-auto max-w-[1120px]">
+            <div
+              data-reveal
+              className="mb-12 flex flex-col items-center text-center"
+            >
               <div className="acw-section-label">
                 <span className="acw-num">|</span>
                 <span>Support our work</span>
@@ -182,19 +189,19 @@ export default function PartnerPage() {
                 family, and reclaim a crown.
               </p>
             </div>
-            <ul className="acw-checklist mx-auto max-w-[760px]">
+            <ul data-reveal className="acw-checklist mx-auto max-w-[760px]">
               {GIVING.map((g) => (
                 <li key={g}>{g}</li>
               ))}
             </ul>
-            <div className="mt-12 flex justify-center">
+            <div data-reveal className="mt-12 flex justify-center">
               <Button asChild variant="editorial" size="pill">
                 <Link href="/contact">
                   Give / Support ACW <ArrowRight />
                 </Link>
               </Button>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <Join withLabel={false} />
