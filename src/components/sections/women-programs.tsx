@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -105,6 +105,9 @@ export function WomenPrograms({
   const [active, setActive] = useState(0);
   const [interacted, setInteracted] = useState(false);
   const cur = WOMEN_PROGRAMS[active];
+  // One ref per tab button so arrow-key navigation can call .focus() on the
+  // newly selected tab, keeping DOM focus in sync with tabIndex.
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Stacked (/programs): reveal each program block as it enters. Tabs (home):
   // stagger the heading and tab bar; the active panel keeps its own fade.
@@ -154,6 +157,7 @@ export function WomenPrograms({
             {WOMEN_PROGRAMS.map((e, i) => (
               <button
                 key={e.id}
+                ref={(el) => { tabRefs.current[i] = el; }}
                 id={`${e.id}-tab`}
                 role="tab"
                 aria-selected={active === i}
@@ -168,12 +172,16 @@ export function WomenPrograms({
                   const last = WOMEN_PROGRAMS.length - 1;
                   if (ev.key === "ArrowRight") {
                     ev.preventDefault();
-                    setActive((a) => (a < last ? a + 1 : 0));
+                    const next = i < last ? i + 1 : 0;
+                    setActive(next);
                     setInteracted(true);
+                    tabRefs.current[next]?.focus();
                   } else if (ev.key === "ArrowLeft") {
                     ev.preventDefault();
-                    setActive((a) => (a > 0 ? a - 1 : last));
+                    const prev = i > 0 ? i - 1 : last;
+                    setActive(prev);
                     setInteracted(true);
+                    tabRefs.current[prev]?.focus();
                   }
                 }}
               >
