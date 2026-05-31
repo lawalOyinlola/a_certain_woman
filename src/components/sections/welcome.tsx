@@ -1,17 +1,27 @@
+"use client";
+
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
+
 export function Welcome() {
+  const ref = useGsapReveal<HTMLElement>({ stagger: 0.16 });
+
   return (
     <section
+      ref={ref}
       id="welcome"
       className="acw-bg-cream relative px-6 py-32 md:px-12 md:py-40"
     >
       <div className="mx-auto flex max-w-[920px] flex-col items-center text-center">
-        <h2 className="acw-display acw-display--center mt-6">
+        <h2 data-reveal className="acw-display acw-display--center mt-6">
           Welcome to
           <br />
           <em>A Certain Woman.</em>
         </h2>
 
-        <div className="mt-12 flex max-w-[720px] flex-col gap-5 text-[17px] leading-[1.75] text-ink-2 text-justify">
+        <div
+          data-reveal
+          className="mt-12 flex max-w-[720px] flex-col gap-5 text-[17px] leading-[1.75] text-ink-2 text-justify"
+        >
           <p>
             A Certain Woman was birthed as more than an organization. It is a
             movement of restoration, dignity, faith, healing, and becoming.
@@ -32,7 +42,7 @@ export function Welcome() {
         </div>
 
         {/* Declaration */}
-        <div className="mt-20 flex flex-col items-center gap-7">
+        <div data-reveal className="mt-20 flex flex-col items-center gap-7">
           <span className="acw-decl-rule" />
           <p className="acw-declaration-quote">
             This is where <em>hearts</em> are restored.
