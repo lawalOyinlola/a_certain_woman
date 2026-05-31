@@ -76,7 +76,7 @@ export function StoriesGrid() {
   const ref = useGsapReveal<HTMLDivElement>({ batch: true, stagger: 0.08 });
 
   return (
-    <div ref={ref} className="mx-auto max-w-[1320px]">
+    <div className="mx-auto max-w-[1320px]">
       <div className="mb-16 flex flex-wrap justify-center gap-2 border-b border-border pb-6">
         {CATS.map((c) => (
           <button
@@ -94,7 +94,9 @@ export function StoriesGrid() {
         ))}
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* key={cat} remounts the grid on filter change so useGsapReveal
+          re-queries the new articles and re-initialises ScrollTrigger.batch. */}
+      <div ref={ref} key={cat} className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filtered.map((s) => (
           <article
             key={s.title}
