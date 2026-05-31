@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 const STORIES = [
   {
@@ -26,14 +29,27 @@ const STORIES = [
 ];
 
 export function StoriesPreview() {
+  const headerRef = useGsapReveal<HTMLDivElement>({ stagger: 0.14 });
+  const cardsRef = useGsapReveal<HTMLDivElement>({
+    targets: "article",
+    stagger: 0.14,
+    from: { y: 48 },
+    trigger: { start: "top 85%" },
+  });
+  const ctaRef = useGsapReveal<HTMLDivElement>({
+    targets: "a, button",
+    from: { y: 20 },
+    trigger: { start: "top 95%" },
+  });
+
   return (
     <section id="stories" className="bg-cream-2 px-6 py-32 md:px-12 md:py-36">
-      <div className="mx-auto mb-14 max-w-[1320px]">
-        <div className="acw-section-label">
+      <div ref={headerRef} className="mx-auto mb-14 max-w-[1320px]">
+        <div data-reveal className="acw-section-label">
           <span className="acw-num">|</span>
           <span>Stories of becoming</span>
         </div>
-        <div className="mt-6 grid items-end gap-16 md:grid-cols-[1.2fr_1fr]">
+        <div data-reveal className="mt-6 grid items-end gap-16 md:grid-cols-[1.2fr_1fr]">
           <h2 className="acw-display">
             Every woman
             <br />
@@ -47,7 +63,7 @@ export function StoriesPreview() {
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-[1320px] gap-6 md:grid-cols-3">
+      <div ref={cardsRef} className="mx-auto grid max-w-[1320px] gap-6 md:grid-cols-3">
         {STORIES.map((s) => (
           <article
             key={s.title}
@@ -85,7 +101,7 @@ export function StoriesPreview() {
         ))}
       </div>
 
-      <div className="mt-14 flex justify-center">
+      <div ref={ctaRef} className="mt-14 flex justify-center">
         <Button asChild variant="editorialOutline" size="pill">
           <Link href="/stories">All stories &amp; the journal</Link>
         </Button>
