@@ -1,12 +1,19 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
+
+// SSR-safe layout effect: useLayoutEffect in the browser, useEffect on the
+// server. "use client" components still SSR in Next.js, so we fall back to
+// useEffect there to avoid the "useLayoutEffect does nothing on the server"
+// warning while still hiding elements before paint in the browser.
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 type Options = {
   /** CSS selector for children to animate — defaults to direct [data-reveal] children. */
@@ -31,13 +38,19 @@ type Options = {
  * `data-reveal` (or pass a custom `targets` selector). Elements fade and
  * rise into view as the section crosses the viewport — fires once,
  * respects `prefers-reduced-motion`.
+ *
+ * Options are intentionally excluded from the dependency array: this is a
+ * one-time setup hook whose config is fixed at call-site (static options
+ * pattern). If reactive re-setup is needed, pass a dependency via the
+ * component's own key or remount the container.
  */
 export function useGsapReveal<T extends HTMLElement = HTMLElement>(
   options: Options = {},
 ) {
   const ref = useRef<T>(null);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useIsomorphicLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -51,6 +64,7 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
 
       // Per-element reveal — each target animates as it scrolls into view.
       if (options.batch) {
+        // Set initial hidden state synchronously before paint to prevent FOUC.
         gsap.set(targets, { opacity: 0, ...from });
         ScrollTrigger.batch(targets, {
           start: options.trigger?.start ?? "top 88%",
@@ -86,7 +100,7 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
     }, el);
 
     return () => ctx.revert();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return ref;
 }
