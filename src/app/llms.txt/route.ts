@@ -3,7 +3,7 @@ import {
   getPastEvents,
   getUpcomingEvents,
 } from "@/lib/data/events";
-import { siteUrl } from "@/config/site";
+import { siteUrl, contact } from "@/config/site";
 
 export const dynamic = "force-static";
 
@@ -29,7 +29,7 @@ function buildContent() {
 - Who it's for: women in every season (healing, rising, leading, becoming); men who stand with them; families, churches, and communities walking alongside
 - Long view: a world where every person is healed, honored, and whole, and where gender-based initiatives are no longer needed
 - Area served: Sierra Leone and West Africa
-- Email: info@acertainwoman.org
+- Email: ${contact.email}
 - Website: ${siteUrl}
 
 ## Pillars of transformation
