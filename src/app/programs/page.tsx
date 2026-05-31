@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
-import { Experiences } from "@/components/sections/experiences";
-import { MenWhoStand } from "@/components/sections/men-who-stand";
+import { Programs } from "@/components/sections/programs";
 import { Join } from "@/components/sections/join";
 
 // Revalidate hourly so the Men Who Stand date badge stays current.
@@ -42,9 +41,7 @@ export default function ProgramsPage() {
           sub="Our programs are designed to meet women at different stages of their journey: from healing to leadership, from restoration to service, from private pain to public purpose."
         />
 
-        <Experiences withLabel={false} />
-
-        <MenWhoStand />
+        <Programs withLabel={false} layout="stacked" withDevotional />
 
         <Join withLabel={false} />
       </main>
