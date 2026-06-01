@@ -35,8 +35,11 @@ export function Nav() {
           : "py-5 bg-transparent",
       )}
     >
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-8 px-6 md:px-12">
-        <Link href="/" className="flex items-center gap-2 text-forest">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto_1fr] items-center gap-8 px-6 md:px-12">
+        <Link
+          href="/"
+          className="flex items-center gap-2 justify-self-start text-forest"
+        >
           <Image
             src="/assets/logo.png"
             alt="A Certain Woman"
@@ -50,7 +53,7 @@ export function Nav() {
           />
         </Link>
 
-        <div className="hidden items-center gap-6 text-[11px] uppercase tracking-[0.18em] text-muted-foreground lg:flex">
+        <div className="hidden items-center justify-self-center gap-6 text-[11px] uppercase tracking-[0.18em] text-muted-foreground lg:flex">
           {items.map(([label, href]) => (
             <Link
               key={href}
@@ -62,22 +65,24 @@ export function Nav() {
           ))}
         </div>
 
-        <Link
-          href="/contact"
-          className="hidden whitespace-nowrap rounded-full border border-forest px-5 py-2.5 text-[11px] uppercase tracking-[0.18em] text-forest transition-colors hover:bg-forest hover:text-cream-1 md:inline-flex"
-        >
-          Join the Movement
-        </Link>
+        <div className="flex items-center justify-end gap-2 justify-self-end">
+          <Link
+            href="/contact"
+            className="hidden whitespace-nowrap rounded-full border border-forest px-5 py-2.5 text-[11px] uppercase tracking-[0.18em] text-forest transition-colors hover:bg-forest hover:text-cream-1 md:inline-flex"
+          >
+            Join the Movement
+          </Link>
 
-        <button
-          onClick={() => setOpen((o) => !o)}
-          aria-label="Menu"
-          className="flex flex-col gap-[5px] p-2 lg:hidden"
-        >
-          <span className="block h-px w-5 bg-forest" />
-          <span className="block h-px w-5 bg-forest" />
-          <span className="block h-px w-5 bg-forest" />
-        </button>
+          <button
+            onClick={() => setOpen((o) => !o)}
+            aria-label="Menu"
+            className="flex flex-col gap-[5px] p-2 lg:hidden"
+          >
+            <span className="block h-px w-5 bg-forest" />
+            <span className="block h-px w-5 bg-forest" />
+            <span className="block h-px w-5 bg-forest" />
+          </button>
+        </div>
       </div>
 
       {open && (
