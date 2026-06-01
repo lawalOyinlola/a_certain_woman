@@ -72,6 +72,7 @@ export default function ProgramsPage() {
         <Programs withLabel={false} layout="stacked" withDevotional />
 
         <Faq
+          className="bg-cream-1"
           label="Questions"
           heading={
             <>
