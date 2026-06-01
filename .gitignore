@@ -46,3 +46,6 @@ CLAUDE*
 skills-lock.json
 .agents*
 .agents/*
+
+#docs
+SEO*
