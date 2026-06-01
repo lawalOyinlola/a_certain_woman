@@ -4,7 +4,36 @@ import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
 import { Reveal } from "@/components/site/reveal";
 import { Founder } from "@/components/sections/founder";
+import { Impact } from "@/components/sections/impact";
 import { Join } from "@/components/sections/join";
+import { Faq } from "@/components/sections/faq";
+
+const FAQS = [
+  {
+    q: "What is A Certain Woman?",
+    a: "A Certain Woman (ACW) is a faith-rooted women's movement and institutional platform based in Freetown, Sierra Leone. We are dedicated to restoring identity, nurturing healing, raising purpose-driven women, and building safe, beautiful, transformational spaces for women and girls.",
+  },
+  {
+    q: "Who founded A Certain Woman?",
+    a: "A Certain Woman was founded by Namaari Inanna Kargbo, who serves as its founder and custodian.",
+  },
+  {
+    q: "What does the name “A Certain Woman” mean?",
+    a: "In scripture and in life, many unnamed women carried stories of pain, faith, courage, restoration, and transformation. Though the world may not always name her, God sees her. A Certain Woman represents every woman whose story matters. She is seen, called, restored, and crowned.",
+  },
+  {
+    q: "Is A Certain Woman a faith-based organization?",
+    a: "Yes. A Certain Woman is faith-rooted, and we believe restoration is deeply connected to God, grace, prayer, scripture, and purpose. We create welcoming spaces for women and girls on a journey of healing, identity, and growth.",
+  },
+  {
+    q: "Who can be part of A Certain Woman?",
+    a: "Every woman is welcome. The woman who has survived silently, served faithfully, loved deeply, fallen, risen, waited, prayed, and rebuilt. We also walk alongside girls and young women, and engage the men, families, and communities who shape their lives.",
+  },
+  {
+    q: "Where does A Certain Woman operate?",
+    a: "A Certain Woman is based in Freetown, Sierra Leone, and works with women, girls, families, and communities across Sierra Leone and the wider West Africa region.",
+  },
+];
 
 export const metadata: Metadata = {
   title: "About",
@@ -217,6 +246,21 @@ export default function AboutPage() {
             </p>
           </Reveal>
         </section>
+
+        <Impact />
+
+        <Faq
+          className="bg-cream-1"
+          label="Questions"
+          heading={
+            <>
+              Questions,
+              <br />
+              <em>answered.</em>
+            </>
+          }
+          items={FAQS}
+        />
 
         <Join />
       </main>
