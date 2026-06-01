@@ -3,8 +3,32 @@ import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
 import { EventsBrowser } from "./events-browser";
+import { Faq } from "@/components/sections/faq";
 import { EVENTS, isUpcoming, type ACWEvent } from "@/lib/data/events";
 import { siteUrl } from "@/config/site";
+
+const FAQS = [
+  {
+    q: "Are A Certain Woman's events free to attend?",
+    a: "Most A Certain Woman gatherings are free to attend. A few experiences, such as the Crown Table Spotlight Breakfast, are invitation-only. Details for each gathering are shared on its event listing.",
+  },
+  {
+    q: "Where are A Certain Woman's events held?",
+    a: "Our events are held primarily in Freetown, Sierra Leone. The specific venue is shared with each event, so check the event listing for the exact location.",
+  },
+  {
+    q: "How do I find out about upcoming events?",
+    a: "Watch this Events page for upcoming gatherings, follow us on Instagram and TikTok at @a__certain__woman, or reach out through the Contact page and we will keep you informed.",
+  },
+  {
+    q: "How do I attend or RSVP for an event?",
+    a: "Reach out through the Contact page to let us know which gathering you would like to attend, and we will share how to join. For sponsored or invitation-based events, you can also connect with us through the Partner page.",
+  },
+  {
+    q: "Can I bring a friend or invite someone?",
+    a: "Yes. Most of our gatherings warmly welcome guests, and we love when women bring others along. For invitation-only events, please check with us first so we can make space for your guest.",
+  },
+];
 
 function eventToJsonLd(event: ACWEvent) {
   const upcoming = isUpcoming(event);
@@ -106,6 +130,19 @@ export default async function EventsPage({
         <div className="mx-auto mt-16 max-w-[1280px] px-6 md:px-12">
           <EventsBrowser initialTab={initialTab} initialQuery={q} />
         </div>
+
+        <Faq
+          className="mt-16 bg-cream-2"
+          label="Attending"
+          heading={
+            <>
+              Before you
+              <br />
+              <em>gather.</em>
+            </>
+          }
+          items={FAQS}
+        />
       </main>
       <Footer />
     </>
