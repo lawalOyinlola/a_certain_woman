@@ -44,8 +44,11 @@ export const socials = {
     handle: "@a__certain__woman",
     url: "https://www.tiktok.com/@a__certain__woman",
   },
-  // TODO: add the Facebook page URL once the client provides it.
-  facebook: null as Social | null,
+  facebook: {
+    label: "Facebook",
+    handle: "A Certain Woman",
+    url: "https://www.facebook.com/people/A-Certain-Woman/61587369674617/",
+  },
 } satisfies Record<string, Social | null>;
 
 /** Public profile URLs for schema.org `sameAs` (skips not-yet-provided ones). */
