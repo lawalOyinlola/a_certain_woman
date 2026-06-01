@@ -5,8 +5,36 @@ import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
 import { Reveal } from "@/components/site/reveal";
 import { Join } from "@/components/sections/join";
+import { Faq } from "@/components/sections/faq";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
+
+const FAQS = [
+  {
+    q: "How can I partner with A Certain Woman?",
+    a: "There are six main ways to partner: sponsor an event, support community outreach, fund the Identity Academy, build a CSR partnership, collaborate as a church or faith partner, or work with us as a government or development partner. Reach out through the Contact page and we will share a partnership brief.",
+  },
+  {
+    q: "Who can partner with A Certain Woman?",
+    a: "We welcome partnerships with individuals, churches, companies, government institutions, NGOs, development partners, foundations, and community leaders who believe in the restoration, dignity, wellbeing, and empowerment of women and girls.",
+  },
+  {
+    q: "How can I give or donate to support the work?",
+    a: "Your support helps create healing spaces, host empowerment programmes, support vulnerable women and girls, and provide outreach care. You can sponsor one woman, support an outreach, sponsor an event, fund training materials, support girls' mentorship, become a monthly partner, or give through corporate sponsorship. Contact us to arrange your gift.",
+  },
+  {
+    q: "Can my company partner through corporate social responsibility (CSR)?",
+    a: "Yes. Companies can deliver women's empowerment, wellness, leadership, and family wellbeing programmes as part of their CSR commitments. We will help shape a partnership that fits your goals and the communities we serve.",
+  },
+  {
+    q: "How do I request a partnership brief?",
+    a: "Visit the Contact page and let us know you would like a partnership brief, or use the Request Partnership Brief option on this page. We will follow up with details on how we can work together.",
+  },
+  {
+    q: "What makes A Certain Woman a credible partner?",
+    a: "A Certain Woman brings a clear women-focused mission, strong faith and community trust, an elegant and credible public presence, both grassroots and institutional reach, programme models ready for scaling, and strong storytelling, visibility, and documentation.",
+  },
+];
 
 export const metadata: Metadata = {
   title: "Partner With Us",
@@ -203,6 +231,19 @@ export default function PartnerPage() {
             </div>
           </Reveal>
         </section>
+
+        <Faq
+          className="bg-cream-2"
+          label="Questions"
+          heading={
+            <>
+              Partnership,
+              <br />
+              <em>answered.</em>
+            </>
+          }
+          items={FAQS}
+        />
 
         <Join withLabel={false} />
       </main>
