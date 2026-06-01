@@ -3,8 +3,37 @@ import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
 import { Reveal } from "@/components/site/reveal";
+import { Impact } from "@/components/sections/impact";
 import { Join } from "@/components/sections/join";
+import { Faq } from "@/components/sections/faq";
 import { cn } from "@/lib/utils";
+
+const FAQS = [
+  {
+    q: "What kind of work does A Certain Woman do?",
+    a: "A Certain Woman works across five areas: women's identity and healing, leadership and empowerment, support for girls and young women, family and community wellbeing, and advocacy and partnership. We support women and girls emotionally, spiritually, socially, and practically.",
+  },
+  {
+    q: "What are healing circles?",
+    a: "Healing circles are safe, intimate spaces for reflection, prayer, release, and restoration, where women can process pain, release shame, and begin again. They sit alongside guided reflection sessions, wellness brunches, and story-sharing spaces.",
+  },
+  {
+    q: "Does A Certain Woman work with girls and young women?",
+    a: "Yes. We support girls and young women with identity, self-worth, confidence, and direction through school outreach, mentorship programmes, identity sessions, life skills training, and faith and values formation.",
+  },
+  {
+    q: "What is the Men Who Stand initiative?",
+    a: "Men Who Stand is A Certain Woman's male engagement initiative for responsible fatherhood, positive masculinity, family leadership, and legacy-building. It is built on the conviction that family wellbeing is strengthened when men also rise in responsibility, healing, and purpose.",
+  },
+  {
+    q: "How can I take part in a programme or gathering?",
+    a: "Visit our Events page to see upcoming gatherings, or reach out through the Contact page to find the right programme for you. We welcome women and girls at every stage of their journey.",
+  },
+  {
+    q: "How can I support the work of A Certain Woman?",
+    a: "You can support our work by partnering with us, sponsoring an event, funding the Identity Academy, supporting community outreach, or becoming a monthly partner. Visit our Partner page to see every way to give and collaborate.",
+  },
+];
 
 export const metadata: Metadata = {
   title: "Our Work",
@@ -119,7 +148,7 @@ export default function OurWorkPage() {
             key={a.title}
             className={cn(
               "px-6 py-24 md:px-12 md:py-28",
-              i % 2 ? "bg-cream-2" : "bg-cream-1"
+              i % 2 ? "bg-cream-2" : "bg-cream-1",
             )}
           >
             <Reveal className="mx-auto max-w-[1120px]">
@@ -145,6 +174,20 @@ export default function OurWorkPage() {
             </Reveal>
           </section>
         ))}
+
+        <Impact />
+
+        <Faq
+          label="Questions"
+          heading={
+            <>
+              How the
+              <br />
+              <em>work works.</em>
+            </>
+          }
+          items={FAQS}
+        />
 
         <Join withLabel={false} />
       </main>
