@@ -565,13 +565,53 @@
     @apply font-display italic text-[19px] text-forest pl-6 pb-3.5 border-b border-dashed border-border relative;
   }
   .acw-checklist li::before {
-    content: "+";
-    @apply absolute left-0 top-0 text-gold font-sans not-italic;
+    content: "*";
+    @apply absolute left-0 top-[6px] text-[22px] leading-none text-gold font-sans not-italic;
   }
   @media (max-width: 960px) {
     .acw-checklist {
       @apply grid-cols-1;
     }
+  }
+
+  /* FAQ accordion */
+  .acw-faq {
+    @apply flex flex-col;
+  }
+  .acw-faq-item {
+    @apply border-b border-border;
+  }
+  .acw-faq-item:first-child {
+    @apply border-t border-border;
+  }
+  .acw-faq-q {
+    @apply flex cursor-pointer list-none items-center justify-between gap-6 py-6 font-display text-[21px] leading-snug text-forest transition-colors;
+  }
+  .acw-faq-q::-webkit-details-marker {
+    display: none;
+  }
+  .acw-faq-q:hover {
+    @apply text-gold;
+  }
+  .acw-faq-icon {
+    @apply relative h-3.5 w-3.5 flex-none;
+  }
+  .acw-faq-icon::before,
+  .acw-faq-icon::after {
+    content: "";
+    @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-gold;
+  }
+  .acw-faq-icon::before {
+    @apply h-px w-3.5;
+  }
+  .acw-faq-icon::after {
+    @apply h-3.5 w-px transition-transform duration-300;
+  }
+  .acw-faq-item[open] .acw-faq-icon::after {
+    @apply scale-y-0;
+  }
+  .acw-faq-a {
+    @apply pr-10 pb-7 text-[16px] leading-[1.7] text-ink-2 text-pretty;
   }
 
   /* Contact form fields */
