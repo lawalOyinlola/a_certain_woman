@@ -178,6 +178,7 @@ export default function OurWorkPage() {
         <Impact />
 
         <Faq
+          className="bg-cream-1"
           label="Questions"
           heading={
             <>
