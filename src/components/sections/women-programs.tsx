@@ -9,7 +9,7 @@ import { WOMEN_PROGRAMS, type WomenProgram } from "@/lib/data/programs";
 import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 /** Eyebrow + title + blurb — the part shown before the tabs on mobile. */
-function ProgramHead({ p }: { p: WomenProgram }) {
+function ProgramHead({ p, detail = false }: { p: WomenProgram; detail?: boolean }) {
   return (
     <>
       <div className="flex items-center justify-center gap-5 text-cream-1/60">
@@ -27,12 +27,27 @@ function ProgramHead({ p }: { p: WomenProgram }) {
       <p className="mx-auto mt-7 max-w-[680px] text-center text-[17px] leading-[1.65] text-cream-1/80">
         {p.blurb}
       </p>
+
+      {detail && p.body && (
+        <p className="mx-auto mt-4 max-w-[680px] text-center text-[16px] leading-[1.75] text-cream-1/60">
+          {p.body}
+        </p>
+      )}
     </>
   );
 }
 
 /** Key features + best-for + CTA grid. */
-function ProgramBody({ p }: { p: WomenProgram }) {
+function ProgramBody({
+  p,
+  detail = false,
+}: {
+  p: WomenProgram;
+  detail?: boolean;
+}) {
+  const features = detail ? p.features : p.features.slice(0, 4);
+  const bestFor = (detail && p.detailBestFor) ? p.detailBestFor : p.bestFor;
+
   return (
     <div className="grid gap-16 border-t border-cream-1/20 pt-12 md:grid-cols-2">
       <div>
@@ -40,7 +55,7 @@ function ProgramBody({ p }: { p: WomenProgram }) {
           KEY FEATURES
         </small>
         <ul className="acw-exp-features mt-6">
-          {p.features.map((f, i) => (
+          {features.map((f, i) => (
             <li key={i}>{f}</li>
           ))}
         </ul>
@@ -50,7 +65,7 @@ function ProgramBody({ p }: { p: WomenProgram }) {
           BEST FOR
         </small>
         <p className="mt-6 text-[17px] leading-[1.6] text-cream-1/80">
-          {p.bestFor}
+          {bestFor}
         </p>
         <Button
           asChild
@@ -215,9 +230,9 @@ export function WomenPrograms({
               data-reveal
               className="scroll-mt-28 md:scroll-mt-32"
             >
-              <ProgramHead p={p} />
+              <ProgramHead p={p} detail />
               <div className="mt-12 md:mt-14">
-                <ProgramBody p={p} />
+                <ProgramBody p={p} detail />
               </div>
             </article>
           ))}

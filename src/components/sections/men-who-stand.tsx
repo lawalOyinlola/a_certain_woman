@@ -80,6 +80,14 @@ export function MenWhoStand({
                 <li key={f}>{f}</li>
               ))}
             </ul>
+            {withDevotional && MEN.bestFor && (
+              <div className="mt-10">
+                <small className="acw-section-label-mini">BEST FOR</small>
+                <p className="mt-3 text-[16px] leading-[1.65] text-ink-2">
+                  {MEN.bestFor}
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
