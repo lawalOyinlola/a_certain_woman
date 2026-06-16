@@ -31,6 +31,47 @@ export const contact = {
 export const mailtoHref = `mailto:${contact.email}`;
 export const telHref = `tel:${contact.phoneE164}`;
 
+/**
+ * The reasons offered in the contact form's "Reason for Contact" dropdown.
+ * Single-sourced here so deep links (`contactHref`) and the form stay in sync;
+ * a `reason` that isn't in this list is ignored by the form.
+ */
+export const CONTACT_REASONS = [
+  "Join the Movement",
+  "Attend an Event",
+  "Partner / Sponsor",
+  "Media Inquiry",
+  "Volunteer",
+  "Invite ACW",
+  "Share My Story",
+  "General Inquiry",
+] as const;
+
+export type ContactReason = (typeof CONTACT_REASONS)[number];
+
+/**
+ * Build a deep link to the contact form that preselects a reason, prefills the
+ * message, and scrolls to the form (`#write`). Lets any "purposeful" CTA across
+ * the site land the visitor on a pre-contextualised form instead of a blank one.
+ */
+export function contactHref(opts?: {
+  reason?: ContactReason;
+  prefill?: string;
+}): string {
+  const params = new URLSearchParams();
+  if (opts?.reason) params.set("reason", opts.reason);
+  if (opts?.prefill) params.set("prefill", opts.prefill);
+  const qs = params.toString();
+  return `/contact${qs ? `?${qs}` : ""}#write`;
+}
+
+/** Build a WhatsApp deep link, optionally with a prefilled message. */
+export function whatsappHref(text?: string): string {
+  return text
+    ? `${contact.whatsappUrl}?text=${encodeURIComponent(text)}`
+    : contact.whatsappUrl;
+}
+
 type Social = { label: string; handle: string; url: string };
 
 export const socials = {
