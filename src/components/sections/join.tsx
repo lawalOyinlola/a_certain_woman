@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
+import { contactHref } from "@/config/site";
 import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 import { cn } from "@/lib/utils";
 
@@ -24,34 +25,84 @@ const PhoneField = dynamic(
   },
 );
 
-const PATHS = [
-  {
+type Pathway = {
+  kind: string;
+  title: string;
+  body: string;
+  cta: string;
+  href: string;
+};
+
+/**
+ * The pool of onward invitations. Each page picks a contextual subset (see
+ * `paths` prop) so this block references *other* pages rather than repeating
+ * links to the page you're already on.
+ */
+const PATHWAY = {
+  join: {
     kind: "JOIN",
     title: "I want to join the movement",
     body: "Receive our quiet letters, find a circle near you, and gather with women becoming whole.",
     cta: "Join the Movement",
-    href: "/contact",
+    href: contactHref({
+      reason: "Join the Movement",
+      prefill: "I would like to join the movement.",
+    }),
   },
-  {
+  partner: {
     kind: "PARTNER",
     title: "I want to partner with you",
     body: "Churches, companies, NGOs, and government partners. Build restoration alongside ACW.",
     cta: "Become a Partner",
     href: "/partner",
   },
-  {
+  support: {
     kind: "SUPPORT",
     title: "I want to support the work",
     body: "Sponsor a woman, fund an outreach, support an event, or become a monthly partner.",
     cta: "Give / Support ACW",
     href: "/partner#support",
   },
-];
+  programs: {
+    kind: "EXPLORE",
+    title: "I want to see the work",
+    body: "Healing circles, the Identity Academy, Faith & Flowers, and every room we've built for women.",
+    cta: "Explore the Programs",
+    href: "/programs",
+  },
+  events: {
+    kind: "GATHER",
+    title: "I want to be in the room",
+    body: "Find the next gathering, and the women becoming whole alongside you.",
+    cta: "See Upcoming Events",
+    href: "/events",
+  },
+  story: {
+    kind: "HER STORY",
+    title: "I want to know why",
+    body: "The grief, survival, faith, and grace behind A Certain Woman, in the founder's own words.",
+    cta: "Read the Founder's Letter",
+    href: "/founder",
+  },
+} satisfies Record<string, Pathway>;
+
+export type PathwayKey = keyof typeof PATHWAY;
+
+/** Front-door default (home): join, partner, give. */
+const DEFAULT_PATHS: PathwayKey[] = ["join", "partner", "support"];
 
 type ContactType = "email" | "phone";
 type NewsletterStatus = "idle" | "loading" | "success" | "error";
 
-export function Join({ withLabel = true }: { withLabel?: boolean }) {
+export function Join({
+  withLabel = true,
+  paths = DEFAULT_PATHS,
+}: {
+  withLabel?: boolean;
+  /** Which onward pathways to show, in order. Pass `[]` for newsletter only. */
+  paths?: PathwayKey[];
+}) {
+  const pathways = paths.map((k) => PATHWAY[k]);
   const [contactType, setContactType] = useState<ContactType>("phone");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -121,6 +172,8 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
       id="join"
       className="acw-bg-cream-up relative px-6 py-32 md:px-12 md:py-40"
     >
+      {pathways.length > 0 && (
+        <>
       <div
         data-reveal
         className="mx-auto mb-20 flex max-w-[760px] flex-col items-center text-center"
@@ -144,9 +197,14 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
         </p>
       </div>
 
-      {/* 3 pathways */}
-      <div className="mx-auto mb-24 grid max-w-[1320px] gap-6 md:grid-cols-3">
-        {PATHS.map((p) => (
+      {/* Onward pathways — a contextual subset chosen per page */}
+      <div
+        className={cn(
+          "mx-auto mb-24 grid max-w-[1320px] gap-6",
+          pathways.length > 1 && "md:grid-cols-3",
+        )}
+      >
+        {pathways.map((p) => (
           <article
             key={p.kind}
             data-reveal
@@ -184,6 +242,8 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
           </article>
         ))}
       </div>
+        </>
+      )}
 
       {/* Newsletter */}
       <div
