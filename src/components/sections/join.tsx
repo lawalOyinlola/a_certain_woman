@@ -79,7 +79,13 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
     } else {
       // Loaded on demand — the metadata-heavy validator stays out of the
       // initial bundle. By now PhoneField is mounted, so this resolves instantly.
-      const { isValidPhoneNumber } = await import("react-phone-number-input");
+      let isValidPhoneNumber: (value: string) => boolean;
+      try {
+        ({ isValidPhoneNumber } = await import("react-phone-number-input"));
+      } catch {
+        setError("Unable to validate phone number, please try again.");
+        return;
+      }
       if (!phone || !isValidPhoneNumber(phone)) {
         setError("Please enter a valid phone number.");
         return;
@@ -100,7 +106,11 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
       }
       setStatus("success");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.",
+      );
       setStatus("error");
     }
   };
@@ -209,33 +219,39 @@ export function Join({ withLabel = true }: { withLabel?: boolean }) {
               <p className="text-[13px] italic text-ink-2 mb-3">
                 How would you like to receive each letter?
               </p>
-              <div className="flex items-center gap-2 mb-1">
+              <div
+                className="mb-1 flex items-center gap-2"
+                role="group"
+                aria-label="Preferred delivery channel"
+              >
                 <span className="text-[10px] tracking-[0.28em] uppercase text-muted-foreground shrink-0">
                   via:
                 </span>
                 <div className="flex gap-1 p-1 bg-[#ede8df] rounded-full">
                   <button
                     type="button"
+                    aria-pressed={contactType === "phone"}
                     onClick={() => switchType("phone")}
                     disabled={status === "loading"}
                     className={cn(
                       "cursor-pointer px-4 py-1.5 rounded-full text-[10px] tracking-[0.22em] uppercase transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50",
                       contactType === "phone"
                         ? "bg-forest text-cream-1 shadow-sm"
-                        : "text-muted-foreground hover:text-ink"
+                        : "text-muted-foreground hover:text-ink",
                     )}
                   >
                     WhatsApp / Phone
                   </button>
                   <button
                     type="button"
+                    aria-pressed={contactType === "email"}
                     onClick={() => switchType("email")}
                     disabled={status === "loading"}
                     className={cn(
                       "cursor-pointer px-4 py-1.5 rounded-full text-[10px] tracking-[0.22em] uppercase transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50",
                       contactType === "email"
                         ? "bg-forest text-cream-1 shadow-sm"
-                        : "text-muted-foreground hover:text-ink"
+                        : "text-muted-foreground hover:text-ink",
                     )}
                   >
                     Email
