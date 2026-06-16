@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ACWEvent, getEventStatus } from "@/lib/data/events";
-import { Play } from "@/components/site/icons";
+import { Play, ArrowRight } from "@/components/site/icons";
 import { Lightbox, type LightboxItem } from "@/components/ui/lightbox";
 import { Button } from "@/components/ui/button";
+import { contactHref, whatsappHref } from "@/config/site";
 import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 // How many photos to show before the "view all" reveal, so long galleries
@@ -90,6 +92,35 @@ export function EventDetail({ event }: { event: ACWEvent }) {
         <p className="mx-auto mt-6 max-w-[640px] text-[15px] leading-[1.85] text-ink-2">
           {event.blurb}
         </p>
+
+        {/* Attend CTA — only on gatherings still ahead. Past events stay
+            archival. The form link arrives prefilled with this event so the
+            visitor doesn't have to retype it; WhatsApp is the fast path. */}
+        {status !== "PAST" && (
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <Button asChild variant="editorial" size="pillSm">
+              <Link
+                href={contactHref({
+                  reason: "Attend an Event",
+                  prefill: `I would like to attend ${event.title} (${event.date}).`,
+                })}
+              >
+                Tell us you&apos;re coming <ArrowRight />
+              </Link>
+            </Button>
+            <Button asChild variant="editorialOutline" size="pillSm">
+              <a
+                href={whatsappHref(
+                  `Hello A Certain Woman, I would like to attend ${event.title} on ${event.date}.`,
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ask on WhatsApp
+              </a>
+            </Button>
+          </div>
+        )}
       </header>
 
       <div data-reveal className="mx-auto mt-12 max-w-[1280px]">
