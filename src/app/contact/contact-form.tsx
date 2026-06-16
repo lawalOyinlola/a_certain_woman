@@ -92,7 +92,13 @@ export function ContactForm() {
     // Phone is optional, so only check its format when one was entered. The
     // metadata-heavy validator loads on demand (PhoneField is already mounted).
     if (phone.trim()) {
-      const { isValidPhoneNumber } = await import("react-phone-number-input");
+      let isValidPhoneNumber: (value: string) => boolean;
+      try {
+        ({ isValidPhoneNumber } = await import("react-phone-number-input"));
+      } catch {
+        setFieldErrors({ phone: "Unable to validate phone number, please try again." });
+        return;
+      }
       if (!isValidPhoneNumber(phone)) {
         errs.phone = "Please enter a valid phone number.";
       }
