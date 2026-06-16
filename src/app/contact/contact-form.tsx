@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +16,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+// Same lazy split as the newsletter: react-phone-number-input (libphonenumber
+// metadata + flag SVGs + CSS) stays out of the initial bundle and only loads
+// when the form mounts in the browser.
+const PhoneField = dynamic(
+  () => import("@/components/ui/phone-field").then((m) => m.PhoneField),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        aria-hidden
+        className="h-[46px] w-full animate-pulse border-b border-border"
+      />
+    ),
+  },
+);
 
 const REASONS = [
   "Join the Movement",
@@ -46,12 +63,13 @@ export function ContactForm() {
   const [serverError, setServerError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [reason, setReason] = useState(REASONS[0]);
+  const [phone, setPhone] = useState("");
 
-  const validate = (fd: FormData) => {
+  const validate = (fd: FormData, phoneValue: string) => {
     const errs: Record<string, string> = {};
     const name = (fd.get("name") as string).trim();
     const email = (fd.get("email") as string).trim();
-    const phone = (fd.get("phone") as string).trim();
+    const phone = phoneValue.trim();
     const message = (fd.get("message") as string).trim();
 
     if (name.length < 2) errs.name = "Please enter your name.";
@@ -70,7 +88,15 @@ export function ContactForm() {
     setServerError("");
 
     const fd = new FormData(e.currentTarget);
-    const errs = validate(fd);
+    const errs = validate(fd, phone);
+    // Phone is optional, so only check its format when one was entered. The
+    // metadata-heavy validator loads on demand (PhoneField is already mounted).
+    if (phone.trim()) {
+      const { isValidPhoneNumber } = await import("react-phone-number-input");
+      if (!isValidPhoneNumber(phone)) {
+        errs.phone = "Please enter a valid phone number.";
+      }
+    }
     if (Object.keys(errs).length) {
       setFieldErrors(errs);
       return;
@@ -84,7 +110,7 @@ export function ContactForm() {
         body: JSON.stringify({
           name: (fd.get("name") as string).trim(),
           email: (fd.get("email") as string).trim() || undefined,
-          phone: (fd.get("phone") as string).trim() || undefined,
+          phone: phone.trim() || undefined,
           organization: (fd.get("organization") as string).trim() || undefined,
           reason,
           message: (fd.get("message") as string).trim(),
@@ -155,24 +181,35 @@ export function ContactForm() {
         />
       </FormField>
 
-      <FormField
-        label="Email Address"
-        error={fieldErrors.email}
-        hint="Email or phone — at least one is required."
-      >
-        <FieldInput name="email" type="email" placeholder="her@email.com" />
-      </FormField>
-
-      <FormField label="Phone / WhatsApp">
-        <FieldInput name="phone" type="tel" placeholder="+232 ..." />
-      </FormField>
-
       <FormField label="Organization (optional)">
         <FieldInput
           name="organization"
           type="text"
           placeholder="Church, NGO, company..."
         />
+      </FormField>
+
+      <FormField label="Phone / WhatsApp" error={fieldErrors.phone}>
+        <PhoneField
+          id="contact-phone"
+          value={phone}
+          onChange={(v) => {
+            setPhone(v);
+            setFieldErrors((prev) => ({ ...prev, phone: "" }));
+          }}
+          placeholder="76 123 456"
+          disabled={isLoading}
+          aria-label="Phone or WhatsApp number"
+          aria-invalid={Boolean(fieldErrors.phone)}
+        />
+      </FormField>
+
+      <FormField
+        label="Email Address"
+        error={fieldErrors.email}
+        hint="Email or phone required."
+      >
+        <FieldInput name="email" type="email" placeholder="her@email.com" />
       </FormField>
 
       {/* Reason — underline-styled Select */}
@@ -182,7 +219,10 @@ export function ContactForm() {
           onValueChange={(v) => v !== null && setReason(v)}
           disabled={isLoading}
         >
-          <SelectTrigger className="w-full rounded-none border-0 border-b border-border bg-transparent py-3 h-auto text-[16px] font-sans text-ink shadow-none ring-0 focus-visible:ring-0 focus-visible:border-gold hover:border-gold/60 transition-colors duration-200 data-placeholder:text-muted-foreground data-placeholder:opacity-50 data-placeholder:italic [&>svg]:text-muted-foreground">
+          <SelectTrigger
+            aria-label="Reason for Contact"
+            className="w-full rounded-none border-0 border-b border-border bg-transparent h-12 text-[16px] font-sans text-ink shadow-none ring-0 focus-visible:ring-0 focus-visible:border-gold hover:border-gold/60 transition-colors duration-200 data-placeholder:text-muted-foreground data-placeholder:opacity-50 data-placeholder:italic [&>svg]:text-muted-foreground"
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="bg-cream-1 border-border shadow-[0_8px_32px_-8px_rgba(31,38,32,0.18)]">
