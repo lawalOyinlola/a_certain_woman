@@ -8,6 +8,7 @@ import { Reveal } from "@/components/site/reveal";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "@/components/site/icons";
 import { Join } from "@/components/sections/join";
+import { contactHref } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "Why I Do What I Do — A Founder Reflection",
@@ -56,6 +57,16 @@ export default function FounderPage() {
           sub="A founder reflection by Namaari Inanna Kargbo. Not just a woman, A Certain Woman."
         />
 
+        {/* Gentle content note: the letter speaks honestly of war and abuse,
+            so a reader can choose her moment before she begins. */}
+        <div className="bg-cream-1 px-6 pt-10 md:px-12">
+          <p className="mx-auto max-w-[760px] border-l-2 border-gold/50 pl-5 text-[14px] italic leading-[1.7] text-muted-foreground">
+            A note before you read: this letter speaks gently but honestly of
+            grief, war, and abuse. Please read it in your own time, and only
+            when you feel ready.
+          </p>
+        </div>
+
         {/* Opening quote + portrait */}
         <section className="bg-cream-1 px-6 pb-8 pt-4 md:px-12">
           <Reveal className="mx-auto max-w-[760px]">
@@ -70,7 +81,7 @@ export default function FounderPage() {
                 height={520}
                 // LCP element on this page — load eagerly so it isn't
                 // lazy-discovered (which also caused the late layout shift).
-                priority
+                preload
                 sizes="360px"
                 className="aspect-4/5 w-full max-w-[360px] object-cover"
               />
@@ -241,7 +252,12 @@ export default function FounderPage() {
               className="mt-10 flex flex-wrap justify-center gap-3"
             >
               <Button asChild variant="editorial" size="pill">
-                <Link href="/contact">
+                <Link
+                  href={contactHref({
+                    reason: "Join the Movement",
+                    prefill: "I would like to join the movement.",
+                  })}
+                >
                   Join the Movement <ArrowRight />
                 </Link>
               </Button>
@@ -252,7 +268,7 @@ export default function FounderPage() {
           </Reveal>
         </section>
 
-        <Join />
+        <Join paths={["join", "programs", "support"]} />
       </main>
       <Footer />
     </>
