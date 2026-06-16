@@ -1,4 +1,9 @@
-export function newsletterEmailHtml(email: string): string {
+type Subscriber = { email?: string; phone?: string };
+
+export function newsletterEmailHtml({ email, phone }: Subscriber): string {
+  const label = email ? "Email address" : "WhatsApp / Phone";
+  const value = email ?? phone ?? "";
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,9 +28,9 @@ export function newsletterEmailHtml(email: string): string {
     <p>New newsletter subscriber</p>
   </div>
   <div class="body">
-    <p class="label">Email address</p>
-    <p class="value">${email}</p>
-    <p class="note">Add this address to your mailing list.</p>
+    <p class="label">${label}</p>
+    <p class="value">${value}</p>
+    <p class="note">Add this contact to your mailing list.</p>
   </div>
   <div class="footer">Restoring Hearts. Reclaiming Crowns.</div>
 </div>
@@ -33,6 +38,8 @@ export function newsletterEmailHtml(email: string): string {
 </html>`;
 }
 
-export function newsletterEmailText(email: string): string {
-  return `A CERTAIN WOMAN — New Newsletter Subscriber\n${"=".repeat(44)}\n\n${email}\n\nAdd this address to your mailing list.`;
+export function newsletterEmailText({ email, phone }: Subscriber): string {
+  const label = email ? "Email" : "WhatsApp / Phone";
+  const value = email ?? phone ?? "";
+  return `A CERTAIN WOMAN — New Newsletter Subscriber\n${"=".repeat(44)}\n\n${label}: ${value}\n\nAdd this contact to your mailing list.`;
 }
