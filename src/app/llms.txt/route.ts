@@ -62,8 +62,8 @@ ${past.length === 0 ? "_No past events yet._" : past.map(eventLine).join("\n")}
 ## Pages
 
 - [Home](${siteUrl}/): movement overview, who we serve, programs, founder, and how to engage.
-- [About](${siteUrl}/about): why ACW exists, vision, mission, values, and the founder's heart.
-- [Our Work](${siteUrl}/our-work): identity, healing, leadership, motherhood, advocacy, and partnership.
+- [About](${siteUrl}/about): why ACW exists, vision, mission, values, the five areas of work (identity, healing, leadership, family, advocacy), and the founder's heart.
+- [Founder's Letter](${siteUrl}/founder): "Why I Do What I Do" — Namaari Inanna Kargbo's full founder reflection.
 - [Programs](${siteUrl}/programs): every signature program, who it's for, and how to engage.
 - [Events](${siteUrl}/events): browse and search every upcoming and past gathering.
 - [Gallery](${siteUrl}/gallery): photos and films from each gathering, filterable by event.
