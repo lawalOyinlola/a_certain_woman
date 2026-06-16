@@ -76,6 +76,11 @@ function shuffleSeeded<T>(items: T[], seed: number): T[] {
   return out;
 }
 
+// How many tiles to render before the "Show more" reveal. Keeps the initial
+// DOM (and image requests) light on phones / slower connections, then grows in
+// steps the visitor controls.
+const GALLERY_STEP = 24;
+
 function spanForIndex(idx: number, kind: MediaItem["kind"]): string {
   if (kind === "video") return "col-span-2 row-span-2";
   const pattern = ["", "row-span-2", "", "col-span-2", "", "row-span-2"] as const;
@@ -112,6 +117,7 @@ export function Gallery({
   }, [media]);
 
   const [filter, setFilter] = useState<string>("__all__");
+  const [shown, setShown] = useState(GALLERY_STEP);
   const [lb, setLb] = useState<number | null>(null);
   // One-time reveal of the initial tiles; later filter changes render
   // instantly without re-animating.
@@ -122,8 +128,14 @@ export function Gallery({
     return media.filter((m) => m.eventId === filter);
   }, [media, filter]);
 
+  // Only the first `shown` tiles are rendered; "Show more" grows the window.
+  // The lightbox still indexes into the full `visible` list, so opening a tile
+  // and navigating beyond what's rendered keeps working.
+  const rendered = visible.slice(0, shown);
+
   const selectFilter = (next: string) => {
     setFilter(next);
+    setShown(GALLERY_STEP);
     setLb(null);
   };
 
@@ -186,8 +198,9 @@ export function Gallery({
           </p>
         </div>
       ) : (
+        <>
         <div className="mx-auto mt-8 grid max-w-[1280px] grid-flow-dense auto-rows-[240px] grid-cols-2 gap-3 md:auto-rows-[260px] md:grid-cols-4">
-          {visible.map((m, i) => (
+          {rendered.map((m, i) => (
             <button
               key={`${m.kind}-${m.src}-${i}`}
               data-reveal
@@ -234,6 +247,22 @@ export function Gallery({
             </button>
           ))}
         </div>
+
+        {visible.length > shown && (
+          <div className="mt-10 flex flex-col items-center gap-4">
+            <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+              Showing {rendered.length} of {visible.length}
+            </p>
+            <Button
+              variant="editorialOutline"
+              size="pill"
+              onClick={() => setShown((n) => n + GALLERY_STEP)}
+            >
+              Show more
+            </Button>
+          </div>
+        )}
+        </>
       )}
 
       <div data-reveal className="mt-12 flex justify-center">
