@@ -10,6 +10,7 @@ import {
   Sprig,
 } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
+import { contactHref } from "@/config/site";
 
 const marqueeItems = [
   "BECOMING",
@@ -66,7 +67,7 @@ export function Hero() {
             She is not just a woman, she is ...
           </div>
           <h1 className="acw-tagline-mega">
-            <span className="acw-rise acw-rise-delay-2 block">A Certain</span>
+            <span className="acw-rise acw-rise-delay-2 block">A Certain </span>
             <span className="acw-rise acw-rise-delay-3 ml-[0.18em] block italic text-gold">
               Woman.
             </span>
@@ -87,12 +88,14 @@ export function Hero() {
 
         <div className="acw-rise acw-rise-delay-5 mt-7 flex flex-wrap items-center justify-center gap-3">
           <Button asChild variant="editorial" size="pill">
-            <Link href="/contact">
+            <Link
+              href={contactHref({
+                reason: "Join the Movement",
+                prefill: "I would like to join the movement.",
+              })}
+            >
               Join the Movement <ArrowRight />
             </Link>
-          </Button>
-          <Button asChild variant="editorialOutline" size="pill">
-            <Link href="/partner">Partner With Us</Link>
           </Button>
           <Button asChild variant="editorialOutline" size="pill">
             <Link href="/programs">Explore Our Programs</Link>
