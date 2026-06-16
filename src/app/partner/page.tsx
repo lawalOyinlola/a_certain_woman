@@ -8,6 +8,7 @@ import { Join } from "@/components/sections/join";
 import { Faq } from "@/components/sections/faq";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
+import { contact, contactHref, mailtoHref, whatsappHref } from "@/config/site";
 
 const FAQS = [
   {
@@ -177,12 +178,25 @@ export default function PartnerPage() {
                 </ul>
                 <div className="mt-8 flex flex-wrap gap-3.5">
                   <Button asChild variant="editorial" size="pill">
-                    <Link href="/contact">
+                    <Link
+                      href={contactHref({
+                        reason: "Partner / Sponsor",
+                        prefill:
+                          "I would like to become a partner with A Certain Woman.",
+                      })}
+                    >
                       Become a Partner <ArrowRight />
                     </Link>
                   </Button>
                   <Button asChild variant="editorialOutline" size="pill">
-                    <Link href="/contact">Request Partnership Brief</Link>
+                    <Link
+                      href={contactHref({
+                        reason: "Partner / Sponsor",
+                        prefill: "Please send me a partnership brief.",
+                      })}
+                    >
+                      Request Partnership Brief
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -222,12 +236,44 @@ export default function PartnerPage() {
                 <li key={g}>{g}</li>
               ))}
             </ul>
-            <div data-reveal className="mt-12 flex justify-center">
+            <div data-reveal className="mt-12 flex flex-col items-center gap-5">
               <Button asChild variant="editorial" size="pill">
-                <Link href="/contact">
+                <Link
+                  href={contactHref({
+                    reason: "Partner / Sponsor",
+                    prefill:
+                      "I would like to support the work of A Certain Woman. Here is how I would like to give: ",
+                  })}
+                >
                   Give / Support ACW <ArrowRight />
                 </Link>
               </Button>
+              {/* Interim: secure online giving is on the way. Until then we
+                  arrange gifts personally, and offer a direct human channel so
+                  giving isn't gated behind a form alone. */}
+              <p className="max-w-[520px] text-center text-[13px] leading-[1.7] text-muted-foreground">
+                Secure online giving is coming soon. For now, tell us how you
+                would like to give and we will arrange it with you personally,
+                or reach us directly on{" "}
+                <a
+                  href={whatsappHref(
+                    "Hello A Certain Woman, I would like to support your work.",
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-forest underline decoration-gold/50 underline-offset-4 transition-colors hover:text-gold"
+                >
+                  WhatsApp
+                </a>{" "}
+                or{" "}
+                <a
+                  href={mailtoHref}
+                  className="text-forest underline decoration-gold/50 underline-offset-4 transition-colors hover:text-gold"
+                >
+                  {contact.email}
+                </a>
+                .
+              </p>
             </div>
           </Reveal>
         </section>
@@ -245,7 +291,7 @@ export default function PartnerPage() {
           items={FAQS}
         />
 
-        <Join withLabel={false} />
+        <Join paths={["join", "programs", "events"]} />
       </main>
       <Footer />
     </>
