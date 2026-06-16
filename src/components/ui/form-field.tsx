@@ -36,7 +36,7 @@ export function FormField({
           {label}
         </label>
         {hint && (
-          <span className="font-display text-[11px] italic text-muted-foreground/70">
+          <span className="font-display text-[11px] italic text-muted-foreground">
             {hint}
           </span>
         )}
@@ -59,7 +59,9 @@ export function FieldInput({ className, ...props }: FieldInputProps) {
   return (
     <input
       className={cn(
-        "w-full border-0 border-b border-border bg-transparent py-3 font-sans text-[16px] text-ink outline-none transition-colors duration-200",
+        // h-12 (not py-3) so single-line fields share one fixed height with the
+        // phone field beside them in the grid, keeping every underline level.
+        "h-12 w-full border-0 border-b border-border bg-transparent font-sans text-[16px] text-ink outline-none transition-colors duration-200",
         "placeholder:text-muted-foreground placeholder:opacity-50 placeholder:italic",
         "focus:border-gold",
         "disabled:opacity-40 disabled:cursor-not-allowed",
