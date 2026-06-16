@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { ArrowRight } from "@/components/site/icons";
@@ -69,6 +69,10 @@ export function ContactForm() {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [reason, setReason] = useState<string>(initialReason);
   const [phone, setPhone] = useState("");
+
+  useEffect(() => {
+    setReason(initialReason);
+  }, [initialReason]);
 
   const validate = (fd: FormData, phoneValue: string) => {
     const errs: Record<string, string> = {};
@@ -252,6 +256,7 @@ export function ContactForm() {
 
       <FormField label="Message" error={fieldErrors.message} full>
         <FieldTextarea
+          key={initialMessage}
           name="message"
           defaultValue={initialMessage}
           placeholder="Tell us a little about why you're writing..."
