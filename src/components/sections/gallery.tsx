@@ -52,14 +52,50 @@ function buildMedia(): MediaItem[] {
   });
 }
 
+/** Small seeded PRNG (mulberry32). Same seed yields the same sequence, so the
+ *  server and client shuffle identically — no hydration mismatch, and the tiles
+ *  mount once in their final order (which keeps native lazy-loading working). */
+function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** Deterministic Fisher-Yates shuffle driven by `seed`. */
+function shuffleSeeded<T>(items: T[], seed: number): T[] {
+  const rand = mulberry32(seed);
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
 function spanForIndex(idx: number, kind: MediaItem["kind"]): string {
   if (kind === "video") return "col-span-2 row-span-2";
   const pattern = ["", "row-span-2", "", "col-span-2", "", "row-span-2"] as const;
   return pattern[idx % pattern.length];
 }
 
-export function Gallery({ compact = false }: { compact?: boolean }) {
-  const media = useMemo(() => buildMedia(), []);
+export function Gallery({
+  compact = false,
+  seed,
+}: {
+  compact?: boolean;
+  /** When provided, the media order is shuffled deterministically from this
+   *  seed (passed by the server so server and client agree). Omit to keep the
+   *  source order. */
+  seed?: number;
+}) {
+  const media = useMemo(
+    () => (seed === undefined ? buildMedia() : shuffleSeeded(buildMedia(), seed)),
+    [seed],
+  );
   const eventsWithMedia = useMemo<ACWEvent[]>(
     () =>
       EVENTS.filter((e) => e.photos.length > 0 || (e.videos?.length ?? 0) > 0),
@@ -166,9 +202,8 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
                 alt={m.kind === "photo" ? m.alt : m.title}
                 fill
                 sizes="(min-width: 768px) 25vw, 50vw"
-                // Eager-load the first row (the LCP candidate) instead of
-                // lazy-loading it; the rest stay lazy.
-                priority={i < 4}
+                // Preload the first row (the LCP candidate); the rest stay lazy.
+                preload={i < 4}
                 className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
               />
 
