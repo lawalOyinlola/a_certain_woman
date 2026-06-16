@@ -22,7 +22,14 @@ export const metadata: Metadata = {
   },
 };
 
+// Regenerate (and reshuffle) at most hourly; cached HTML is served in between,
+// so the order is stable within each window. The seed is baked into the
+// prerendered page and passed to <Gallery>, so the server HTML and the client
+// hydration share one order (no mismatch, no post-mount reorder).
+export const revalidate = 3600;
+
 export default function GalleryPage() {
+  const seed = Date.now();
   return (
     <>
       <Nav />
@@ -36,7 +43,7 @@ export default function GalleryPage() {
           }
           sub="Faces, voices, and quiet corners from every gathering of the sisterhood. Filter by the room you were in."
         />
-        <Gallery compact />
+        <Gallery compact seed={seed} />
       </main>
       <Footer />
     </>
