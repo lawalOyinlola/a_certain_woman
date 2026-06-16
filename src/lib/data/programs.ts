@@ -1,3 +1,5 @@
+import { contactHref } from "@/config/site";
+
 export type Devotional = {
   week: string;
   truth: string;
@@ -96,7 +98,11 @@ export const PROGRAMS: Program[] = [
       "Media and storytelling moments",
     ],
     cta: "Nominate a Woman of Impact",
-    href: "/partner",
+    href: contactHref({
+      reason: "General Inquiry",
+      prefill:
+        "I would like to nominate a Woman of Impact for the Crown Table Spotlight: ",
+    }),
   },
   {
     kind: "women",
@@ -122,7 +128,10 @@ export const PROGRAMS: Program[] = [
       "Faith and purpose",
     ],
     cta: "Register Interest",
-    href: "/contact",
+    href: contactHref({
+      reason: "Join the Movement",
+      prefill: "I would like to register interest in The Identity Academy.",
+    }),
   },
   {
     kind: "women",
@@ -147,7 +156,10 @@ export const PROGRAMS: Program[] = [
       "Restoration declarations",
     ],
     cta: "Join a Healing Circle",
-    href: "/contact",
+    href: contactHref({
+      reason: "Join the Movement",
+      prefill: "I would like to join a Women's Healing Circle.",
+    }),
   },
   {
     kind: "women",
