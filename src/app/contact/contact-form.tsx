@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
 import { ArrowRight } from "@/components/site/icons";
+import { CONTACT_REASONS } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import {
   FormField,
@@ -33,16 +35,7 @@ const PhoneField = dynamic(
   },
 );
 
-const REASONS = [
-  "Join the Movement",
-  "Attend an Event",
-  "Partner / Sponsor",
-  "Media Inquiry",
-  "Volunteer",
-  "Invite ACW",
-  "Share My Story",
-  "General Inquiry",
-];
+const REASONS = CONTACT_REASONS;
 
 // The submit button speaks to the chosen reason so the action feels specific.
 const SUBMIT_LABELS: Record<string, string> = {
@@ -59,10 +52,22 @@ const DEFAULT_SUBMIT_LABEL = "Send Message";
 type Status = "idle" | "loading" | "success" | "error";
 
 export function ContactForm() {
+  const searchParams = useSearchParams();
+  // A CTA elsewhere on the site can deep-link here with ?reason= and ?prefill=
+  // so the form arrives pre-contextualised. An unknown reason falls back to the
+  // first option; the message prefill is dropped straight into the textarea.
+  const reasonParam = searchParams.get("reason");
+  const initialReason: (typeof REASONS)[number] = (
+    REASONS as readonly string[]
+  ).includes(reasonParam ?? "")
+    ? (reasonParam as (typeof REASONS)[number])
+    : REASONS[0];
+  const initialMessage = searchParams.get("prefill") ?? "";
+
   const [status, setStatus] = useState<Status>("idle");
   const [serverError, setServerError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [reason, setReason] = useState(REASONS[0]);
+  const [reason, setReason] = useState<string>(initialReason);
   const [phone, setPhone] = useState("");
 
   const validate = (fd: FormData, phoneValue: string) => {
@@ -248,6 +253,7 @@ export function ContactForm() {
       <FormField label="Message" error={fieldErrors.message} full>
         <FieldTextarea
           name="message"
+          defaultValue={initialMessage}
           placeholder="Tell us a little about why you're writing..."
         />
       </FormField>
