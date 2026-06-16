@@ -4,6 +4,7 @@ import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
 import { EventsBrowser } from "./events-browser";
 import { Faq } from "@/components/sections/faq";
+import { Join } from "@/components/sections/join";
 import { EVENTS, isUpcoming, type ACWEvent } from "@/lib/data/events";
 import { siteUrl } from "@/config/site";
 
@@ -143,6 +144,10 @@ export default async function EventsPage({
           }
           items={FAQS}
         />
+
+        {/* Onward pathways + the quiet letter: visitors who found no upcoming
+            gathering still have a way to stay connected for the next one. */}
+        <Join paths={["join", "programs", "partner"]} />
       </main>
       <Footer />
     </>
