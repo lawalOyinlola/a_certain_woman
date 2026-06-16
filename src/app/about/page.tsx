@@ -4,6 +4,7 @@ import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
 import { Reveal } from "@/components/site/reveal";
 import { Founder } from "@/components/sections/founder";
+import { OurWork } from "@/components/sections/our-work";
 import { Impact } from "@/components/sections/impact";
 import { Join } from "@/components/sections/join";
 import { Faq } from "@/components/sections/faq";
@@ -32,6 +33,14 @@ const FAQS = [
   {
     q: "Where does A Certain Woman operate?",
     a: "A Certain Woman is based in Freetown, Sierra Leone, and works with women, girls, families, and communities across Sierra Leone and the wider West Africa region.",
+  },
+  {
+    q: "What are healing circles?",
+    a: "Healing circles are safe, intimate spaces for reflection, prayer, release, and restoration, where women can process pain, release shame, and begin again. They sit alongside guided reflection sessions, wellness brunches, and story-sharing spaces.",
+  },
+  {
+    q: "What is the Men Who Stand initiative?",
+    a: "Men Who Stand is A Certain Woman's male engagement initiative for responsible fatherhood, positive masculinity, family leadership, and legacy-building. It is built on the conviction that family wellbeing is strengthened when men also rise in responsibility, healing, and purpose.",
   },
 ];
 
@@ -225,6 +234,8 @@ export default function AboutPage() {
             </div>
           </Reveal>
         </section>
+
+        <OurWork />
 
         <Founder withLabel={false} />
 
