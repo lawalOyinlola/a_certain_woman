@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 
 const items: Array<[string, string]> = [
   ["About", "/about"],
-  ["Our Work", "/our-work"],
   ["Programs", "/programs"],
   ["Events", "/events"],
   ["Partner", "/partner"],
@@ -35,7 +34,7 @@ export function Nav() {
           : "py-5 bg-transparent",
       )}
     >
-      <div className="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto_1fr] items-center gap-8 px-6 md:px-12">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-2 items-center gap-8 px-6 md:px-12 lg:grid-cols-[1fr_auto_1fr]">
         <Link
           href="/"
           className="flex items-center gap-2 justify-self-start text-forest"
@@ -43,8 +42,8 @@ export function Nav() {
           <Image
             src="/assets/logo.png"
             alt="A Certain Woman"
-            width={140}
-            height={40}
+            width={48}
+            height={48}
             className={cn(
               "w-auto object-contain transition-all",
               scrolled ? "h-9" : "h-11",
@@ -65,7 +64,7 @@ export function Nav() {
           ))}
         </div>
 
-        <div className="flex items-center justify-end gap-2 justify-self-end">
+        <div className="flex items-center justify-end gap-2 justify-self-end lg:col-start-3">
           <Link
             href="/contact"
             className="hidden whitespace-nowrap rounded-full border border-forest px-5 py-2.5 text-[11px] uppercase tracking-[0.18em] text-forest transition-colors hover:bg-forest hover:text-cream-1 md:inline-flex"
