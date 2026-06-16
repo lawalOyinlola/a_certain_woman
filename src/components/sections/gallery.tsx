@@ -166,6 +166,9 @@ export function Gallery({ compact = false }: { compact?: boolean }) {
                 alt={m.kind === "photo" ? m.alt : m.title}
                 fill
                 sizes="(min-width: 768px) 25vw, 50vw"
+                // Eager-load the first row (the LCP candidate) instead of
+                // lazy-loading it; the rest stay lazy.
+                priority={i < 4}
                 className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
               />
 
