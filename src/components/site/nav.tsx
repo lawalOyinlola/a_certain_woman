@@ -125,14 +125,12 @@ function NavDropdown({
         </svg>
       </button>
 
-      <div
-        role="menu"
-        aria-label={group.label}
-        className={cn(
-          "absolute left-1/2 top-full z-10 min-w-[210px] -translate-x-1/2 pt-3 transition-opacity duration-150",
-          open ? "opacity-100" : "pointer-events-none opacity-0",
-        )}
-      >
+      {open && (
+        <div
+          role="menu"
+          aria-label={group.label}
+          className="absolute left-1/2 top-full z-10 min-w-[210px] -translate-x-1/2 pt-3"
+        >
         <div className="flex flex-col gap-1 border border-border bg-background p-2 shadow-[0_18px_44px_-22px_rgba(31,38,32,0.3)]">
           {group.children.map((child, i) => {
             const childActive = pathname === child.href;
@@ -142,7 +140,7 @@ function NavDropdown({
                 ref={i === 0 ? firstLinkRef : undefined}
                 href={child.href}
                 role="menuitem"
-                tabIndex={open ? 0 : -1}
+                tabIndex={0}
                 onClick={() => setOpen(false)}
                 className={cn(
                   "group/item flex items-center justify-between gap-4 whitespace-nowrap px-3 py-2 text-left transition-colors hover:text-forest",
@@ -163,6 +161,7 @@ function NavDropdown({
           })}
         </div>
       </div>
+      )}
     </div>
   );
 }
