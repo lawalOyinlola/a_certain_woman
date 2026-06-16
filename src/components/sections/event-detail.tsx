@@ -5,10 +5,16 @@ import { useMemo, useState } from "react";
 import { ACWEvent, getEventStatus } from "@/lib/data/events";
 import { Play } from "@/components/site/icons";
 import { Lightbox, type LightboxItem } from "@/components/ui/lightbox";
+import { Button } from "@/components/ui/button";
 import { useGsapReveal } from "@/hooks/use-gsap-reveal";
+
+// How many photos to show before the "view all" reveal, so long galleries
+// don't stretch the page. A clean 2 rows on desktop (4-up), 4 rows on mobile.
+const PHOTO_PREVIEW_COUNT = 8;
 
 export function EventDetail({ event }: { event: ACWEvent }) {
   const [lb, setLb] = useState<number | null>(null);
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
   const ref = useGsapReveal<HTMLElement>({ batch: true, stagger: 0.08 });
 
   const hasProgram = event.program.length > 0;
@@ -183,7 +189,10 @@ export function EventDetail({ event }: { event: ACWEvent }) {
             THE GALLERY · {event.photos.length} PHOTOS
           </small>
           <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
-            {event.photos.map((p, k) => (
+            {(showAllPhotos
+              ? event.photos
+              : event.photos.slice(0, PHOTO_PREVIEW_COUNT)
+            ).map((p, k) => (
               <button
                 key={k}
                 onClick={() => setLb(videoCount + k)}
@@ -202,6 +211,21 @@ export function EventDetail({ event }: { event: ACWEvent }) {
               </button>
             ))}
           </div>
+
+          {event.photos.length > PHOTO_PREVIEW_COUNT && (
+            <div className="mt-8 flex justify-center">
+              <Button
+                variant="editorialOutline"
+                size="pill"
+                onClick={() => setShowAllPhotos((v) => !v)}
+                aria-expanded={showAllPhotos}
+              >
+                {showAllPhotos
+                  ? "Show fewer photos"
+                  : `View all ${event.photos.length} photos`}
+              </Button>
+            </div>
+          )}
         </div>
       )}
 
