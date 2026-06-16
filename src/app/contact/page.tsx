@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
 import { PageHero } from "@/components/site/page-hero";
@@ -62,22 +63,17 @@ export default function ContactPage() {
           }
           sub="Whether you want to join the movement, partner with us, invite ACW to collaborate, support an outreach, attend an event, or share your story, you are welcome here."
         />
-        <Faq
-          className="bg-cream-2"
-          label="Common questions"
-          heading={
-            <>
-              Before you
-              <br />
-              <em>write.</em>
-            </>
-          }
-          items={FAQS}
-        />
-
-        <section className="bg-cream-1 px-6 py-24 md:px-12 md:py-28">
+        {/* Form first: most visitors who reach this page have already decided
+            to write, so we lead with the form (and WhatsApp), FAQ follows. The
+            #write anchor lets CTAs across the site deep-link straight here. */}
+        <section
+          id="write"
+          className="scroll-mt-28 bg-cream-1 px-6 py-24 md:px-12 md:py-28"
+        >
           <div className="mx-auto max-w-[1120px]">
-            <ContactForm />
+            <Suspense fallback={null}>
+              <ContactForm />
+            </Suspense>
 
             <div className="acw-contact-info">
               <div>
@@ -127,7 +123,22 @@ export default function ContactPage() {
           </div>
         </section>
 
-        <Join withLabel={false} />
+        <Faq
+          className="bg-cream-2"
+          label="Common questions"
+          heading={
+            <>
+              Before you
+              <br />
+              <em>write.</em>
+            </>
+          }
+          items={FAQS}
+        />
+
+        {/* Newsletter only: visitors here are already writing, so the onward
+            pathway cards (which would link back to contact) are dropped. */}
+        <Join withLabel={false} paths={[]} />
       </main>
       <Footer />
     </>
