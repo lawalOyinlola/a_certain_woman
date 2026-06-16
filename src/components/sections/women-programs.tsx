@@ -8,8 +8,18 @@ import { cn } from "@/lib/utils";
 import { WOMEN_PROGRAMS, type WomenProgram } from "@/lib/data/programs";
 import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
-/** Eyebrow + title + blurb — the part shown before the tabs on mobile. */
-function ProgramHead({ p, detail = false }: { p: WomenProgram; detail?: boolean }) {
+/** Eyebrow + title + blurb — the part shown before the tabs on mobile.
+ * `titleAs` keeps the heading order valid: h3 when a section h2 sits above
+ * (home page), h2 when the section label is hidden (/programs, under the h1). */
+function ProgramHead({
+  p,
+  detail = false,
+  titleAs: Title = "h3",
+}: {
+  p: WomenProgram;
+  detail?: boolean;
+  titleAs?: "h2" | "h3";
+}) {
   return (
     <>
       <div className="flex items-center justify-center gap-5 text-cream-1/60">
@@ -20,9 +30,9 @@ function ProgramHead({ p, detail = false }: { p: WomenProgram; detail?: boolean 
         <span className="text-[11px] uppercase tracking-[0.3em]">{p.sub}</span>
       </div>
 
-      <h3 className="acw-exp-title mt-6">
+      <Title className="acw-exp-title mt-6">
         <em>{p.title}.</em>
-      </h3>
+      </Title>
 
       <p className="mx-auto mt-7 max-w-[680px] text-center text-[17px] leading-[1.65] text-cream-1/80">
         {p.blurb}
@@ -120,6 +130,10 @@ export function WomenPrograms({
   const [active, setActive] = useState(0);
   const [interacted, setInteracted] = useState(false);
   const cur = WOMEN_PROGRAMS[active];
+  // When the section label/h2 is hidden (/programs), the program titles become
+  // the top heading under the page h1, so they must be h2 (not h3) to keep the
+  // heading order sequential.
+  const titleAs = withLabel ? "h3" : "h2";
   // One ref per tab button so arrow-key navigation can call .focus() on the
   // newly selected tab, keeping DOM focus in sync with tabIndex.
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -214,7 +228,7 @@ export function WomenPrograms({
             aria-labelledby={`${cur.id}-tab`}
             className="acw-fade order-1 mx-auto w-full max-w-[1100px] md:order-2 md:mt-14"
           >
-            <ProgramHead p={cur} />
+            <ProgramHead p={cur} titleAs={titleAs} />
             <div className="mt-12 md:mt-14">
               <ProgramBody p={cur} />
             </div>
@@ -230,7 +244,7 @@ export function WomenPrograms({
               data-reveal
               className="scroll-mt-28 md:scroll-mt-32"
             >
-              <ProgramHead p={p} detail />
+              <ProgramHead p={p} detail titleAs={titleAs} />
               <div className="mt-12 md:mt-14">
                 <ProgramBody p={p} detail />
               </div>
