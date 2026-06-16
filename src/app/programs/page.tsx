@@ -84,7 +84,7 @@ export default function ProgramsPage() {
           items={FAQS}
         />
 
-        <Join withLabel={false} />
+        <Join paths={["join", "events", "partner"]} />
       </main>
       <Footer />
     </>
