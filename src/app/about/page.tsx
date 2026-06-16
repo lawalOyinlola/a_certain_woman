@@ -273,7 +273,7 @@ export default function AboutPage() {
           items={FAQS}
         />
 
-        <Join />
+        <Join paths={["join", "programs", "partner"]} />
       </main>
       <Footer />
     </>
