@@ -62,8 +62,8 @@ export default function FounderPage() {
         <div className="bg-cream-1 px-6 pt-10 md:px-12">
           <p className="mx-auto max-w-[760px] border-l-2 border-gold/50 pl-5 text-[14px] italic leading-[1.7] text-muted-foreground">
             A note before you read: this letter speaks gently but honestly of
-            grief, war, and abuse. Please read it in your own time, and only
-            when you feel ready.
+            grief, war, sexual violence, and survival. Please read in your own
+            time, and only when you feel ready.
           </p>
         </div>
 
@@ -247,9 +247,16 @@ export default function FounderPage() {
                 Founder &amp; Custodian, A Certain Woman
               </div>
             </div>
+            <p
+              data-reveal
+              className="mx-auto mt-10 max-w-[480px] text-[15px] italic leading-[1.75] text-muted-foreground"
+            >
+              If this story touched something in you, you are welcome to write
+              to us, join a circle, or simply receive the quiet letter.
+            </p>
             <div
               data-reveal
-              className="mt-10 flex flex-wrap justify-center gap-3"
+              className="mt-8 flex flex-wrap justify-center gap-3"
             >
               <Button asChild variant="editorial" size="pill">
                 <Link
