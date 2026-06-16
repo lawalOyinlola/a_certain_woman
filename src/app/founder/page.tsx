@@ -32,7 +32,7 @@ function Break({ children }: { children: React.ReactNode }) {
   return (
     <h2
       data-reveal
-      className="my-12 text-center font-display text-[clamp(22px,2.4vw,30px)] italic leading-[1.25] text-forest"
+      className="my-12 text-center font-display text-[clamp(22px,2.4vw,30px)] italic leading-tight text-forest"
     >
       {children}
     </h2>
@@ -77,7 +77,7 @@ export default function FounderPage() {
             </div>
             <blockquote
               data-reveal
-              className="acw-founder-quote mx-auto text-center !border-l-0 !pl-0"
+              className="acw-founder-quote mx-auto text-center border-l-0! pl-0!"
             >
               &ldquo;When I create spaces of dignity, I am creating what I once
               needed.&rdquo;
