@@ -542,7 +542,7 @@
 
   /* Value cards */
   .acw-value-card {
-    @apply border border-border px-7 py-8 bg-cream-1 transition-[border-color,transform] duration-300;
+    @apply relative isolate overflow-hidden border border-border px-7 pt-10 pb-8 bg-cream-1 transition-[border-color,transform] duration-300;
   }
   .acw-value-card:hover {
     @apply border-gold -translate-y-1;
@@ -553,8 +553,16 @@
   .acw-value-card p {
     @apply text-[15px] leading-[1.65] text-muted-foreground text-pretty;
   }
+  /* Oversized index numeral — bleeds off the top-right corner and sits behind
+     the card content as a soft gold watermark, intensifying on hover. Opacity
+     is kept low so the card text stays above the 4.5:1 contrast ratio even
+     where it overlaps the numeral (axe composites the two). */
   .acw-vc-num {
-    @apply block font-display italic text-[14px] text-gold mb-3;
+    @apply pointer-events-none absolute -top-3 right-3 -z-10 select-none font-display not-italic leading-none text-gold-2/15 transition-[color,transform] duration-300;
+    font-size: clamp(72px, 8vw, 104px);
+  }
+  .acw-value-card:hover .acw-vc-num {
+    @apply scale-105 text-gold-2/18;
   }
 
   /* Checklist */
@@ -637,6 +645,35 @@
   .acw-field input::placeholder,
   .acw-field textarea::placeholder {
     @apply text-muted-foreground opacity-50 italic;
+  }
+
+  /* react-phone-number-input, restyled to match the underline .acw-field look.
+     We drive sizing through the library's own CSS variables (set on the root)
+     rather than overriding its inner element boxes, which keeps the flag from
+     collapsing. */
+  .acw-phone {
+    /* Keep the flag within the input's text line box (~1.19em at 16px) so the
+       row height — and therefore the underline — matches a plain .acw-field
+       sitting beside it in the grid. */
+    --PhoneInputCountryFlag-height: 1.1em;
+    --PhoneInputCountryFlag-borderColor: rgba(31, 38, 32, 0.12);
+    --PhoneInputCountryFlag-borderColor--focus: var(--acw-gold);
+    @apply flex items-center gap-3 w-full h-12 border-0 border-b border-border bg-transparent text-[16px] transition-colors duration-250;
+  }
+  .acw-phone:focus-within {
+    @apply border-gold;
+  }
+  .acw-phone .PhoneInputCountry {
+    @apply mr-1;
+  }
+  .acw-phone .PhoneInputInput {
+    @apply flex-1 min-w-0 h-full border-0 bg-transparent text-ink text-[16px] font-sans outline-none;
+  }
+  .acw-phone .PhoneInputInput::placeholder {
+    @apply text-muted-foreground opacity-50 italic;
+  }
+  .acw-phone:has(input:disabled) {
+    @apply opacity-60;
   }
 
   /* Lives on a <fieldset> (the grid container). Mobile-first: one column on
