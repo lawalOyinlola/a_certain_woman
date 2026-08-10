@@ -99,7 +99,15 @@ export function EventsBrowser({
   const pendingHashRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const id = decodeURIComponent(window.location.hash.slice(1));
+    // A fragment like "#%" is not valid percent-encoding, and decoding it
+    // throws. Left unguarded that takes the whole list down with it, so a
+    // malformed hash is treated as pointing at nothing.
+    let id: string;
+    try {
+      id = decodeURIComponent(window.location.hash.slice(1));
+    } catch {
+      return;
+    }
     if (!id) return;
     const index = filtered.findIndex((e) => e.id === id);
     if (index === -1) return;
