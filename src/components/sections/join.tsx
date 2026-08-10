@@ -447,7 +447,13 @@ export function Join({
                 </small>
               </form>
             ) : (
-              <div className="flex flex-col items-center gap-4 py-10 text-center">
+              // The form unmounts on success, so without a live region a
+              // screen reader gets no word that the subscription went through.
+              <div
+                role="status"
+                aria-live="polite"
+                className="flex flex-col items-center gap-4 py-10 text-center"
+              >
                 <div className="text-gold">
                   <svg
                     viewBox="0 0 60 60"
