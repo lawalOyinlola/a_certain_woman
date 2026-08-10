@@ -2,11 +2,15 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
 import { contactHref } from "@/config/site";
-import { useGsapReveal } from "@/hooks/use-gsap-reveal";
+import {
+  useGsapReveal,
+  useIsomorphicLayoutEffect,
+} from "@/hooks/use-gsap-reveal";
 import { cn } from "@/lib/utils";
 
 // Lazy-load the phone field so react-phone-number-input — its libphonenumber
@@ -19,7 +23,7 @@ const PhoneField = dynamic(
     loading: () => (
       <div
         aria-hidden
-        className="h-[46px] w-full animate-pulse border-b border-border"
+        className="h-11.5 w-full animate-pulse border-b border-border"
       />
     ),
   },
@@ -109,6 +113,48 @@ export function Join({
   const [status, setStatus] = useState<NewsletterStatus>("idle");
   const [error, setError] = useState("");
   const revealRef = useGsapReveal<HTMLElement>({ batch: true, stagger: 0.1 });
+  // Newsletter panel gets its own softer fade + zoom reveal, distinct from
+  // the plain fade-up used for the onward-pathway cards above.
+  const newsletterRef = useGsapReveal<HTMLDivElement>({
+    targets: "[data-reveal-newsletter]",
+    from: { opacity: 0, scale: 0.94, y: 24, duration: 1, ease: "power2.out" },
+  });
+
+  // Sliding thumb behind the active toggle button — measured against the
+  // button's own box so it works for the two different label widths.
+  const phoneBtnRef = useRef<HTMLButtonElement>(null);
+  const emailBtnRef = useRef<HTMLButtonElement>(null);
+  const [thumb, setThumb] = useState({ left: 0, width: 0 });
+
+  useIsomorphicLayoutEffect(() => {
+    const el =
+      contactType === "phone" ? phoneBtnRef.current : emailBtnRef.current;
+    if (el) setThumb({ left: el.offsetLeft, width: el.offsetWidth });
+  }, [contactType]);
+
+  // The field + its helper text fade/rise in with a slight stagger whenever
+  // the delivery channel switches, instead of popping in as a dead swap.
+  const fieldRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = fieldRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const targets = el.querySelectorAll<HTMLElement>("[data-field-anim]");
+    if (!targets.length) return;
+    gsap.fromTo(
+      targets,
+      { opacity: 0, y: 8 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.35,
+        ease: "power2.out",
+        stagger: 0.06,
+        overwrite: true,
+      },
+    );
+  }, [contactType]);
 
   const switchType = (type: ContactType) => {
     setContactType(type);
@@ -174,233 +220,259 @@ export function Join({
     >
       {pathways.length > 0 && (
         <>
-      <div
-        data-reveal
-        className="mx-auto mb-20 flex max-w-[760px] flex-col items-center text-center"
-      >
-        {withLabel && (
-          <div className="acw-section-label">
-            <span className="acw-num">|</span>
-            <span>An invitation</span>
-          </div>
-        )}
-        <h2 className="acw-display acw-display--center mt-6">
-          There is a place for you
-          <br />
-          <em>in this movement.</em>
-        </h2>
-        <p className="mt-7 max-w-[620px] text-[17px] leading-[1.65] text-muted-foreground">
-          Whether you are a woman seeking healing, a leader desiring to mentor
-          others, a church or organization looking to collaborate, or a donor
-          wanting to support transformational work. A Certain Woman welcomes
-          you.
-        </p>
-      </div>
-
-      {/* Onward pathways — a contextual subset chosen per page */}
-      <div
-        className={cn(
-          "mx-auto mb-24 grid max-w-[1320px] gap-6",
-          pathways.length > 1 && "md:grid-cols-3",
-        )}
-      >
-        {pathways.map((p) => (
-          <article
-            key={p.kind}
+          <div
             data-reveal
-            className="relative flex flex-col gap-5 border border-border bg-cream-1 p-10 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold hover:shadow-[0_28px_60px_-28px_rgba(31,38,32,0.18)] focus-within:-translate-y-1.5 focus-within:border-gold focus-within:shadow-[0_28px_60px_-28px_rgba(31,38,32,0.18)]"
+            className="mx-auto mb-20 flex max-w-190 flex-col items-center text-center"
           >
-            <small className="text-[10px] uppercase tracking-[0.32em] text-gold">
-              {p.kind}
-            </small>
-            <h3 className="font-display text-[34px] leading-[1.05] tracking-[-0.01em] text-forest">
-              {p.title}
-            </h3>
-            <p className="flex-1 text-[15px] leading-[1.65] text-muted-foreground">
-              {p.body}
+            {withLabel && (
+              <div className="acw-section-label">
+                <span className="acw-num">|</span>
+                <span>An invitation</span>
+              </div>
+            )}
+            <h2 className="acw-display acw-display--center mt-6">
+              There is a place for you
+              <br />
+              <em>in this movement.</em>
+            </h2>
+            <p className="mt-7 max-w-155 text-[17px] leading-[1.65] text-muted-foreground">
+              Whether you are a woman seeking healing, a leader desiring to
+              mentor others, a church or organization looking to collaborate, or
+              a donor wanting to support transformational work. A Certain Woman
+              welcomes you.
             </p>
-            {/* Stretched link — the visible arrow CTA, but its ::after covers
-                the whole card so the entire card is the click target. */}
-            <Link
-              href={p.href}
-              className="acw-link-arrow w-fit after:absolute after:inset-0 after:content-['']"
-            >
-              <span className="sr-only">{p.title}: </span>
-              {p.cta}
-              <svg
-                width="14"
-                height="10"
-                viewBox="0 0 14 10"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.2"
-                aria-hidden
+          </div>
+
+          {/* Onward pathways — a contextual subset chosen per page */}
+          <div
+            className={cn(
+              "mx-auto mb-24 grid max-w-330 gap-6",
+              pathways.length > 1 && "md:grid-cols-3",
+            )}
+          >
+            {pathways.map((p) => (
+              <article
+                key={p.kind}
+                data-reveal
+                className="relative flex flex-col gap-5 border border-border bg-cream-1 p-10 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold hover:shadow-[0_28px_60px_-28px_rgba(31,38,32,0.18)] focus-within:-translate-y-1.5 focus-within:border-gold focus-within:shadow-[0_28px_60px_-28px_rgba(31,38,32,0.18)]"
               >
-                <path d="M0 5h12M8 1l4 4-4 4" />
-              </svg>
-            </Link>
-          </article>
-        ))}
-      </div>
+                <small className="text-[10px] uppercase tracking-[0.32em] text-gold">
+                  {p.kind}
+                </small>
+                <h3 className="font-display text-[34px] leading-[1.05] tracking-[-0.01em] text-forest">
+                  {p.title}
+                </h3>
+                <p className="flex-1 text-[15px] leading-[1.65] text-muted-foreground">
+                  {p.body}
+                </p>
+                {/* Stretched link — the visible arrow CTA, but its ::after covers
+                the whole card so the entire card is the click target. */}
+                <Link
+                  href={p.href}
+                  className="acw-link-arrow w-fit after:absolute after:inset-0 after:content-['']"
+                >
+                  <span className="sr-only">{p.title}: </span>
+                  {p.cta}
+                  <svg
+                    width="14"
+                    height="10"
+                    viewBox="0 0 14 10"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                    aria-hidden
+                  >
+                    <path d="M0 5h12M8 1l4 4-4 4" />
+                  </svg>
+                </Link>
+              </article>
+            ))}
+          </div>
         </>
       )}
 
-      {/* Newsletter */}
-      <div
-        data-reveal
-        className="relative mx-auto grid max-w-[1320px] gap-16 border border-border bg-cream-1 p-10 md:grid-cols-2 md:gap-16 md:p-16"
-      >
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-3 border border-border"
-        />
-        <div className="relative">
-          <small className="acw-section-label-mini">QUIET LETTER</small>
-          <h3 className="mt-3 font-display text-[clamp(40px,4.5vw,64px)] font-normal leading-[0.95] tracking-[-0.015em] text-forest">
-            Receive the
-            <br />
-            <em className="italic text-gold">letter.</em>
-          </h3>
-          <p className="mt-6 text-[16px] leading-[1.65] text-muted-foreground">
-            Quietly written. Freely sent. Reflections, scripture, and notes on
-            the journey of becoming.
-          </p>
-        </div>
+      {/* Newsletter — its own ref/reveal so it can fade + zoom in softly
+          instead of the plain fade-up used for the pathway cards above. */}
+      <div ref={newsletterRef}>
+        <div
+          data-reveal-newsletter
+          className="relative mx-auto grid max-w-330 gap-16 border border-border bg-cream-1 p-10 md:grid-cols-2 md:gap-16 md:p-16"
+        >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-3 border border-border"
+          />
+          <div className="relative">
+            <small className="acw-section-label-mini">QUIET LETTER</small>
+            <h3 className="mt-3 font-display text-[clamp(40px,4.5vw,64px)] font-normal leading-[0.95] tracking-[-0.015em] text-forest">
+              Receive the
+              <br />
+              <em className="italic text-gold">letter.</em>
+            </h3>
+            <p className="mt-6 text-[16px] leading-[1.65] text-muted-foreground">
+              Quietly written. Freely sent. Reflections, scripture, and notes on
+              the journey of becoming.
+            </p>
+          </div>
 
-        <div className="relative">
-          {status !== "success" ? (
-            <form
-              onSubmit={onSubmit}
-              className="flex flex-col gap-3"
-              aria-busy={status === "loading"}
-              noValidate
-            >
-              {/* Contact type toggle */}
-              <p className="text-[13px] italic text-ink-2 mb-3">
-                How would you like to receive each letter?
-              </p>
-              <div
-                className="mb-1 flex items-center gap-2"
-                role="group"
-                aria-label="Preferred delivery channel"
+          <div className="relative">
+            {status !== "success" ? (
+              <form
+                onSubmit={onSubmit}
+                className="flex flex-col gap-3"
+                aria-busy={status === "loading"}
+                noValidate
               >
-                <span className="text-[10px] tracking-[0.28em] uppercase text-muted-foreground shrink-0">
-                  via:
-                </span>
-                <div className="flex gap-1 p-1 bg-[#ede8df] rounded-full">
-                  <button
-                    type="button"
-                    aria-pressed={contactType === "phone"}
-                    onClick={() => switchType("phone")}
-                    disabled={status === "loading"}
-                    className={cn(
-                      "cursor-pointer px-4 py-1.5 rounded-full text-[10px] tracking-[0.22em] uppercase transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50",
-                      contactType === "phone"
-                        ? "bg-forest text-cream-1 shadow-sm"
-                        : "text-muted-foreground hover:text-ink",
-                    )}
-                  >
-                    WhatsApp / Phone
-                  </button>
-                  <button
-                    type="button"
-                    aria-pressed={contactType === "email"}
-                    onClick={() => switchType("email")}
-                    disabled={status === "loading"}
-                    className={cn(
-                      "cursor-pointer px-4 py-1.5 rounded-full text-[10px] tracking-[0.22em] uppercase transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50",
-                      contactType === "email"
-                        ? "bg-forest text-cream-1 shadow-sm"
-                        : "text-muted-foreground hover:text-ink",
-                    )}
-                  >
-                    Email
-                  </button>
-                </div>
-              </div>
-
-              {contactType === "email" ? (
-                <div className="acw-field">
-                  <input
-                    type="email"
-                    placeholder="her@email.com"
-                    value={email}
-                    disabled={status === "loading"}
-                    autoComplete="email"
-                    aria-label="Your email address"
-                    aria-invalid={Boolean(error)}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setError("");
-                    }}
-                  />
-                  <small className="mt-2 block text-[12px] leading-snug text-muted-foreground">
-                    Each letter arrives quietly in your inbox.
-                  </small>
-                </div>
-              ) : (
-                <div className="block relative">
-                  <PhoneField
-                    id="newsletter-phone"
-                    value={phone}
-                    onChange={(v) => {
-                      setPhone(v);
-                      setError("");
-                    }}
-                    placeholder="76 123 456"
-                    disabled={status === "loading"}
-                    aria-label="Your WhatsApp or phone number"
-                    aria-invalid={Boolean(error)}
-                  />
-                  <small className="mt-2 block text-[12px] leading-snug text-muted-foreground">
-                    We&apos;ll send your letters on WhatsApp where possible.
-                  </small>
-                </div>
-              )}
-
-              {error && (
-                <div role="alert" className="text-[13px] text-destructive">
-                  {error}
-                </div>
-              )}
-              <Button
-                type="submit"
-                variant="editorial"
-                size="pill"
-                className="mt-3 w-full"
-                disabled={status === "loading"}
-              >
-                {status === "loading" ? "Sending…" : "Subscribe"}
-                {status !== "loading" && <ArrowRight />}
-              </Button>
-              <small className="mt-3 block text-[11px] leading-snug text-muted-foreground">
-                Unsubscribe anytime. We write gently and infrequently.
-              </small>
-            </form>
-          ) : (
-            <div className="flex flex-col items-center gap-4 py-10 text-center">
-              <div className="text-gold">
-                <svg
-                  viewBox="0 0 60 60"
-                  width="60"
-                  height="60"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1"
+                {/* Contact type toggle */}
+                <p className="text-[13px] italic text-ink-2 mb-3">
+                  How would you like to receive each letter?
+                </p>
+                <div
+                  className="mb-1 flex items-center gap-2"
+                  role="group"
+                  aria-label="Preferred delivery channel"
                 >
-                  <circle cx="30" cy="30" r="28" />
-                  <path d="M18 30 L26 38 L42 22" />
-                </svg>
+                  <span className="text-[10px] tracking-[0.28em] uppercase text-muted-foreground shrink-0">
+                    via:
+                  </span>
+                  <div className="relative flex gap-1 p-1 bg-[#ede8df] rounded-full">
+                    {/* Sliding thumb — measured against whichever button is
+                      active, so it works for both label widths. */}
+                    <span
+                      aria-hidden
+                      className="absolute inset-y-1 left-0 rounded-full bg-forest shadow-sm transition-[transform,width] duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-reduce:transition-none"
+                      style={{
+                        transform: `translateX(${thumb.left}px)`,
+                        width: thumb.width,
+                      }}
+                    />
+                    <button
+                      ref={phoneBtnRef}
+                      type="button"
+                      aria-pressed={contactType === "phone"}
+                      onClick={() => switchType("phone")}
+                      disabled={status === "loading"}
+                      className={cn(
+                        "relative z-10 cursor-pointer px-4 py-1.5 rounded-full text-[10px] tracking-[0.22em] uppercase transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50",
+                        contactType === "phone"
+                          ? "text-cream-1"
+                          : "text-muted-foreground hover:text-ink",
+                      )}
+                    >
+                      WhatsApp / Phone
+                    </button>
+                    <button
+                      ref={emailBtnRef}
+                      type="button"
+                      aria-pressed={contactType === "email"}
+                      onClick={() => switchType("email")}
+                      disabled={status === "loading"}
+                      className={cn(
+                        "relative z-10 cursor-pointer px-4 py-1.5 rounded-full text-[10px] tracking-[0.22em] uppercase transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50",
+                        contactType === "email"
+                          ? "text-cream-1"
+                          : "text-muted-foreground hover:text-ink",
+                      )}
+                    >
+                      Email
+                    </button>
+                  </div>
+                </div>
+
+                {contactType === "email" ? (
+                  <div key="email" ref={fieldRef} className="acw-field">
+                    <input
+                      type="email"
+                      placeholder="her@email.com"
+                      value={email}
+                      disabled={status === "loading"}
+                      autoComplete="email"
+                      aria-label="Your email address"
+                      aria-invalid={Boolean(error)}
+                      data-field-anim
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        setError("");
+                      }}
+                    />
+                    <small
+                      data-field-anim
+                      className="mt-2 block text-[12px] leading-snug text-muted-foreground"
+                    >
+                      Each letter arrives quietly in your inbox.
+                    </small>
+                  </div>
+                ) : (
+                  <div key="phone" ref={fieldRef} className="block relative">
+                    <div data-field-anim>
+                      <PhoneField
+                        id="newsletter-phone"
+                        value={phone}
+                        onChange={(v) => {
+                          setPhone(v);
+                          setError("");
+                        }}
+                        placeholder="76 123 456"
+                        disabled={status === "loading"}
+                        aria-label="Your WhatsApp or phone number"
+                        aria-invalid={Boolean(error)}
+                      />
+                    </div>
+                    <small
+                      data-field-anim
+                      className="mt-2 block text-[12px] leading-snug text-muted-foreground"
+                    >
+                      We&apos;ll send your letters on WhatsApp where possible.
+                    </small>
+                  </div>
+                )}
+
+                {error && (
+                  <div role="alert" className="text-[13px] text-destructive">
+                    {error}
+                  </div>
+                )}
+                <Button
+                  type="submit"
+                  variant="editorial"
+                  size="pill"
+                  className="mt-3 w-full"
+                  disabled={status === "loading"}
+                >
+                  {status === "loading" ? "Sending…" : "Subscribe"}
+                  {status !== "loading" && <ArrowRight />}
+                </Button>
+                <small className="mt-3 block text-[11px] leading-snug text-muted-foreground">
+                  Unsubscribe anytime. We write gently and infrequently.
+                </small>
+              </form>
+            ) : (
+              <div className="flex flex-col items-center gap-4 py-10 text-center">
+                <div className="text-gold">
+                  <svg
+                    viewBox="0 0 60 60"
+                    width="60"
+                    height="60"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                  >
+                    <circle cx="30" cy="30" r="28" />
+                    <path d="M18 30 L26 38 L42 22" />
+                  </svg>
+                </div>
+                <h3 className="font-display text-[32px] text-forest">
+                  Welcome.
+                </h3>
+                <p className="text-[14px] text-ink-2">
+                  Your first letter will find you soon.
+                </p>
+                <em className="font-display text-[16px] italic text-gold">
+                  Until then, peace.
+                </em>
               </div>
-              <h3 className="font-display text-[32px] text-forest">Welcome.</h3>
-              <p className="text-[14px] text-ink-2">
-                Your first letter will find you soon.
-              </p>
-              <em className="font-display text-[16px] italic text-gold">
-                Until then, peace.
-              </em>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </section>

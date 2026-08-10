@@ -59,7 +59,7 @@ export function WhoWeServe() {
 
   return (
     <section id="who" className="bg-cream-1 px-6 py-32 md:px-12 md:py-36">
-      <div className="mx-auto mb-16 grid max-w-[1320px] items-end gap-10 md:mb-24 md:grid-cols-[1.5fr_1fr] md:gap-16">
+      <div className="mx-auto mb-16 grid max-w-330 items-end gap-10 md:mb-24 md:grid-cols-[1.5fr_1fr] md:gap-16">
         <div className="flex flex-col gap-7">
           <div className="acw-section-label">
             <span className="acw-num">|</span>
@@ -71,7 +71,7 @@ export function WhoWeServe() {
             <em>still becoming.</em>
           </h2>
         </div>
-        <p className="font-display italic text-[18px] leading-snug text-ink-2 md:max-w-[340px] md:justify-self-end md:text-right">
+        <p className="font-display italic text-[18px] leading-snug text-ink-2 md:max-w-85 md:justify-self-end md:text-right">
           {/* <p className="text-[16px] leading-[1.65] text-muted-foreground"> */}
           Women in every season: healing, rising, leading, becoming.
         </p>
@@ -79,7 +79,7 @@ export function WhoWeServe() {
 
       <div
         ref={ref}
-        className="mx-auto grid max-w-[1320px] grid-cols-1 gap-x-14 gap-y-14 sm:grid-cols-2 md:grid-cols-3"
+        className="mx-auto grid max-w-330 grid-cols-1 gap-x-14 gap-y-14 sm:grid-cols-2 md:grid-cols-3"
       >
         {PERSONAS.map((p, i) => (
           <article

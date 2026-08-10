@@ -83,7 +83,14 @@ const GALLERY_STEP = 24;
 
 function spanForIndex(idx: number, kind: MediaItem["kind"]): string {
   if (kind === "video") return "col-span-2 row-span-2";
-  const pattern = ["", "row-span-2", "", "col-span-2", "", "row-span-2"] as const;
+  const pattern = [
+    "",
+    "row-span-2",
+    "",
+    "col-span-2",
+    "",
+    "row-span-2",
+  ] as const;
   return pattern[idx % pattern.length];
 }
 
@@ -98,7 +105,8 @@ export function Gallery({
   seed?: number;
 }) {
   const media = useMemo(
-    () => (seed === undefined ? buildMedia() : shuffleSeeded(buildMedia(), seed)),
+    () =>
+      seed === undefined ? buildMedia() : shuffleSeeded(buildMedia(), seed),
     [seed],
   );
   const eventsWithMedia = useMemo<ACWEvent[]>(
@@ -152,7 +160,7 @@ export function Gallery({
       className="relative px-6 py-24 md:px-12 md:py-36"
     >
       {!compact && (
-        <div data-reveal className="mx-auto max-w-[1280px] text-center">
+        <div data-reveal className="mx-auto max-w-7xl text-center">
           <div className="acw-section-label justify-center">
             <span className="acw-num">|</span>
             <span>The gathering, in pictures</span>
@@ -162,7 +170,7 @@ export function Gallery({
             <br />
             <em>the room.</em>
           </h2>
-          <p className="mx-auto mt-6 max-w-[640px] text-[15px] leading-[1.8] text-muted-foreground">
+          <p className="mx-auto mt-6 max-w-160 text-[15px] leading-[1.8] text-muted-foreground">
             Faces, voices, and quiet corners from our gatherings. The
             sisterhood, captured.
           </p>
@@ -171,7 +179,7 @@ export function Gallery({
 
       {/* Filter chips */}
       {eventsWithMedia.length > 0 && (
-        <div className="mx-auto mt-12 flex max-w-[1280px] flex-wrap items-center gap-2 border-y border-border py-4">
+        <div className="mx-auto mt-12 flex max-w-7xl flex-wrap items-center gap-2 border-y border-border py-4">
           <FilterChip
             label="All"
             count={counts.get("__all__") ?? 0}
@@ -191,7 +199,7 @@ export function Gallery({
       )}
 
       {visible.length === 0 ? (
-        <div className="mx-auto max-w-[600px] py-24 text-center">
+        <div className="mx-auto max-w-150 py-24 text-center">
           <small className="acw-section-label-mini justify-center">EMPTY</small>
           <p className="font-display text-[26px] italic text-forest">
             Nothing here yet.
@@ -199,69 +207,69 @@ export function Gallery({
         </div>
       ) : (
         <>
-        <div className="mx-auto mt-8 grid max-w-[1280px] grid-flow-dense auto-rows-[240px] grid-cols-2 gap-3 md:auto-rows-[260px] md:grid-cols-4">
-          {rendered.map((m, i) => (
-            <button
-              key={`${m.kind}-${m.src}-${i}`}
-              data-reveal
-              onClick={() => setLb(i)}
-              className={cn(
-                "group relative overflow-hidden rounded-md border border-border bg-cream-2 outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 active:brightness-90 transition-[filter] duration-150",
-                spanForIndex(i, m.kind),
-              )}
-            >
-              <Image
-                src={m.kind === "video" ? (m.poster ?? m.src) : m.src}
-                alt={m.kind === "photo" ? m.alt : m.title}
-                fill
-                sizes="(min-width: 768px) 25vw, 50vw"
-                // Preload the first row (the LCP candidate); the rest stay lazy.
-                preload={i < 4}
-                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-              />
+          <div className="mx-auto mt-8 grid max-w-7xl grid-flow-dense auto-rows-[240px] grid-cols-2 gap-3 md:auto-rows-[260px] md:grid-cols-4">
+            {rendered.map((m, i) => (
+              <button
+                key={`${m.kind}-${m.src}-${i}`}
+                data-reveal
+                onClick={() => setLb(i)}
+                className={cn(
+                  "group relative overflow-hidden rounded-md border border-border bg-cream-2 outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 active:brightness-90 transition-[filter] duration-150",
+                  spanForIndex(i, m.kind),
+                )}
+              >
+                <Image
+                  src={m.kind === "video" ? (m.poster ?? m.src) : m.src}
+                  alt={m.kind === "photo" ? m.alt : m.title}
+                  fill
+                  sizes="(min-width: 768px) 25vw, 50vw"
+                  // Preload the first row (the LCP candidate); the rest stay lazy.
+                  preload={i < 4}
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                />
 
-              {m.kind === "video" && (
-                <>
-                  <div className="absolute inset-0 bg-forest/30" />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-cream-1">
-                    <Play size={56} />
-                    <small className="mt-3 text-[10px] uppercase tracking-[0.3em] text-cream-1/80">
-                      FILM
-                    </small>
-                    <span className="mt-1 font-display text-[18px] italic">
-                      {m.title}
-                      {m.duration ? ` · ${m.duration}` : ""}
-                    </span>
-                  </div>
-                </>
-              )}
+                {m.kind === "video" && (
+                  <>
+                    <div className="absolute inset-0 bg-forest/30" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-cream-1">
+                      <Play size={56} />
+                      <small className="mt-3 text-[10px] uppercase tracking-[0.3em] text-cream-1/80">
+                        FILM
+                      </small>
+                      <span className="mt-1 font-display text-[18px] italic">
+                        {m.title}
+                        {m.duration ? ` · ${m.duration}` : ""}
+                      </span>
+                    </div>
+                  </>
+                )}
 
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-linear-to-t from-forest/80 to-transparent p-4 text-cream-1 opacity-0 transition-opacity group-hover:opacity-100">
-                <small className="font-display text-[14px] italic">
-                  {String(i + 1).padStart(2, "0")}
-                </small>
-                <span className="text-right text-[12px] leading-snug">
-                  {m.kind === "photo" ? m.caption : m.eventTitle}
-                </span>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        {visible.length > shown && (
-          <div className="mt-10 flex flex-col items-center gap-4">
-            <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-              Showing {rendered.length} of {visible.length}
-            </p>
-            <Button
-              variant="editorialOutline"
-              size="pill"
-              onClick={() => setShown((n) => n + GALLERY_STEP)}
-            >
-              Show more
-            </Button>
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-linear-to-t from-forest/80 to-transparent p-4 text-cream-1 opacity-0 transition-opacity group-hover:opacity-100">
+                  <small className="font-display text-[14px] italic">
+                    {String(i + 1).padStart(2, "0")}
+                  </small>
+                  <span className="text-right text-[12px] leading-snug">
+                    {m.kind === "photo" ? m.caption : m.eventTitle}
+                  </span>
+                </div>
+              </button>
+            ))}
           </div>
-        )}
+
+          {visible.length > shown && (
+            <div className="mt-10 flex flex-col items-center gap-4">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+                Showing {rendered.length} of {visible.length}
+              </p>
+              <Button
+                variant="editorialOutline"
+                size="pill"
+                onClick={() => setShown((n) => n + GALLERY_STEP)}
+              >
+                Show more
+              </Button>
+            </div>
+          )}
         </>
       )}
 

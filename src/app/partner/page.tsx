@@ -8,7 +8,13 @@ import { Join } from "@/components/sections/join";
 import { Faq } from "@/components/sections/faq";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
-import { contact, contactHref, mailtoHref, whatsappHref } from "@/config/site";
+import {
+  contact,
+  contactHref,
+  mailtoHref,
+  mobileMoney,
+  whatsappHref,
+} from "@/config/site";
 
 const FAQS = [
   {
@@ -126,9 +132,11 @@ export default function PartnerPage() {
           sub="A Certain Woman welcomes partnerships with individuals, churches, companies, government institutions, NGOs, development partners, foundations, and community leaders who believe in the restoration, dignity, wellbeing, and empowerment of women and girls."
         />
 
-        {/* Pathways */}
+        {/* Pathways + why partner, merged into one section so the page
+            doesn't repeat "here's why, here's how" across two full-height
+            blocks. */}
         <section className="bg-cream-1 px-6 py-24 md:px-12 md:py-28">
-          <Reveal batch stagger={0.08} className="mx-auto max-w-[1120px]">
+          <Reveal batch stagger={0.08} className="mx-auto max-w-280">
             <div
               data-reveal
               className="mb-14 flex flex-col items-center text-center"
@@ -152,53 +160,50 @@ export default function PartnerPage() {
                 </div>
               ))}
             </div>
-          </Reveal>
-        </section>
 
-        {/* Why partner */}
-        <section className="bg-cream-2 px-6 py-24 md:px-12 md:py-28">
-          <Reveal className="mx-auto max-w-[1120px]">
-            <div className="acw-twoup">
-              <div data-reveal className="acw-twoup-left">
-                <div className="acw-section-label">
-                  <span className="acw-num">|</span>
-                  <span>Why partner</span>
-                </div>
-                <h2 className="acw-page-h2 mt-6">
-                  Why
-                  <br />
-                  <em>partner</em> with ACW?
-                </h2>
+            <div className="mt-16 border-t border-border pt-14 text-center">
+              <small
+                data-reveal
+                className="acw-section-label-mini justify-center"
+              >
+                WHY PARTNER WITH ACW
+              </small>
+              <div className="mx-auto mt-5 flex max-w-190 flex-wrap justify-center gap-2.5">
+                {WHY.map((w) => (
+                  <span
+                    key={w}
+                    data-reveal
+                    className="rounded-full border border-gold/30 bg-cream-2 px-4 py-2 text-[13px] leading-[1.4] text-forest"
+                  >
+                    {w}
+                  </span>
+                ))}
               </div>
-              <div data-reveal className="acw-twoup-body">
-                <ul className="acw-checklist">
-                  {WHY.map((w) => (
-                    <li key={w}>{w}</li>
-                  ))}
-                </ul>
-                <div className="mt-8 flex flex-wrap gap-3.5">
-                  <Button asChild variant="editorial" size="pill">
-                    <Link
-                      href={contactHref({
-                        reason: "Partner / Sponsor",
-                        prefill:
-                          "I would like to become a partner with A Certain Woman.",
-                      })}
-                    >
-                      Become a Partner <ArrowRight />
-                    </Link>
-                  </Button>
-                  <Button asChild variant="editorialOutline" size="pill">
-                    <Link
-                      href={contactHref({
-                        reason: "Partner / Sponsor",
-                        prefill: "Please send me a partnership brief.",
-                      })}
-                    >
-                      Request Partnership Brief
-                    </Link>
-                  </Button>
-                </div>
+              <div
+                data-reveal
+                className="mt-9 flex flex-wrap justify-center gap-3.5"
+              >
+                <Button asChild variant="editorial" size="pill">
+                  <Link
+                    href={contactHref({
+                      reason: "Partner / Sponsor",
+                      prefill:
+                        "I would like to become a partner with A Certain Woman.",
+                    })}
+                  >
+                    Become a Partner <ArrowRight />
+                  </Link>
+                </Button>
+                <Button asChild variant="editorialOutline" size="pill">
+                  <Link
+                    href={contactHref({
+                      reason: "Partner / Sponsor",
+                      prefill: "Please send me a partnership brief.",
+                    })}
+                  >
+                    Request Partnership Brief
+                  </Link>
+                </Button>
               </div>
             </div>
           </Reveal>
@@ -207,9 +212,12 @@ export default function PartnerPage() {
         {/* Support / give */}
         <section
           id="support"
-          className="bg-cream-1 px-6 py-24 md:px-12 md:py-28"
+          className="acw-bg-cream-down px-6 py-24 md:px-12 md:py-28"
         >
-          <Reveal className="mx-auto max-w-[1120px]">
+          {/* batch: individual targets reveal as they scroll into view, so
+              the mobile money cards and note still animate even though
+              they sit well below the section's own top edge. */}
+          <Reveal batch stagger={0.1} className="mx-auto max-w-280">
             <div
               data-reveal
               className="mb-12 flex flex-col items-center text-center"
@@ -223,7 +231,7 @@ export default function PartnerPage() {
                 <br />
                 of <em>restoration.</em>
               </h2>
-              <p className="mx-auto mt-6 max-w-[620px] text-[17px] leading-[1.65] text-muted-foreground">
+              <p className="mx-auto mt-6 max-w-155 text-[17px] leading-[1.65] text-muted-foreground">
                 Your support helps A Certain Woman create healing spaces, host
                 empowerment programs, support vulnerable women and girls,
                 provide outreach care, and build a movement of restoration.
@@ -231,33 +239,54 @@ export default function PartnerPage() {
                 family, and reclaim a crown.
               </p>
             </div>
-            <ul data-reveal className="acw-checklist mx-auto max-w-[760px]">
+            <ul data-reveal className="acw-checklist mx-auto max-w-190">
               {GIVING.map((g) => (
                 <li key={g}>{g}</li>
               ))}
             </ul>
-            <div data-reveal className="mt-12 flex flex-col items-center gap-5">
-              <Button asChild variant="editorial" size="pill">
-                <Link
-                  href={contactHref({
-                    reason: "Partner / Sponsor",
-                    prefill:
-                      "I would like to support the work of A Certain Woman. Here is how I would like to give: ",
-                  })}
-                >
-                  Give / Support ACW <ArrowRight />
-                </Link>
-              </Button>
-              {/* Interim: secure online giving is on the way. Until then we
-                  arrange gifts personally, and offer a direct human channel so
-                  giving isn't gated behind a form alone. */}
-              <p className="max-w-[520px] text-center text-[13px] leading-[1.7] text-muted-foreground">
-                Secure online giving is coming soon. For now, tell us how you
-                would like to give and we will arrange it with you personally,
-                or reach us directly on{" "}
+
+            {/* Mobile money: the fastest way to give while secure online
+                giving is on the way. Cast in the dark/gold treatment so it
+                reads as the trustworthy, "official" payment detail on the
+                page rather than another line item. */}
+            <div className="mx-auto mt-16 max-w-190">
+              <small
+                data-reveal
+                className="acw-section-label-mini block text-center"
+              >
+                GIVE BY MOBILE MONEY
+              </small>
+              <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {mobileMoney.map((m) => (
+                  <div
+                    key={m.provider}
+                    data-reveal
+                    className="relative overflow-hidden rounded-md border border-gold/25 bg-forest px-7 py-8 text-center"
+                  >
+                    <span className="block text-[11px] uppercase tracking-[0.3em] text-gold-2">
+                      {m.provider}
+                    </span>
+                    <span className="mt-4 block font-display text-[30px] tracking-[0.03em] text-cream-1 tabular-nums md:text-[34px]">
+                      {m.number}
+                    </span>
+                    <span className="mt-3 block text-[11px] uppercase tracking-[0.2em] text-cream-1/50">
+                      Mobile Money &middot; Sierra Leone
+                    </span>
+                    <div className="pointer-events-none absolute inset-3 border border-cream-1/10" />
+                  </div>
+                ))}
+              </div>
+
+              <p
+                data-reveal
+                className="mx-auto mt-7 max-w-130 text-center text-[13px] leading-[1.7] text-muted-foreground"
+              >
+                Text or email us before or after sending a gift, so we can
+                confirm receipt and follow up with a proper acknowledgment
+                &mdash;{" "}
                 <a
                   href={whatsappHref(
-                    "Hello A Certain Woman, I would like to support your work.",
+                    "Hello A Certain Woman, I have a question about giving.",
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -274,12 +303,28 @@ export default function PartnerPage() {
                 </a>
                 .
               </p>
+
+              {/* Informational, not another "give" CTA — the account details
+                  above already give visitors what they need to act. */}
+              <div data-reveal className="mt-7 flex justify-center">
+                <Button asChild variant="editorialOutline" size="pillSm">
+                  <a
+                    href={whatsappHref(
+                      "Hello A Certain Woman, I have a question about giving.",
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Ask about giving <ArrowRight />
+                  </a>
+                </Button>
+              </div>
             </div>
           </Reveal>
         </section>
 
         <Faq
-          className="bg-cream-2"
+          className="acw-bg-cream-down"
           label="Questions"
           heading={
             <>
@@ -291,7 +336,7 @@ export default function PartnerPage() {
           items={FAQS}
         />
 
-        <Join paths={["join", "programs", "events"]} />
+        <Join paths={[]} />
       </main>
       <Footer />
     </>

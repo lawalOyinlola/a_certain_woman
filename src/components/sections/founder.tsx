@@ -15,9 +15,9 @@ export function Founder({ withLabel = true }: { withLabel?: boolean }) {
       id="founder"
       className="bg-cream-1 px-6 py-32 md:px-12 md:py-40"
     >
-      <div className="mx-auto grid max-w-[1320px] items-start gap-16 md:grid-cols-[1fr_1.4fr] md:gap-20">
+      <div className="mx-auto grid max-w-330 items-start gap-16 md:grid-cols-[1fr_1.4fr] md:gap-20">
         {/* Portrait — sticky on desktop, slides in from below */}
-        <div data-reveal className="md:sticky md:top-[120px]">
+        <div data-reveal className="md:sticky md:top-30">
           <div className="relative border border-border bg-cream-2 p-4">
             <Image
               src="/assets/namaari_founder.jpg"
@@ -90,12 +90,7 @@ export function Founder({ withLabel = true }: { withLabel?: boolean }) {
               Founder &amp; Custodian, A Certain Woman
             </div>
 
-            <Button
-              asChild
-              variant="editorial"
-              size="pill"
-              className="mt-8"
-            >
+            <Button asChild variant="editorial" size="pill" className="mt-8">
               <Link href="/founder">
                 Read the Founder&rsquo;s Letter <ArrowRight />
               </Link>

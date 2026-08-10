@@ -9,6 +9,7 @@ import { Lightbox, type LightboxItem } from "@/components/ui/lightbox";
 import { Button } from "@/components/ui/button";
 import { contactHref, whatsappHref } from "@/config/site";
 import { useGsapReveal } from "@/hooks/use-gsap-reveal";
+import { cn } from "@/lib/utils";
 
 // How many photos to show before the "view all" reveal, so long galleries
 // don't stretch the page. A clean 2 rows on desktop (4-up), 4 rows on mobile.
@@ -51,7 +52,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
       id={event.id}
       className="scroll-mt-32 border-b border-border py-20 last:border-none md:py-28"
     >
-      <header data-reveal className="mx-auto max-w-[1100px] text-center">
+      <header data-reveal className="mx-auto max-w-275 text-center">
         <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
           {status !== "PAST" && (
             <span className="rounded-full bg-forest px-3 py-1.5 text-cream-1">
@@ -82,14 +83,14 @@ export function EventDetail({ event }: { event: ACWEvent }) {
           <em>{event.subtitle}.</em>
         </h2>
         {event.theme && (
-          <p className="mx-auto mt-5 max-w-[680px] font-display text-[18px] italic text-gold md:text-[20px]">
+          <p className="mx-auto mt-5 max-w-170 font-display text-[18px] italic text-gold md:text-[20px]">
             <span className="not-italic font-sans text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
               Theme:{" "}
             </span>
             {event.theme}
           </p>
         )}
-        <p className="mx-auto mt-6 max-w-[640px] text-[15px] leading-[1.85] text-ink-2">
+        <p className="mx-auto mt-6 max-w-160 text-[15px] leading-[1.85] text-ink-2">
           {event.blurb}
         </p>
 
@@ -123,7 +124,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
         )}
       </header>
 
-      <div data-reveal className="mx-auto mt-12 max-w-[1280px]">
+      <div data-reveal className="mx-auto mt-12 max-w-7xl">
         <div className="relative aspect-video overflow-hidden rounded-md border border-border">
           <Image
             src={event.cover}
@@ -138,7 +139,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
       {(hasProgram || hasSpeakers) && (
         <div
           data-reveal
-          className="mx-auto mt-16 grid max-w-[1100px] grid-cols-1 gap-12 px-2 md:grid-cols-2"
+          className="mx-auto mt-16 grid max-w-275 grid-cols-1 gap-12 px-2 md:grid-cols-2"
         >
           {hasProgram && (
             <div>
@@ -177,31 +178,50 @@ export function EventDetail({ event }: { event: ACWEvent }) {
       )}
 
       {hasVideos && (
-        <div data-reveal className="mx-auto mt-16 max-w-[1100px]">
+        <div data-reveal className="mx-auto mt-16 max-w-275">
           <small className="acw-section-label-mini">
-            FILM {event.videos!.length > 1 ? `· ${event.videos!.length} CLIPS` : ""}
+            FILM{" "}
+            {event.videos!.length > 1 ? `· ${event.videos!.length} CLIPS` : ""}
           </small>
-          <div className="mt-3 grid grid-cols-1 gap-4 md:grid-cols-[2fr_1fr]">
+          {/* Up to 3 clips per row: a lone video keeps its wide hero ratio at
+              half width, two split the row evenly, three or more fill the
+              row and wrap. Always one column on mobile. */}
+          <div
+            className={cn(
+              "mt-3 grid grid-cols-1 gap-4",
+              videoCount === 2 && "sm:grid-cols-2",
+              videoCount >= 3 && "sm:grid-cols-2 lg:grid-cols-3",
+            )}
+          >
             {event.videos!.map((v, i) => (
               <button
                 key={i}
                 onClick={() => setLb(i)}
-                className={
-                  "group relative block w-full overflow-hidden rounded-md border border-border outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 active:brightness-90 transition-[filter] duration-150 " +
-                  (i === 0 ? "" : "md:col-start-2")
-                }
+                className={cn(
+                  "group relative block w-full overflow-hidden rounded-md border border-border outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 active:brightness-90 transition-[filter] duration-150",
+                  videoCount === 1 && "md:w-1/2",
+                )}
               >
-                <div className={"relative " + (i === 0 ? "aspect-21/9" : "aspect-4/3")}>
+                <div
+                  className={cn(
+                    "relative",
+                    videoCount === 1 ? "aspect-21/9" : "aspect-4/3",
+                  )}
+                >
                   <Image
                     src={v.poster ?? event.cover}
                     alt={v.title ?? `${event.title} film ${i + 1}`}
                     fill
-                    sizes="(min-width: 1100px) 1100px, 100vw"
+                    sizes={
+                      videoCount === 1
+                        ? "(min-width: 768px) 550px, 100vw"
+                        : "(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+                    }
                     className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                   />
                   <div className="absolute inset-0 bg-forest/40 transition-colors group-hover:bg-forest/50" />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-cream-1">
-                    <Play size={i === 0 ? 80 : 56} />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-cream-1">
+                    <Play size={videoCount === 1 ? 80 : 56} />
                     <span className="mt-3 text-[11px] uppercase tracking-[0.3em]">
                       {v.title ?? "Recap film"}
                       {v.duration ? ` · ${v.duration}` : ""}
@@ -215,7 +235,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
       )}
 
       {hasPhotos && (
-        <div data-reveal className="mx-auto mt-16 max-w-[1280px]">
+        <div data-reveal className="mx-auto mt-16 max-w-7xl">
           <small className="acw-section-label-mini">
             THE GALLERY · {event.photos.length} PHOTOS
           </small>
@@ -263,7 +283,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
       {!hasPhotos && !hasVideos && status !== "PAST" && (
         <div
           data-reveal
-          className="mx-auto mt-12 max-w-[820px] border-t border-border pt-10 text-center"
+          className="mx-auto mt-12 max-w-205 border-t border-border pt-10 text-center"
         >
           <small className="acw-section-label-mini justify-center">
             STILL TO COME

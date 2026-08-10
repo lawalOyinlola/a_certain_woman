@@ -128,7 +128,7 @@ export default async function EventsPage({
           sub="Every room we've built, and every one we're building next. Speakers, programs, and the women who were there."
         />
 
-        <div className="mx-auto mt-16 max-w-[1280px] px-6 md:px-12">
+        <div className="mx-auto mt-16 max-w-7xl px-6 md:px-12">
           <EventsBrowser initialTab={initialTab} initialQuery={q} />
         </div>
 

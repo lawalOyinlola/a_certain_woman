@@ -63,8 +63,12 @@ export function Anthem() {
   });
 
   return (
-    <section ref={sectionRef} id="anthem" className="bg-cream-1 px-6 py-32 md:px-12 md:py-36">
-      <div className="mx-auto grid max-w-[1320px] items-center gap-12 md:grid-cols-[1fr_1.3fr] md:gap-20">
+    <section
+      ref={sectionRef}
+      id="anthem"
+      className="bg-cream-1 px-6 py-32 md:px-12 md:py-36"
+    >
+      <div className="mx-auto grid max-w-330 items-center gap-12 md:grid-cols-[1fr_1.3fr] md:gap-20">
         <div data-reveal>
           <div className="acw-section-label">
             <span className="acw-num">|</span>
@@ -75,13 +79,16 @@ export function Anthem() {
             <br />
             for the <em>becoming.</em>
           </h2>
-          <p className="mt-7 max-w-[420px] text-[17px] leading-[1.65] text-muted-foreground">
-            Every movement has a sound. Ours is a quiet hymn for the woman
-            who is healing, rising, and reclaiming her crown.
+          <p className="mt-7 max-w-105 text-[17px] leading-[1.65] text-muted-foreground">
+            Every movement has a sound. Ours is a quiet hymn for the woman who
+            is healing, rising, and reclaiming her crown.
           </p>
         </div>
 
-        <div data-reveal className="acw-anthem-player-glow relative grid items-center gap-8 overflow-hidden bg-forest p-9 text-cream-1 md:grid-cols-[120px_1fr]">
+        <div
+          data-reveal
+          className="acw-anthem-player-glow relative grid items-center gap-8 overflow-hidden bg-forest p-9 text-cream-1 md:grid-cols-[120px_1fr]"
+        >
           <audio
             ref={audioRef}
             src="/assets/ACW_anthem.mp3"

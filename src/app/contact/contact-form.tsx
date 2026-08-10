@@ -29,7 +29,7 @@ const PhoneField = dynamic(
     loading: () => (
       <div
         aria-hidden
-        className="h-[46px] w-full animate-pulse border-b border-border"
+        className="h-11.5 w-full animate-pulse border-b border-border"
       />
     ),
   },
@@ -105,7 +105,9 @@ export function ContactForm() {
       try {
         ({ isValidPhoneNumber } = await import("react-phone-number-input"));
       } catch {
-        setFieldErrors({ phone: "Unable to validate phone number, please try again." });
+        setFieldErrors({
+          phone: "Unable to validate phone number, please try again.",
+        });
         return;
       }
       if (!isValidPhoneNumber(phone)) {
@@ -148,7 +150,7 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="mx-auto max-w-[520px] py-12 text-center">
+      <div className="mx-auto max-w-130 py-12 text-center">
         <div className="text-gold">
           <svg
             viewBox="0 0 60 60"
@@ -186,88 +188,90 @@ export function ContactForm() {
           htmlFor="contact-name"
           error={fieldErrors.name}
         >
-        <FieldInput
-          id="contact-name"
-          name="name"
-          type="text"
-          placeholder="Her name"
-          aria-invalid={Boolean(fieldErrors.name)}
-          aria-describedby={fieldErrors.name ? "contact-name-error" : undefined}
-        />
-      </FormField>
+          <FieldInput
+            id="contact-name"
+            name="name"
+            type="text"
+            placeholder="Her name"
+            aria-invalid={Boolean(fieldErrors.name)}
+            aria-describedby={
+              fieldErrors.name ? "contact-name-error" : undefined
+            }
+          />
+        </FormField>
 
-      <FormField label="Organization (optional)">
-        <FieldInput
-          name="organization"
-          type="text"
-          placeholder="Church, NGO, company..."
-        />
-      </FormField>
+        <FormField label="Organization (optional)">
+          <FieldInput
+            name="organization"
+            type="text"
+            placeholder="Church, NGO, company..."
+          />
+        </FormField>
 
-      <FormField label="Phone / WhatsApp" error={fieldErrors.phone}>
-        <PhoneField
-          id="contact-phone"
-          value={phone}
-          onChange={(v) => {
-            setPhone(v);
-            setFieldErrors((prev) => ({ ...prev, phone: "" }));
-          }}
-          placeholder="76 123 456"
-          disabled={isLoading}
-          aria-label="Phone or WhatsApp number"
-          aria-invalid={Boolean(fieldErrors.phone)}
-        />
-      </FormField>
+        <FormField label="Phone / WhatsApp" error={fieldErrors.phone}>
+          <PhoneField
+            id="contact-phone"
+            value={phone}
+            onChange={(v) => {
+              setPhone(v);
+              setFieldErrors((prev) => ({ ...prev, phone: "" }));
+            }}
+            placeholder="76 123 456"
+            disabled={isLoading}
+            aria-label="Phone or WhatsApp number"
+            aria-invalid={Boolean(fieldErrors.phone)}
+          />
+        </FormField>
 
-      <FormField
-        label="Email Address"
-        error={fieldErrors.email}
-        hint="Email or phone required."
-      >
-        <FieldInput name="email" type="email" placeholder="her@email.com" />
-      </FormField>
-
-      {/* Reason — underline-styled Select */}
-      <FormField label="Reason for Contact" full>
-        <Select
-          value={reason}
-          onValueChange={(v) => v !== null && setReason(v)}
-          disabled={isLoading}
+        <FormField
+          label="Email Address"
+          error={fieldErrors.email}
+          hint="Email or phone required."
         >
-          <SelectTrigger
-            aria-label="Reason for Contact"
-            className="w-full rounded-none border-0 border-b border-border bg-transparent h-12 text-[16px] font-sans text-ink shadow-none ring-0 focus-visible:ring-0 focus-visible:border-gold hover:border-gold/60 transition-colors duration-200 data-placeholder:text-muted-foreground data-placeholder:opacity-50 data-placeholder:italic [&>svg]:text-muted-foreground"
+          <FieldInput name="email" type="email" placeholder="her@email.com" />
+        </FormField>
+
+        {/* Reason — underline-styled Select */}
+        <FormField label="Reason for Contact" full>
+          <Select
+            value={reason}
+            onValueChange={(v) => v !== null && setReason(v)}
+            disabled={isLoading}
           >
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-cream-1 border-border shadow-[0_8px_32px_-8px_rgba(31,38,32,0.18)]">
-            {REASONS.map((r) => (
-              <SelectItem
-                key={r}
-                value={r}
-                className="font-sans text-[14px] text-ink cursor-pointer focus:bg-cream-2 focus:text-forest"
-              >
-                {r}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </FormField>
+            <SelectTrigger
+              aria-label="Reason for Contact"
+              className="w-full rounded-none border-0 border-b border-border bg-transparent h-12 text-[16px] font-sans text-ink shadow-none ring-0 focus-visible:ring-0 focus-visible:border-gold hover:border-gold/60 transition-colors duration-200 data-placeholder:text-muted-foreground data-placeholder:opacity-50 data-placeholder:italic [&>svg]:text-muted-foreground"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-cream-1 border-border shadow-[0_8px_32px_-8px_rgba(31,38,32,0.18)]">
+              {REASONS.map((r) => (
+                <SelectItem
+                  key={r}
+                  value={r}
+                  className="font-sans text-[14px] text-ink cursor-pointer focus:bg-cream-2 focus:text-forest"
+                >
+                  {r}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </FormField>
 
-      <FormField label="Message" error={fieldErrors.message} full>
-        <FieldTextarea
-          key={initialMessage}
-          name="message"
-          defaultValue={initialMessage}
-          placeholder="Tell us a little about why you're writing..."
-        />
-      </FormField>
+        <FormField label="Message" error={fieldErrors.message} full>
+          <FieldTextarea
+            key={initialMessage}
+            name="message"
+            defaultValue={initialMessage}
+            placeholder="Tell us a little about why you're writing..."
+          />
+        </FormField>
 
-      {serverError && (
-        <p className="acw-field--full font-sans text-[13px] text-destructive">
-          {serverError}
-        </p>
-      )}
+        {serverError && (
+          <p className="acw-field--full font-sans text-[13px] text-destructive">
+            {serverError}
+          </p>
+        )}
 
         <div className="acw-field--full">
           <Button

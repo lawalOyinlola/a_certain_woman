@@ -178,6 +178,13 @@ export const EVENTS: ACWEvent[] = [
     blurb:
       "The room where it all began. Our official launch and summit, gathered under one theme: healing is possible, purpose is still alive, and no season is wasted in the hands of God. A day of worship, reflection, teaching, and the quiet unveiling of A Certain Woman: restoring hearts, reclaiming crowns, raising women who are healed, whole, and ready to serve.",
     photos: launchPhotos,
+    videos: [
+      {
+        src: "/media/ACW_launch/VIDEO-2026-08-08-19-15-58.mp4",
+        poster: "/media/ACW_launch/KCS_3444.jpg",
+        title: "Healed & Held · Recap",
+      },
+    ],
     speakers: [],
     program: [],
   },
@@ -267,6 +274,20 @@ export const EVENTS: ACWEvent[] = [
     blurb:
       "A three-day celebration marking the launch of Men Who Stand, anchored in one verse: “Be on your guard; stand firm in the faith; be courageous; be strong” (1 Corinthians 16:13). Three days for men who are willing to heal, to be present, and to build something different. Honesty, faith, and the quiet work of becoming a man of character, legacy, and purpose.",
     photos: [],
+    videos: [
+      {
+        src: "/media/a_man_who_stands/VIDEO-2026-06-17-19-31-46.mp4",
+        title: "Men Who Stand · The Podcast — Ep. 1",
+      },
+      {
+        src: "/media/a_man_who_stands/VIDEO-2026-06-19-19-10-54.mp4",
+        title: "Men Who Stand · The Podcast — Ep. 2",
+      },
+      {
+        src: "/media/a_man_who_stands/VIDEO-2026-06-24-16-35-47.mp4",
+        title: "Men Who Stand · Recap",
+      },
+    ],
     speakers: [],
     program: [],
   },

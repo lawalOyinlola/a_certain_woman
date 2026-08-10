@@ -60,7 +60,7 @@ export default function FounderPage() {
         {/* Gentle content note: the letter speaks honestly of war and abuse,
             so a reader can choose her moment before she begins. */}
         <div className="bg-cream-1 px-6 pt-10 md:px-12">
-          <p className="mx-auto max-w-[760px] border-l-2 border-gold/50 pl-5 text-[14px] italic leading-[1.7] text-muted-foreground">
+          <p className="mx-auto max-w-190 border-l-2 border-gold/50 pl-5 text-[14px] italic leading-[1.7] text-muted-foreground">
             A note before you read: this letter speaks gently but honestly of
             grief, war, sexual violence, and survival. Please read in your own
             time, and only when you feel ready.
@@ -69,7 +69,7 @@ export default function FounderPage() {
 
         {/* Opening quote + portrait */}
         <section className="bg-cream-1 px-6 pb-8 pt-4 md:px-12">
-          <Reveal className="mx-auto max-w-[760px]">
+          <Reveal className="mx-auto max-w-190">
             <div
               data-reveal
               className="mx-auto mb-14 w-fit border border-border bg-cream-2 p-4"
@@ -83,7 +83,7 @@ export default function FounderPage() {
                 // lazy-discovered (which also caused the late layout shift).
                 preload
                 sizes="360px"
-                className="aspect-4/5 w-full max-w-[360px] object-cover"
+                className="aspect-4/5 w-full max-w-90 object-cover"
               />
             </div>
             <blockquote
@@ -101,7 +101,7 @@ export default function FounderPage() {
           <Reveal
             batch
             stagger={0.04}
-            className="mx-auto max-w-[680px] text-[17px] leading-[1.85] text-ink-2 [&>p]:mb-6 [&>p:first-child]:first-letter:float-left [&>p:first-child]:first-letter:mr-3 [&>p:first-child]:first-letter:font-display [&>p:first-child]:first-letter:text-[64px] [&>p:first-child]:first-letter:leading-[0.8] [&>p:first-child]:first-letter:text-forest"
+            className="mx-auto max-w-170 text-[17px] leading-[1.85] text-ink-2 [&>p]:mb-6 [&>p:first-child]:first-letter:float-left [&>p:first-child]:first-letter:mr-3 [&>p:first-child]:first-letter:font-display [&>p:first-child]:first-letter:text-[64px] [&>p:first-child]:first-letter:leading-[0.8] [&>p:first-child]:first-letter:text-forest"
           >
             <p data-reveal>
               I was born into wealth, love, presence, covenant, and covering.
@@ -232,8 +232,8 @@ export default function FounderPage() {
 
         {/* Signature + closing */}
         <section className="bg-cream-2 px-6 py-20 md:px-12 md:py-24">
-          <Reveal className="mx-auto max-w-[680px] text-center">
-            <p data-reveal className="acw-founder-emph mx-auto max-w-[520px]">
+          <Reveal className="mx-auto max-w-170 text-center">
+            <p data-reveal className="acw-founder-emph mx-auto max-w-130">
               Restoring hearts. Reclaiming crowns.
             </p>
             <div
@@ -249,7 +249,7 @@ export default function FounderPage() {
             </div>
             <p
               data-reveal
-              className="mx-auto mt-10 max-w-[480px] text-[15px] italic leading-[1.75] text-muted-foreground"
+              className="mx-auto mt-10 max-w-120 text-[15px] italic leading-[1.75] text-muted-foreground"
             >
               If this story touched something in you, you are welcome to write
               to us, join a circle, or simply receive the quiet letter.
@@ -275,7 +275,10 @@ export default function FounderPage() {
           </Reveal>
         </section>
 
-        <Join paths={["join", "programs", "support"]} />
+        {/* Newsletter only — the closing section above already offers its
+            own "Join the Movement" CTA, so the full pathways grid would
+            just repeat it. */}
+        <Join paths={[]} />
       </main>
       <Footer />
     </>

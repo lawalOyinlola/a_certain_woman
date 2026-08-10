@@ -12,7 +12,7 @@ if (typeof window !== "undefined") {
 // server. "use client" components still SSR in Next.js, so we fall back to
 // useEffect there to avoid the "useLayoutEffect does nothing on the server"
 // warning while still hiding elements before paint in the browser.
-const useIsomorphicLayoutEffect =
+export const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 type Options = {

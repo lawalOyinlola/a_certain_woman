@@ -129,7 +129,7 @@ export default function AboutPage() {
 
         {/* Why the name */}
         <section className="bg-cream-1 px-6 py-24 md:px-12 md:py-28">
-          <Reveal className="mx-auto max-w-[1120px]">
+          <Reveal className="mx-auto max-w-280">
             <div className="acw-twoup">
               <div data-reveal className="acw-twoup-left">
                 <div className="acw-section-label">
@@ -165,7 +165,7 @@ export default function AboutPage() {
 
         {/* Vision & Mission */}
         <section className="bg-cream-2 px-6 py-24 md:px-12 md:py-28">
-          <Reveal className="mx-auto max-w-[1120px]">
+          <Reveal className="mx-auto max-w-280">
             <div className="acw-twoup">
               <div data-reveal className="acw-twoup-left">
                 <div className="acw-section-label">
@@ -213,7 +213,7 @@ export default function AboutPage() {
 
         {/* Values */}
         <section className="bg-cream-1 px-6 py-24 md:px-12 md:py-28">
-          <Reveal batch stagger={0.08} className="mx-auto max-w-[1120px]">
+          <Reveal batch stagger={0.08} className="mx-auto max-w-280">
             <div data-reveal className="flex flex-col items-center text-center">
               <div className="acw-section-label">
                 <span className="acw-num">|</span>
@@ -241,7 +241,7 @@ export default function AboutPage() {
 
         {/* Closing */}
         <section className="bg-cream-2 px-6 py-24 md:px-12 md:py-28">
-          <Reveal className="mx-auto max-w-[1120px] text-center">
+          <Reveal className="mx-auto max-w-280 text-center">
             <h2 data-reveal className="acw-page-h2">
               <em>A Certain Woman</em>
               <br />
@@ -249,7 +249,7 @@ export default function AboutPage() {
             </h2>
             <p
               data-reveal
-              className="mx-auto mt-8 max-w-[600px] font-display text-[18px] italic leading-[1.65] text-muted-foreground"
+              className="mx-auto mt-8 max-w-150 font-display text-[18px] italic leading-[1.65] text-muted-foreground"
             >
               It is a table. It is a covering. It is a mirror. It is a movement.
               <br />

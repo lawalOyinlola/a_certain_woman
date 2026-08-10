@@ -117,25 +117,69 @@ export function Sprig() {
   );
 }
 
-export function PillarIcon({ kind }: { kind: "tree" | "crown" | "heart" | "house" }) {
+export function PillarIcon({
+  kind,
+}: {
+  kind: "tree" | "crown" | "heart" | "house";
+}) {
   switch (kind) {
     case "tree":
       return (
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.2">
+        <svg
+          viewBox="0 0 48 48"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.2"
+        >
           <path d="M24 44 V20" />
           <path d="M24 28 Q14 24 12 14" />
           <path d="M24 28 Q34 24 36 14" />
           <path d="M24 22 Q18 16 18 8" />
           <path d="M24 22 Q30 16 30 8" />
-          <ellipse cx="13" cy="13" rx="5" ry="6" transform="rotate(-25 13 13)" fill="currentColor" opacity="0.2" />
-          <ellipse cx="35" cy="13" rx="5" ry="6" transform="rotate(25 35 13)" fill="currentColor" opacity="0.2" />
-          <ellipse cx="18" cy="7" rx="3.5" ry="4.5" fill="currentColor" opacity="0.3" />
-          <ellipse cx="30" cy="7" rx="3.5" ry="4.5" fill="currentColor" opacity="0.3" />
+          <ellipse
+            cx="13"
+            cy="13"
+            rx="5"
+            ry="6"
+            transform="rotate(-25 13 13)"
+            fill="currentColor"
+            opacity="0.2"
+          />
+          <ellipse
+            cx="35"
+            cy="13"
+            rx="5"
+            ry="6"
+            transform="rotate(25 35 13)"
+            fill="currentColor"
+            opacity="0.2"
+          />
+          <ellipse
+            cx="18"
+            cy="7"
+            rx="3.5"
+            ry="4.5"
+            fill="currentColor"
+            opacity="0.3"
+          />
+          <ellipse
+            cx="30"
+            cy="7"
+            rx="3.5"
+            ry="4.5"
+            fill="currentColor"
+            opacity="0.3"
+          />
         </svg>
       );
     case "crown":
       return (
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.2">
+        <svg
+          viewBox="0 0 48 48"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.2"
+        >
           <path d="M6 36 L10 14 L18 24 L24 8 L30 24 L38 14 L42 36 Z" />
           <line x1="6" y1="36" x2="42" y2="36" />
           <line x1="6" y1="40" x2="42" y2="40" />
@@ -147,7 +191,12 @@ export function PillarIcon({ kind }: { kind: "tree" | "crown" | "heart" | "house
       );
     case "heart":
       return (
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.2">
+        <svg
+          viewBox="0 0 48 48"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.2"
+        >
           <path d="M24 40 C8 28 8 14 16 12 C20 11 23 14 24 17 C25 14 28 11 32 12 C40 14 40 28 24 40 Z" />
           <path d="M24 22 V32" strokeWidth="0.8" />
           <path d="M20 26 L24 24 L28 26" strokeWidth="0.8" />
@@ -155,7 +204,12 @@ export function PillarIcon({ kind }: { kind: "tree" | "crown" | "heart" | "house
       );
     case "house":
       return (
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.2">
+        <svg
+          viewBox="0 0 48 48"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.2"
+        >
           <path d="M8 24 L24 10 L40 24 V40 H8 Z" />
           <path d="M20 40 V28 H28 V40" />
           <path d="M16 22 V14 H20 V18" />
@@ -167,7 +221,14 @@ export function PillarIcon({ kind }: { kind: "tree" | "crown" | "heart" | "house
 
 export function Play({ size = 60 }: { size?: number }) {
   return (
-    <svg viewBox="0 0 60 60" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1">
+    <svg
+      viewBox="0 0 60 60"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+    >
       <circle cx="30" cy="30" r="29" />
       <path d="M24 20 L42 30 L24 40 Z" fill="currentColor" />
     </svg>

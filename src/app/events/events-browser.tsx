@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { EventDetail } from "@/components/sections/event-detail";
+import { ArrowRight } from "@/components/site/icons";
+import { Button } from "@/components/ui/button";
 import {
   type ACWEvent,
   getPastEvents,
@@ -11,6 +13,10 @@ import { useDebouncedValue } from "@/lib/hooks/use-debounced-value";
 import { cn } from "@/lib/utils";
 
 type Tab = "upcoming" | "past" | "all";
+
+// Long past a handful of events, rendering every EventDetail at once (each
+// pulls in its own photo grid + lightbox) gets heavy. Page them.
+const PAGE_SIZE = 5;
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "upcoming", label: "Upcoming" },
@@ -70,11 +76,26 @@ export function EventsBrowser({
     [list, debouncedQuery],
   );
 
+  // Reset paging whenever the tab or search narrows/widens the result set,
+  // so switching tabs doesn't leave you mid-scroll through a shorter list.
+  // Adjusted during render (React's sanctioned pattern for derived state)
+  // rather than an effect, so it doesn't cost an extra commit.
+  const pageResetKey = `${tab}:${debouncedQuery}`;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [prevPageResetKey, setPrevPageResetKey] = useState(pageResetKey);
+  if (pageResetKey !== prevPageResetKey) {
+    setPrevPageResetKey(pageResetKey);
+    setVisibleCount(PAGE_SIZE);
+  }
+
+  const visible = filtered.slice(0, visibleCount);
+  const hasMore = filtered.length > visibleCount;
+
   return (
     <>
       {/* Controls */}
-      <div className="sticky top-[72px] z-30 -mx-6 mb-12 border-y border-border bg-cream-1/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12">
-        <div className="mx-auto flex max-w-[1100px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="sticky top-18 z-30 -mx-6 mb-12 border-y border-border bg-cream-1/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12">
+        <div className="mx-auto flex max-w-275 flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <nav
             className="flex items-center gap-1 self-start rounded-full border border-border p-1"
             aria-label="Filter events"
@@ -101,7 +122,7 @@ export function EventsBrowser({
             ))}
           </nav>
 
-          <label className="relative flex flex-1 items-center md:max-w-[440px]">
+          <label className="relative flex flex-1 items-center md:max-w-110">
             <SearchGlyph />
             <input
               type="search"
@@ -129,9 +150,20 @@ export function EventsBrowser({
         <EmptyState query={debouncedQuery} tab={tab} />
       ) : (
         <div>
-          {filtered.map((e) => (
+          {visible.map((e) => (
             <EventDetail key={e.id} event={e} />
           ))}
+          {hasMore && (
+            <div className="flex justify-center py-16">
+              <Button
+                variant="editorialOutline"
+                size="pill"
+                onClick={() => setVisibleCount((v) => v + PAGE_SIZE)}
+              >
+                View More Events <ArrowRight />
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </>
@@ -140,7 +172,7 @@ export function EventsBrowser({
 
 function EmptyState({ query, tab }: { query: string; tab: Tab }) {
   return (
-    <div className="mx-auto max-w-[640px] py-24 text-center md:py-32">
+    <div className="mx-auto max-w-160 py-24 text-center md:py-32">
       <small className="acw-section-label-mini justify-center">
         NOTHING TO SHOW
       </small>

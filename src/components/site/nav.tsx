@@ -119,7 +119,10 @@ function NavDropdown({
           stroke="currentColor"
           strokeWidth="1.3"
           aria-hidden
-          className={cn("transition-transform duration-200", open && "rotate-180")}
+          className={cn(
+            "transition-transform duration-200",
+            open && "rotate-180",
+          )}
         >
           <path d="M1 1l3.5 3.5L8 1" />
         </svg>
@@ -129,38 +132,38 @@ function NavDropdown({
         <div
           role="menu"
           aria-label={group.label}
-          className="absolute left-1/2 top-full z-10 min-w-[210px] -translate-x-1/2 pt-3"
+          className="absolute left-1/2 top-full z-10 min-w-52.5 -translate-x-1/2 pt-3"
         >
-        <div className="flex flex-col gap-1 border border-border bg-background p-2 shadow-[0_18px_44px_-22px_rgba(31,38,32,0.3)]">
-          {group.children.map((child, i) => {
-            const childActive = pathname === child.href;
-            return (
-              <Link
-                key={child.href}
-                ref={i === 0 ? firstLinkRef : undefined}
-                href={child.href}
-                role="menuitem"
-                tabIndex={0}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "group/item flex items-center justify-between gap-4 whitespace-nowrap px-3 py-2 text-left transition-colors hover:text-forest",
-                  childActive && "text-forest",
-                )}
-              >
-                <span>{child.label}</span>
-                <ChevronsRight
+          <div className="flex flex-col gap-1 border border-border bg-background p-2 shadow-[0_18px_44px_-22px_rgba(31,38,32,0.3)]">
+            {group.children.map((child, i) => {
+              const childActive = pathname === child.href;
+              return (
+                <Link
+                  key={child.href}
+                  ref={i === 0 ? firstLinkRef : undefined}
+                  href={child.href}
+                  role="menuitem"
+                  tabIndex={0}
+                  onClick={() => setOpen(false)}
                   className={cn(
-                    "size-3 shrink-0 text-gold transition-all duration-200",
-                    childActive
-                      ? "translate-x-0 opacity-100"
-                      : "-translate-x-1 opacity-0 group-hover/item:translate-x-0 group-hover/item:opacity-100",
+                    "group/item flex items-center justify-between gap-4 whitespace-nowrap px-3 py-2 text-left transition-colors hover:text-forest",
+                    childActive && "text-forest",
                   )}
-                />
-              </Link>
-            );
-          })}
+                >
+                  <span>{child.label}</span>
+                  <ChevronsRight
+                    className={cn(
+                      "size-3 shrink-0 text-gold transition-all duration-200",
+                      childActive
+                        ? "translate-x-0 opacity-100"
+                        : "-translate-x-1 opacity-0 group-hover/item:translate-x-0 group-hover/item:opacity-100",
+                    )}
+                  />
+                </Link>
+              );
+            })}
+          </div>
         </div>
-      </div>
       )}
     </div>
   );
@@ -187,7 +190,7 @@ export function Nav() {
           : "py-5 bg-transparent",
       )}
     >
-      <div className="mx-auto grid max-w-[1440px] grid-cols-2 items-center gap-8 px-6 md:px-12 lg:grid-cols-[1fr_auto_1fr]">
+      <div className="mx-auto grid max-w-360 grid-cols-2 items-center gap-8 px-6 md:px-12 lg:grid-cols-[1fr_auto_1fr]">
         <Link
           href="/"
           className="flex items-center gap-2 justify-self-start text-forest"
@@ -214,7 +217,10 @@ export function Nav() {
                 key={item.href}
                 href={item.href}
                 aria-current={pathname === item.href ? "page" : undefined}
-                className={cn(NAV_LINK, pathname === item.href && NAV_LINK_ACTIVE)}
+                className={cn(
+                  NAV_LINK,
+                  pathname === item.href && NAV_LINK_ACTIVE,
+                )}
               >
                 {item.label}
               </Link>
@@ -234,7 +240,7 @@ export function Nav() {
             onClick={() => setOpen((o) => !o)}
             aria-label="Menu"
             aria-expanded={open}
-            className="flex flex-col gap-[5px] p-2 lg:hidden"
+            className="flex flex-col gap-1.25 p-2 lg:hidden"
           >
             <span className="block h-px w-5 bg-forest" />
             <span className="block h-px w-5 bg-forest" />

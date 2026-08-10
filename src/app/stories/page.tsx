@@ -51,7 +51,7 @@ export default function StoriesPage() {
         {/* A gentle invitation to contribute, so the page also gathers stories
             and not only tells them. Routes to a prefilled contact form. */}
         <section className="bg-cream-2 px-6 py-20 md:px-12 md:py-24">
-          <div className="mx-auto flex max-w-[680px] flex-col items-center text-center">
+          <div className="mx-auto flex max-w-170 flex-col items-center text-center">
             <div className="acw-section-label justify-center">
               <span className="acw-num">|</span>
               <span>Your story</span>
@@ -61,7 +61,7 @@ export default function StoriesPage() {
               <br />
               <em>still becoming?</em>
             </h2>
-            <p className="mt-6 max-w-[560px] text-[16px] leading-[1.7] text-muted-foreground">
+            <p className="mt-6 max-w-140 text-[16px] leading-[1.7] text-muted-foreground">
               If you carry a story of healing, of rising, of quiet faith, we
               would be honored to hold it. Share as much or as little as you
               wish, and only what you are ready to. Every story is shared

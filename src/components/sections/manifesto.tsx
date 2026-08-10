@@ -15,7 +15,9 @@ export function Manifesto() {
     const el = ref.current;
     if (!el) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     const ctx = gsap.context(() => {
       // ── Crown parallax ────────────────────────────────────────────────────
@@ -60,7 +62,10 @@ export function Manifesto() {
 
       // ── Tagline + attribution fade in after the quote ─────────────────────
       if (reduced) {
-        gsap.set([".manifesto-tagline", ".manifesto-attr"], { opacity: 1, y: 0 });
+        gsap.set([".manifesto-tagline", ".manifesto-attr"], {
+          opacity: 1,
+          y: 0,
+        });
       } else {
         gsap.from([".manifesto-tagline", ".manifesto-attr"], {
           opacity: 0,
@@ -85,7 +90,7 @@ export function Manifesto() {
       ref={ref}
       className="relative bg-cream-1 px-6 py-40 md:px-12 md:py-52"
     >
-      <div className="mx-auto max-w-[1100px] text-center">
+      <div className="mx-auto max-w-275 text-center">
         {/* Crown ornament — animated by GSAP above */}
         <div className="manifesto-crown mx-auto mb-12 h-16 w-16 text-gold opacity-0">
           <svg
@@ -105,9 +110,7 @@ export function Manifesto() {
         </div>
 
         {/* Quote — each line reveals as you scroll through */}
-        <h2
-          className="manifesto-quote relative font-display text-[clamp(40px,7vw,108px)] leading-none tracking-[-0.02em] text-forest"
-        >
+        <h2 className="manifesto-quote relative font-display text-[clamp(40px,7vw,108px)] leading-none tracking-[-0.02em] text-forest">
           <span
             aria-hidden
             className="pointer-events-none absolute -left-2 -top-6 font-display text-[1.4em] italic leading-none text-gold/40"
@@ -133,7 +136,7 @@ export function Manifesto() {
           </span>
         </h2>
 
-        <p className="manifesto-tagline mx-auto mt-14 max-w-[580px] text-[18px] leading-[1.6] text-muted-foreground">
+        <p className="manifesto-tagline mx-auto mt-14 max-w-145 text-[18px] leading-[1.6] text-muted-foreground">
           Your crown was never lost. Only waiting to be reclaimed.
         </p>
 
