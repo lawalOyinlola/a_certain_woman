@@ -38,7 +38,7 @@ export function Faq({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
       />
-      <Reveal className="mx-auto max-w-[1120px]">
+      <Reveal className="mx-auto max-w-280">
         <div className="acw-twoup">
           <div data-reveal className="acw-twoup-left">
             <div className="acw-section-label">

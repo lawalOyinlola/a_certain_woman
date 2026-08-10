@@ -21,13 +21,7 @@ export function FormField({
   children,
 }: FormFieldProps) {
   return (
-    <div
-      className={cn(
-        "acw-field",
-        full && "acw-field--full",
-        className,
-      )}
-    >
+    <div className={cn("acw-field", full && "acw-field--full", className)}>
       <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <label
           htmlFor={htmlFor}
@@ -43,7 +37,10 @@ export function FormField({
       </div>
       {children}
       {error && (
-        <span role="alert" className="mt-1.5 block font-sans text-[12px] tracking-normal text-destructive lowercase">
+        <span
+          role="alert"
+          className="mt-1.5 block font-sans text-[12px] tracking-normal text-destructive lowercase"
+        >
           {error}
         </span>
       )}
@@ -80,7 +77,7 @@ export function FieldTextarea({ className, ...props }: FieldTextareaProps) {
   return (
     <textarea
       className={cn(
-        "w-full min-h-[120px] resize-y border-0 border-b border-border bg-transparent py-3 font-sans text-[16px] text-ink outline-none transition-colors duration-200",
+        "w-full min-h-30 resize-y border-0 border-b border-border bg-transparent py-3 font-sans text-[16px] text-ink outline-none transition-colors duration-200",
         "placeholder:text-muted-foreground placeholder:opacity-50 placeholder:italic",
         "focus:border-gold",
         "disabled:opacity-40 disabled:cursor-not-allowed",

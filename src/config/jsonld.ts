@@ -1,4 +1,10 @@
-import { siteUrl, siteName, siteTagline, contact, socialUrls } from "@/config/site";
+import {
+  siteUrl,
+  siteName,
+  siteTagline,
+  contact,
+  socialUrls,
+} from "@/config/site";
 import { siteDescription } from "@/config/metadata";
 
 export const organizationLd = {
@@ -63,37 +69,43 @@ export const organizationLd = {
       {
         "@type": "Service",
         name: "Identity Academy",
-        description: "A structured pathway for healing, identity, confidence, and leadership for women and girls.",
+        description:
+          "A structured pathway for healing, identity, confidence, and leadership for women and girls.",
         provider: { "@id": `${siteUrl}/#organization` },
       },
       {
         "@type": "Service",
         name: "Faith & Flowers",
-        description: "A sacred wellness brunch experience for rest, reflection, worship, and renewal.",
+        description:
+          "A sacred wellness brunch experience for rest, reflection, worship, and renewal.",
         provider: { "@id": `${siteUrl}/#organization` },
       },
       {
         "@type": "Service",
         name: "Crown Table Spotlight Breakfast",
-        description: "An invitation-only leadership and recognition experience honoring women of impact, legacy, and purpose.",
+        description:
+          "An invitation-only leadership and recognition experience honoring women of impact, legacy, and purpose.",
         provider: { "@id": `${siteUrl}/#organization` },
       },
       {
         "@type": "Service",
         name: "Women's Healing Circles",
-        description: "Safe, intimate spaces for reflection, prayer, release, and restoration.",
+        description:
+          "Safe, intimate spaces for reflection, prayer, release, and restoration.",
         provider: { "@id": `${siteUrl}/#organization` },
       },
       {
         "@type": "Service",
         name: "Community Outreach",
-        description: "Compassion-led initiatives supporting vulnerable women, mothers, girls, and families.",
+        description:
+          "Compassion-led initiatives supporting vulnerable women, mothers, girls, and families.",
         provider: { "@id": `${siteUrl}/#organization` },
       },
       {
         "@type": "Service",
         name: "Men Who Stand",
-        description: "ACW's male engagement program for responsible fatherhood, positive masculinity, family leadership, and legacy-building.",
+        description:
+          "ACW's male engagement program for responsible fatherhood, positive masculinity, family leadership, and legacy-building.",
         provider: { "@id": `${siteUrl}/#organization` },
       },
     ],

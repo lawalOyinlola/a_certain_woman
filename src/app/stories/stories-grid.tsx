@@ -48,8 +48,7 @@ const ALL_STORIES = [
   {
     cat: "Community",
     title: "The Table That Held Her",
-    excerpt:
-      "How an ordinary Saturday brunch became a doorway to restoration.",
+    excerpt: "How an ordinary Saturday brunch became a doorway to restoration.",
     read: "5 min",
     img: "/media/Crown_Table/KCS_2197.jpg",
   },
@@ -76,7 +75,7 @@ export function StoriesGrid() {
   const ref = useGsapReveal<HTMLDivElement>({ batch: true, stagger: 0.08 });
 
   return (
-    <div className="mx-auto max-w-[1320px]">
+    <div className="mx-auto max-w-330">
       <div className="mb-16 flex flex-wrap justify-center gap-2 border-b border-border pb-6">
         {CATS.map((c) => (
           <button
@@ -96,7 +95,11 @@ export function StoriesGrid() {
 
       {/* key={cat} remounts the grid on filter change so useGsapReveal
           re-queries the new articles and re-initialises ScrollTrigger.batch. */}
-      <div ref={ref} key={cat} className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div
+        ref={ref}
+        key={cat}
+        className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+      >
         {filtered.map((s) => (
           <article
             key={s.title}

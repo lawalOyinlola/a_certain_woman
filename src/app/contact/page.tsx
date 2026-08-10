@@ -70,7 +70,7 @@ export default function ContactPage() {
           id="write"
           className="scroll-mt-28 bg-cream-1 px-6 py-24 md:px-12 md:py-28"
         >
-          <div className="mx-auto max-w-[1120px]">
+          <div className="mx-auto max-w-280">
             <Suspense fallback={null}>
               <ContactForm />
             </Suspense>

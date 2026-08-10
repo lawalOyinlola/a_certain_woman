@@ -46,7 +46,7 @@ const FOLLOW = [socials.instagram, socials.tiktok, socials.facebook].filter(
 export function Footer() {
   return (
     <footer className="overflow-hidden bg-forest px-6 pt-24 pb-9 text-cream-1 md:px-12">
-      <div className="mx-auto w-full max-w-[1320px]">
+      <div className="mx-auto w-full max-w-330">
         {/* Grand type lockup */}
         <div className="acw-footer-grand">
           <span>A</span>

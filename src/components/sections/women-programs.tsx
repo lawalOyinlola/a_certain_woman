@@ -34,12 +34,12 @@ function ProgramHead({
         <em>{p.title}.</em>
       </Title>
 
-      <p className="mx-auto mt-7 max-w-[680px] text-center text-[17px] leading-[1.65] text-cream-1/80">
+      <p className="mx-auto mt-7 max-w-170 text-center text-[17px] leading-[1.65] text-cream-1/80">
         {p.blurb}
       </p>
 
       {detail && p.body && (
-        <p className="mx-auto mt-4 max-w-[680px] text-center text-[16px] leading-[1.75] text-cream-1/60">
+        <p className="mx-auto mt-4 max-w-170 text-center text-[16px] leading-[1.75] text-cream-1/60">
           {p.body}
         </p>
       )}
@@ -56,7 +56,7 @@ function ProgramBody({
   detail?: boolean;
 }) {
   const features = detail ? p.features : p.features.slice(0, 4);
-  const bestFor = (detail && p.detailBestFor) ? p.detailBestFor : p.bestFor;
+  const bestFor = detail && p.detailBestFor ? p.detailBestFor : p.bestFor;
 
   return (
     <div className="grid gap-16 border-t border-cream-1/20 pt-12 md:grid-cols-2">
@@ -155,7 +155,7 @@ export function WomenPrograms({
       {withLabel && (
         <div
           data-reveal
-          className="mx-auto mb-14 flex max-w-[760px] flex-col items-center text-center"
+          className="mx-auto mb-14 flex max-w-190 flex-col items-center text-center"
         >
           <div className="acw-section-label acw-section-label--light">
             <span className="acw-num">|</span>
@@ -166,7 +166,7 @@ export function WomenPrograms({
             <br />
             <em className="text-gold-2">we&apos;ve built.</em>
           </h2>
-          <p className="mt-7 max-w-[640px] text-[17px] leading-[1.65] text-cream-1/70">
+          <p className="mt-7 max-w-160 text-[17px] leading-[1.65] text-cream-1/70">
             Every ACW experience is designed with intention, from the words
             spoken, to the table prepared, to the atmosphere created.
           </p>
@@ -174,7 +174,7 @@ export function WomenPrograms({
       )}
 
       {layout === "tabs" ? (
-        <div className="mx-auto flex max-w-[1320px] flex-col">
+        <div className="mx-auto flex max-w-330 flex-col">
           {/* Tabs — below the active title on mobile, above it on desktop */}
           <div
             data-reveal
@@ -186,7 +186,9 @@ export function WomenPrograms({
             {WOMEN_PROGRAMS.map((e, i) => (
               <button
                 key={e.id}
-                ref={(el) => { tabRefs.current[i] = el; }}
+                ref={(el) => {
+                  tabRefs.current[i] = el;
+                }}
                 id={`${e.id}-tab`}
                 role="tab"
                 aria-selected={active === i}
@@ -226,7 +228,7 @@ export function WomenPrograms({
             role="tabpanel"
             id={`${cur.id}-panel`}
             aria-labelledby={`${cur.id}-tab`}
-            className="acw-fade order-1 mx-auto w-full max-w-[1100px] md:order-2 md:mt-14"
+            className="acw-fade order-1 mx-auto w-full max-w-275 md:order-2 md:mt-14"
           >
             <ProgramHead p={cur} titleAs={titleAs} />
             <div className="mt-12 md:mt-14">
@@ -236,7 +238,7 @@ export function WomenPrograms({
         </div>
       ) : (
         // Stacked — every program shown in full so visitors scroll through each.
-        <div className="mx-auto max-w-[1100px] space-y-28 md:space-y-36">
+        <div className="mx-auto max-w-275 space-y-28 md:space-y-36">
           {WOMEN_PROGRAMS.map((p) => (
             <article
               key={p.id}

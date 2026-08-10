@@ -44,12 +44,15 @@ export function StoriesPreview() {
 
   return (
     <section id="stories" className="bg-cream-2 px-6 py-32 md:px-12 md:py-36">
-      <div ref={headerRef} className="mx-auto mb-14 max-w-[1320px]">
+      <div ref={headerRef} className="mx-auto mb-14 max-w-330">
         <div data-reveal className="acw-section-label">
           <span className="acw-num">|</span>
           <span>Stories of becoming</span>
         </div>
-        <div data-reveal className="mt-6 grid items-end gap-16 md:grid-cols-[1.2fr_1fr]">
+        <div
+          data-reveal
+          className="mt-6 grid items-end gap-16 md:grid-cols-[1.2fr_1fr]"
+        >
           <h2 className="acw-display">
             Every woman
             <br />
@@ -63,11 +66,14 @@ export function StoriesPreview() {
         </div>
       </div>
 
-      <div ref={cardsRef} className="mx-auto grid max-w-[1320px] gap-6 md:grid-cols-3">
+      <div
+        ref={cardsRef}
+        className="mx-auto grid max-w-330 gap-6 md:grid-cols-3"
+      >
         {STORIES.map((s) => (
           <article
             key={s.title}
-            className="group flex min-h-[320px] flex-col border border-border bg-cream-1 p-10 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold hover:shadow-[0_28px_60px_-28px_rgba(31,38,32,0.18)]"
+            className="group flex min-h-80 flex-col border border-border bg-cream-1 p-10 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold hover:shadow-[0_28px_60px_-28px_rgba(31,38,32,0.18)]"
           >
             <small className="text-[10px] uppercase tracking-[0.32em] text-gold">
               {s.cat}

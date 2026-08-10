@@ -31,6 +31,12 @@ export const contact = {
 export const mailtoHref = `mailto:${contact.email}`;
 export const telHref = `tel:${contact.phoneE164}`;
 
+/** Mobile money numbers accepted for donations and contributions. */
+export const mobileMoney = [
+  { provider: "Orange Money", number: "078 733 359" },
+  { provider: "Afri Money", number: "033 493 008" },
+] as const;
+
 /**
  * The reasons offered in the contact form's "Reason for Contact" dropdown.
  * Single-sourced here so deep links (`contactHref`) and the form stay in sync;

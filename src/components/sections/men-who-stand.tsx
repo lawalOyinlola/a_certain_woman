@@ -27,9 +27,12 @@ export function MenWhoStand({
       id="men-who-stand"
       className="relative bg-cream-2 px-6 py-32 md:px-12 md:py-40"
     >
-      <div className="mx-auto max-w-[1120px]">
+      <div className="mx-auto max-w-280">
         {withLabel && (
-          <div data-reveal className="mb-14 flex flex-col items-center text-center">
+          <div
+            data-reveal
+            className="mb-14 flex flex-col items-center text-center"
+          >
             <div className="acw-section-label">
               <span className="acw-num">{MEN.n}.</span>
               <span>{MEN.eyebrow}</span>
@@ -37,7 +40,7 @@ export function MenWhoStand({
             <h2 className="acw-display acw-display--center mt-6">
               Men who <em>stand.</em>
             </h2>
-            <p className="mt-5 max-w-[560px] font-display text-[18px] italic text-muted-foreground">
+            <p className="mt-5 max-w-140 font-display text-[18px] italic text-muted-foreground">
               {MEN.sub}
             </p>
           </div>
@@ -57,11 +60,7 @@ export function MenWhoStand({
                   size="pill"
                   className="w-fit"
                 >
-                  <a
-                    href={MEN.pdf}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={MEN.pdf} target="_blank" rel="noopener noreferrer">
                     Read the Journal <ArrowRight />
                   </a>
                 </Button>
@@ -185,8 +184,8 @@ function EventBadge({
       {/* Stamp shape */}
       <div
         className={`
-          relative flex h-[88px] w-[88px] flex-col items-center justify-center
-          rounded-full border-2 text-center md:h-[132px] md:w-[132px]
+          relative flex h-22 w-22 flex-col items-center justify-center
+          rounded-full border-2 text-center md:h-33 md:w-33
           ${
             isToday
               ? "border-gold bg-gold text-cream-1 shadow-[0_0_0_4px_rgba(182,145,74,0.18)] md:shadow-[0_0_0_6px_rgba(182,145,74,0.18)]"

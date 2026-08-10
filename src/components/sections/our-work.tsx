@@ -43,7 +43,7 @@ const AREAS = [
 export function OurWork() {
   return (
     <section className="bg-cream-2 px-6 py-24 md:px-12 md:py-28">
-      <Reveal batch stagger={0.08} className="mx-auto max-w-[1120px]">
+      <Reveal batch stagger={0.08} className="mx-auto max-w-280">
         <div data-reveal className="flex flex-col items-center text-center">
           <div className="acw-section-label">
             <span className="acw-num">|</span>
@@ -52,7 +52,7 @@ export function OurWork() {
           <h2 className="acw-page-h2 mt-6">
             How we <em>serve.</em>
           </h2>
-          <p className="mt-6 max-w-[620px] text-[16px] leading-[1.7] text-ink-2">
+          <p className="mt-6 max-w-155 text-[16px] leading-[1.7] text-ink-2">
             A Certain Woman works at the intersection of faith, healing,
             identity, leadership, and community across five connected areas.
           </p>

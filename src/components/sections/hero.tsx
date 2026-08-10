@@ -37,7 +37,7 @@ export function Hero() {
     >
       {/* parallax sprigs */}
       <div
-        className="pointer-events-none absolute top-12 -left-36 h-[600px] w-[400px] text-forest opacity-30"
+        className="pointer-events-none absolute top-12 -left-36 h-150 w-100 text-forest opacity-30"
         style={{
           transform: `translate3d(0, ${scrollY * 0.15}px, 0) rotate(-12deg)`,
         }}
@@ -45,7 +45,7 @@ export function Hero() {
         <Sprig />
       </div>
       <div
-        className="pointer-events-none absolute -bottom-10 -right-24 h-[390px] w-[260px] text-forest opacity-30"
+        className="pointer-events-none absolute -bottom-10 -right-24 h-97.5 w-65 text-forest opacity-30"
         style={{
           transform: `translate3d(0, ${scrollY * -0.1}px, 0) rotate(168deg)`,
         }}
@@ -55,11 +55,6 @@ export function Hero() {
 
       <div className="relative w-full max-w-5xl flex-center flex-col gap-8 text-center">
         {/* Eyebrow */}
-        <div className="acw-fade flex-center gap-4 text-[11px] uppercase tracking-[0.32em] text-gold">
-          <Crown />
-          <span>A FAITH-ROOTED WOMEN&apos;S MOVEMENT</span>
-          <Crown flip />
-        </div>
 
         {/* Tagline — stacked mega */}
         <div className="flex-center flex-col">
@@ -74,6 +69,11 @@ export function Hero() {
           </h1>
         </div>
 
+        <div className="acw-fade flex-center gap-4 text-[11px] uppercase tracking-[0.32em] text-gold">
+          <Crown />
+          <span>A FAITH-ROOTED WOMEN&apos;S MOVEMENT</span>
+          <Crown flip />
+        </div>
         {/* Rule with star */}
         <div className="acw-rise acw-rise-delay-4 flex items-center justify-center gap-4 text-gold">
           <span className="acw-rule-line" />
@@ -81,7 +81,7 @@ export function Hero() {
           <span className="acw-rule-line" />
         </div>
 
-        <p className="acw-rise acw-rise-delay-4 mx-auto max-w-[640px] text-balance text-[15px] leading-[1.7] text-ink-2">
+        <p className="acw-rise acw-rise-delay-4 mx-auto max-w-160 text-balance text-[15px] leading-[1.7] text-ink-2">
           Restoring identity. Nurturing healing. Raising leaders. Creating safe
           spaces where women are seen, heard, healed, and crowned with purpose.
         </p>

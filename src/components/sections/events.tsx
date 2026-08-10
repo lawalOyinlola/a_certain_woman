@@ -34,7 +34,7 @@ export function Events() {
 
     return (
       <section id="events" className="relative px-6 py-24 md:px-12 md:py-36">
-        <Reveal batch className="mx-auto max-w-[1280px]">
+        <Reveal batch className="mx-auto max-w-7xl">
           <SectionHeader mode="upcoming" />
 
           <FeaturedEvent event={next} mode="upcoming" />
@@ -74,7 +74,7 @@ export function Events() {
 
   return (
     <section id="events" className="relative px-6 py-24 md:px-12 md:py-36">
-      <Reveal batch className="mx-auto max-w-[1280px]">
+      <Reveal batch className="mx-auto max-w-7xl">
         <SectionHeader mode="past" />
 
         <FeaturedEvent event={latest} mode="past" />
@@ -102,7 +102,7 @@ function SectionHeader({ mode }: { mode: Mode }) {
           <br />
           <em>gathering.</em>
         </h2>
-        <p className="mx-auto mt-6 max-w-[620px] text-[15px] leading-[1.8] text-muted-foreground">
+        <p className="mx-auto mt-6 max-w-155 text-[15px] leading-[1.8] text-muted-foreground">
           Sisterhood is built in rooms. Here is the next room we&apos;re
           building, and a glimpse of the ones already filled.
         </p>
@@ -121,7 +121,7 @@ function SectionHeader({ mode }: { mode: Mode }) {
         <br />
         <em>gathering.</em>
       </h2>
-      <p className="mx-auto mt-6 max-w-[620px] text-[15px] leading-[1.8] text-muted-foreground">
+      <p className="mx-auto mt-6 max-w-155 text-[15px] leading-[1.8] text-muted-foreground">
         The next room is still being prepared. While we wait, look back at the
         sisterhood already gathered.
       </p>
@@ -248,7 +248,7 @@ function FeaturedEvent({ event, mode }: { event: ACWEvent; mode: Mode }) {
             {event.theme}
           </p>
         )}
-        <p className="mt-6 max-w-[520px] text-[15px] leading-[1.85] text-ink-2">
+        <p className="mt-6 max-w-130 text-[15px] leading-[1.85] text-ink-2">
           {event.blurb}
         </p>
 

@@ -72,9 +72,7 @@ export async function POST(req: Request) {
           ? stripHtml(body.email).slice(0, 320)
           : undefined,
       phone:
-        typeof body.phone === "string"
-          ? sanitizePhone(body.phone)
-          : undefined,
+        typeof body.phone === "string" ? sanitizePhone(body.phone) : undefined,
     };
 
     // Drop empty strings so the "at least one" check works correctly
@@ -84,7 +82,8 @@ export async function POST(req: Request) {
     const result = schema.safeParse(sanitized);
 
     if (!result.success) {
-      const firstIssue = result.error.issues[0]?.message ?? "Invalid submission.";
+      const firstIssue =
+        result.error.issues[0]?.message ?? "Invalid submission.";
       return NextResponse.json({ error: firstIssue }, { status: 400 });
     }
 

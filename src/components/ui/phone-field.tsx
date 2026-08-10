@@ -98,7 +98,7 @@ function CountrySelectMenu({
             return (
               <SelectItem key={code} value={code}>
                 <span className="flex w-full items-center gap-2.5">
-                  <span className="flex h-3.5 w-5 shrink-0 overflow-hidden rounded-[2px] bg-black/5">
+                  <span className="flex h-3.5 w-5 shrink-0 overflow-hidden rounded-xs bg-black/5">
                     {Flag ? <Flag title={o.label} /> : null}
                   </span>
                   <span className="flex-1 truncate">{o.label}</span>

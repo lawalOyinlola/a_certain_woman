@@ -31,7 +31,11 @@ function useBannerVisible(eventId: string): [boolean, () => void] {
   // No external subscription needed; banner is write-once per session.
   const subscribe = useCallback(() => () => {}, []);
 
-  const visible = useSyncExternalStore(subscribe, clientSnapshot, serverSnapshot);
+  const visible = useSyncExternalStore(
+    subscribe,
+    clientSnapshot,
+    serverSnapshot,
+  );
   const [localDismissed, setLocalDismissed] = useState(false);
 
   const dismiss = useCallback(() => {
@@ -56,9 +60,9 @@ export function AnnouncementBanner() {
     <div
       role="complementary"
       aria-label="Upcoming event announcement"
-      className="fixed inset-x-0 top-[56px] z-40 bg-forest text-cream-1 md:top-[64px]"
+      className="fixed inset-x-0 top-14 z-40 bg-forest text-cream-1 md:top-16"
     >
-      <div className="mx-auto flex max-w-[1440px] items-center gap-3 px-4 py-2 md:px-6">
+      <div className="mx-auto flex max-w-360 items-center gap-3 px-4 py-2 md:px-6">
         {/* Content — clicks through to event and dismisses */}
         <Link
           href={`/events#${event.id}`}
