@@ -96,9 +96,13 @@ export function EventsBrowser({
   // page isn't in the DOM yet, so the browser has nothing to jump to and the
   // visitor is dropped at the top of the list instead. Page forward far enough
   // to render it, then scroll once it exists.
-  const pendingHashRef = useRef<string | null>(null);
+  // Settled once the target has been scrolled to, or once we know the fragment
+  // points at nothing. Until then this runs again after each step below.
+  const hashSettledRef = useRef(false);
 
   useEffect(() => {
+    if (hashSettledRef.current) return;
+
     // A fragment like "#%" is not valid percent-encoding, and decoding it
     // throws. Left unguarded that takes the whole list down with it, so a
     // malformed hash is treated as pointing at nothing.
@@ -106,35 +110,46 @@ export function EventsBrowser({
     try {
       id = decodeURIComponent(window.location.hash.slice(1));
     } catch {
+      hashSettledRef.current = true;
       return;
     }
-    if (!id) return;
+
+    // Resolve against every event rather than the visible tab, so arriving
+    // with a tab or search already applied still finds the target.
+    if (!id || !all.some((e) => e.id === id)) {
+      hashSettledRef.current = true;
+      return;
+    }
+
     const index = filtered.findIndex((e) => e.id === id);
-    if (index === -1) return;
-    pendingHashRef.current = id;
+
     // set-state-in-effect: the hash lives on `window`, which does not exist
     // during the server render, so reading it in a state initialiser instead
-    // would make the server and client disagree on how many events to render.
-    // An effect is the only place this can be read safely, and it runs once.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setVisibleCount((current) =>
-      index < current
-        ? current
-        : Math.ceil((index + 1) / PAGE_SIZE) * PAGE_SIZE,
-    );
-    // Runs once on mount: the hash is the entry URL, not something that
-    // changes as the visitor filters.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // would make the server and client disagree on what to render. An effect
+    // is the only place it can be read safely. Each branch below moves one
+    // step closer to showing the target and then settles.
+    /* eslint-disable react-hooks/set-state-in-effect */
 
-  useEffect(() => {
-    const id = pendingHashRef.current;
-    if (!id) return;
+    // Hidden by the active tab or the search box. Widen to the full list;
+    // the visitor asked for this event specifically.
+    if (index === -1) {
+      setTab("all");
+      setQuery("");
+      return;
+    }
+
+    // Present, but past the last rendered page.
+    if (index >= visibleCount) {
+      setVisibleCount(Math.ceil((index + 1) / PAGE_SIZE) * PAGE_SIZE);
+      return;
+    }
+    /* eslint-enable react-hooks/set-state-in-effect */
+
     const target = document.getElementById(id);
     if (!target) return;
-    pendingHashRef.current = null;
+    hashSettledRef.current = true;
     target.scrollIntoView({ block: "start" });
-  }, [visibleCount]);
+  }, [all, filtered, visibleCount]);
 
   return (
     <>
