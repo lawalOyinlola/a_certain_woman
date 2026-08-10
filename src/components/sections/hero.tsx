@@ -33,16 +33,19 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="acw-grain acw-bg-hero relative flex min-h-screen items-center justify-center overflow-hidden px-6 pb-10 pt-28 md:px-12 md:pt-32"
+      className="acw-grain acw-bg-hero relative flex min-h-screen items-center justify-center overflow-hidden px-6 pb-10 pt-30 md:px-12 md:pt-40"
     >
-      {/* parallax sprigs */}
+      {/* Parallax sprigs. The scroll transform sits on the outer element and
+          the breeze on the inner one, so neither overwrites the other. */}
       <div
         className="pointer-events-none absolute top-12 -left-36 h-150 w-100 text-forest opacity-30"
         style={{
           transform: `translate3d(0, ${scrollY * 0.15}px, 0) rotate(-12deg)`,
         }}
       >
-        <Sprig />
+        <div className="acw-sway h-full w-full">
+          <Sprig />
+        </div>
       </div>
       <div
         className="pointer-events-none absolute -bottom-10 -right-24 h-97.5 w-65 text-forest opacity-30"
@@ -50,7 +53,9 @@ export function Hero() {
           transform: `translate3d(0, ${scrollY * -0.1}px, 0) rotate(168deg)`,
         }}
       >
-        <Sprig />
+        <div className="acw-sway acw-sway--slow h-full w-full">
+          <Sprig />
+        </div>
       </div>
 
       <div className="relative w-full max-w-5xl flex-center flex-col gap-8 text-center">
