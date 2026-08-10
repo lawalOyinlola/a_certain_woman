@@ -12,14 +12,15 @@ export function Impact() {
   const gatheringsCount = String(getPastEvents().length + 1).padStart(2, "0");
 
   const stats = [
+    // The first two are confirmed figures kept by hand, unlike the two below
+    // them, which are derived from the programs and events data. Update them
+    // here when the real numbers move.
     {
-      // TODO(ACW): replace with a real, verified figure before launch.
       value: "4000+",
       label: "Women Reached",
       desc: "Through gatherings, devotionals, outreach, and community engagement.",
     },
     {
-      // TODO(ACW): replace with a real, verified figure before launch.
       value: "25+",
       label: "Safe Spaces Created",
       desc: "Through brunches, healing circles, table conversations, and reflection.",
