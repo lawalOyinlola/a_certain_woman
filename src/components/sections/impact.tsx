@@ -6,6 +6,9 @@ import { getPastEvents } from "@/lib/data/events";
 
 export function Impact() {
   const programsCount = String(TOTAL_PROGRAMS).padStart(2, "0");
+  // One early gathering has no photographs or recap, so it has no entry in
+  // EVENTS and cannot be counted from the data. It still happened, so it is
+  // added back here. Drop the +1 if that gathering is ever added to events.ts.
   const gatheringsCount = String(getPastEvents().length + 1).padStart(2, "0");
 
   const stats = [
