@@ -281,8 +281,23 @@
   }
 }
 
+/* Hero sprigs — a slow drift and tilt, as if caught in a light breeze. The
+   parallax transform lives on the parent, so this animates a nested wrapper
+   to keep the two transforms from overwriting each other. */
+@keyframes acw-sway {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.4deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1.4deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .acw-programs-hint {
+  .acw-programs-hint,
+  .acw-sway,
+  .acw-float {
     animation: none;
   }
 }
@@ -706,5 +721,18 @@
   }
   .acw-diamond-spacer {
     @apply mx-[22px] opacity-60;
+  }
+  /* Long, offset cycles so the two hero sprigs never sway in step with each
+     other — in lockstep it reads as a loop rather than as air moving. */
+  .acw-sway {
+    animation: acw-sway 11s ease-in-out infinite;
+    will-change: transform;
+  }
+  .acw-sway--slow {
+    animation-duration: 15s;
+    animation-delay: -4s;
+  }
+  .acw-float {
+    animation: acw-float 2.6s ease-in-out infinite;
   }
 }

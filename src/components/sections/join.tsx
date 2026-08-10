@@ -316,6 +316,16 @@ export function Join({
           </div>
 
           <div className="relative">
+            {/* Mounted from the outset and left in place. A live region that
+                appears at the same moment as its text is unreliable — screen
+                readers generally only announce changes to regions they were
+                already watching, so creating this alongside the success
+                message would often say nothing at all. */}
+            <p role="status" aria-live="polite" className="sr-only">
+              {status === "success"
+                ? "You are subscribed. Your first letter will find you soon."
+                : ""}
+            </p>
             {status !== "success" ? (
               <form
                 onSubmit={onSubmit}
@@ -447,6 +457,8 @@ export function Join({
                 </small>
               </form>
             ) : (
+              // Purely visual. The announcement is handled by the live region
+              // above, which was already mounted when this appeared.
               <div className="flex flex-col items-center gap-4 py-10 text-center">
                 <div className="text-gold">
                   <svg

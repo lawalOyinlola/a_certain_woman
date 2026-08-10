@@ -6,17 +6,21 @@ import { getPastEvents } from "@/lib/data/events";
 
 export function Impact() {
   const programsCount = String(TOTAL_PROGRAMS).padStart(2, "0");
+  // One early gathering has no photographs or recap, so it has no entry in
+  // EVENTS and cannot be counted from the data. It still happened, so it is
+  // added back here. Drop the +1 if that gathering is ever added to events.ts.
   const gatheringsCount = String(getPastEvents().length + 1).padStart(2, "0");
 
   const stats = [
+    // The first two are confirmed figures kept by hand, unlike the two below
+    // them, which are derived from the programs and events data. Update them
+    // here when the real numbers move.
     {
-      // TODO(ACW): replace with a real, verified figure before launch.
       value: "4000+",
       label: "Women Reached",
       desc: "Through gatherings, devotionals, outreach, and community engagement.",
     },
     {
-      // TODO(ACW): replace with a real, verified figure before launch.
       value: "25+",
       label: "Safe Spaces Created",
       desc: "Through brunches, healing circles, table conversations, and reflection.",
