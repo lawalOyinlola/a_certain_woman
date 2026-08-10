@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EventDetail } from "@/components/sections/event-detail";
 import { ArrowRight } from "@/components/site/icons";
 import { Button } from "@/components/ui/button";
@@ -90,6 +90,43 @@ export function EventsBrowser({
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = filtered.length > visibleCount;
+
+  // Deep links land here as /events#<event-id>, from the home page cards, the
+  // announcement banner, the JSON-LD, and llms.txt. An event past the first
+  // page isn't in the DOM yet, so the browser has nothing to jump to and the
+  // visitor is dropped at the top of the list instead. Page forward far enough
+  // to render it, then scroll once it exists.
+  const pendingHashRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) return;
+    const index = filtered.findIndex((e) => e.id === id);
+    if (index === -1) return;
+    pendingHashRef.current = id;
+    // set-state-in-effect: the hash lives on `window`, which does not exist
+    // during the server render, so reading it in a state initialiser instead
+    // would make the server and client disagree on how many events to render.
+    // An effect is the only place this can be read safely, and it runs once.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setVisibleCount((current) =>
+      index < current
+        ? current
+        : Math.ceil((index + 1) / PAGE_SIZE) * PAGE_SIZE,
+    );
+    // Runs once on mount: the hash is the entry URL, not something that
+    // changes as the visitor filters.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const id = pendingHashRef.current;
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (!target) return;
+    pendingHashRef.current = null;
+    target.scrollIntoView({ block: "start" });
+  }, [visibleCount]);
 
   return (
     <>
