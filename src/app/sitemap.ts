@@ -11,7 +11,6 @@ const ROUTES: Array<{
   { path: "/founder", priority: 0.7, changeFrequency: "yearly" },
   { path: "/programs", priority: 0.9, changeFrequency: "monthly" },
   { path: "/events", priority: 0.9, changeFrequency: "weekly" },
-  { path: "/stories", priority: 0.8, changeFrequency: "weekly" },
   { path: "/partner", priority: 0.8, changeFrequency: "monthly" },
   { path: "/gallery", priority: 0.6, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.7, changeFrequency: "yearly" },

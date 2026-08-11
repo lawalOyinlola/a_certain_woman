@@ -28,8 +28,13 @@ const nextConfig: NextConfig = {
       { source: "/programmes", destination: "/programs", permanent: true },
       { source: "/programme", destination: "/programs", permanent: true },
       { source: "/event", destination: "/events", permanent: true },
-      { source: "/story", destination: "/stories", permanent: true },
-      { source: "/testimonials", destination: "/stories", permanent: true },
+      // Stories is shelved until there are real ones to tell. Its URL and the
+      // words people search for instead all land on the gallery, which is the
+      // closest thing the site now has to the stories of a gathering. These
+      // stay temporary (307) so the URL can be reclaimed when the page returns.
+      { source: "/stories", destination: "/gallery", permanent: false },
+      { source: "/story", destination: "/gallery", permanent: false },
+      { source: "/testimonials", destination: "/gallery", permanent: false },
       { source: "/photos", destination: "/gallery", permanent: true },
       { source: "/media", destination: "/gallery", permanent: true },
       { source: "/partners", destination: "/partner", permanent: true },

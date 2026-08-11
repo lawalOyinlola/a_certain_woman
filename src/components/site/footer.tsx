@@ -24,7 +24,6 @@ const NAV_COLS = [
     h: "Engage",
     items: [
       ["Partner With Us", "/partner"],
-      ["Stories", "/stories"],
       ["Gallery", "/gallery"],
       ["Contact", "/contact"],
     ] as const,

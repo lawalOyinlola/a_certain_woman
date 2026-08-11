@@ -9,7 +9,7 @@ import { SITE_ROUTES } from "@/lib/routes";
 export const metadata: Metadata = {
   title: "Page Not Found",
   description:
-    "That page could not be found. Browse A Certain Woman's programs, events, stories, and ways to partner.",
+    "That page could not be found. Browse A Certain Woman's programs, events, gallery, and ways to partner.",
   // A 404 should never be indexed, and should not be treated as a canonical
   // destination for whatever URL happened to produce it.
   robots: { index: false, follow: true },

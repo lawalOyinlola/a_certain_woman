@@ -67,7 +67,6 @@ ${past.length === 0 ? "_No past events yet._" : past.map(eventLine).join("\n")}
 - [Programs](${siteUrl}/programs): every signature program, who it's for, and how to engage.
 - [Events](${siteUrl}/events): browse and search every upcoming and past gathering.
 - [Gallery](${siteUrl}/gallery): photos and films from each gathering, filterable by event.
-- [Stories](${siteUrl}/stories): testimonies, journal posts, founder reflections, and impact stories.
 - [Partner With Us](${siteUrl}/partner): sponsorship, CSR, church, government, and donor pathways.
 - [Contact](${siteUrl}/contact): write to ACW to join, partner, attend, invite, volunteer, or share your story.
 
