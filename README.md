@@ -17,9 +17,11 @@ A faith-rooted women's movement based in Freetown, Sierra Leone — restoring he
 
 ## Getting started
 
+This project uses [pnpm](https://pnpm.io).
+
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 Open <http://localhost:3000>.
@@ -27,12 +29,10 @@ Open <http://localhost:3000>.
 Other scripts:
 
 ```bash
-npm run build   # Production build
-npm run start   # Run the production build
-npm run lint    # ESLint
+pnpm build   # Production build
+pnpm start   # Run the production build
+pnpm lint    # ESLint
 ```
-
-> Both `package-lock.json` and `pnpm-lock.yaml` are checked in. `package-lock.json` is the one kept current — prefer npm until the stray pnpm lockfile is removed.
 
 ## Environment
 
