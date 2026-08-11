@@ -217,9 +217,16 @@ Everything infinite is disabled under `prefers-reduced-motion`, and
 - Committed at **2560px on the long edge, quality 85**. Camera originals are
   6000×4000 and far past anything the site serves; the difference is invisible
   at display size and enormous on the wire.
-- Gallery order is shuffled per event, seeded by event id (`src/lib/shuffle.ts`),
-  so a set reads as a mix rather than a run of near-identical frames. Seeded
-  rather than random because the server and client must agree.
+- Order is shuffled in two places, both through `src/lib/shuffle.ts` and both
+  seeded, because an unseeded shuffle would give the server and the client
+  different orders and break hydration:
+  - **Event galleries** shuffle that event's photos with a seed derived from
+    the event id (`src/lib/data/events.ts`), so a set reads as a mix rather
+    than a run of near-identical frames and holds still between builds.
+  - **`/gallery`** shuffles the combined media of every event with a
+    `Date.now()` seed generated on the server and handed to `<Gallery>`.
+    `revalidate = 3600` means the mix changes at most hourly, and the cached
+    HTML keeps one order within each window.
 - Gallery uses a `2×2 → 4×n` asymmetric grid with `wide` (col-span-2) and
   `tall` (row-span-2) tiles; the video tile is `2×2`.
 - Event films lay out by count: one keeps the wide hero ratio at half width,
@@ -246,7 +253,7 @@ Everything infinite is disabled under `prefers-reduced-motion`, and
 
 ## 9. File map
 
-```
+```text
 src/
 ├── app/
 │   ├── layout.tsx          ← fonts, root <html>, root metadata

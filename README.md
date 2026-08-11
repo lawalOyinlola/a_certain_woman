@@ -53,7 +53,7 @@ If `NEXT_PUBLIC_SITE_URL` is unset the code falls back to `https://www.acertainw
 
 ## Project layout
 
-```
+```text
 src/
   app/                      # Routes (App Router)
     layout.tsx              # Root layout: fonts, root metadata, viewport
@@ -107,7 +107,10 @@ Most pages are Server Components so they can export `metadata`. Interactive page
 
 Events and programs are plain TypeScript data in `src/lib/data/`. Adding a gathering means adding an entry to `EVENTS` and dropping its photographs into `public/media/<event>/`. There is no CMS.
 
-Gallery order is shuffled per event, seeded by event id, so a set reads as a mix rather than a run of consecutive frames off the camera while staying identical between server and client.
+Photo order is shuffled in two places, both seeded so the server and client render the same order:
+
+- **Event galleries** (`src/lib/data/events.ts`) shuffle each event's photos with a seed derived from the event id. Stable across builds, so a returning visitor finds a gallery as they left it.
+- **The `/gallery` page** shuffles the combined media of every event with a `Date.now()` seed generated on the server and passed to `<Gallery>`. It sits behind `export const revalidate = 3600`, so the mix changes at most hourly and the cached HTML stays consistent within each window.
 
 ### Media
 
