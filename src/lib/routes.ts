@@ -19,7 +19,6 @@ export const SITE_ROUTES: SiteRoute[] = [
   { path: "/programs", label: "Programs" },
   { path: "/events", label: "Events" },
   { path: "/gallery", label: "Gallery" },
-  { path: "/stories", label: "Stories" },
   { path: "/partner", label: "Partner With Us" },
   { path: "/contact", label: "Contact" },
 ];

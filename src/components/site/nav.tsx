@@ -32,7 +32,7 @@ const items: NavItem[] = [
     label: "Our Story",
     children: [
       { label: "Founder's Letter", href: "/founder" },
-      { label: "Stories", href: "/stories" },
+      { label: "Gallery", href: "/gallery" },
     ],
   },
   { label: "Programs", href: "/programs" },
