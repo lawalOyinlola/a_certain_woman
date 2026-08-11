@@ -1,3 +1,5 @@
+import { seedFromString, shuffleSeeded } from "@/lib/shuffle";
+
 export type ACWProgramItem = { time: string; item: string };
 
 export type ACWEventVideo = {
@@ -217,7 +219,7 @@ const menWhoStandPhotos = [
   ...menWhoStandDay2Photos,
 ];
 
-export const EVENTS: ACWEvent[] = [
+const RAW_EVENTS: ACWEvent[] = [
   {
     id: "acw-launch-2026",
     date: "February 14, 2026",
@@ -323,21 +325,26 @@ export const EVENTS: ACWEvent[] = [
     theme: "Restoring strength. Redefining manhood. Building legacy.",
     tags: ["Launch"],
     location: "Freetown, Sierra Leone",
-    cover: "/media/a_man_who_stands/Man_stands_event_banner_202605291622.jpeg",
+    cover: "/media/a_man_who_stands/day1/KCS_2907.jpg",
     blurb:
       "A three-day celebration marking the launch of Men Who Stand, anchored in one verse: “Be on your guard; stand firm in the faith; be courageous; be strong” (1 Corinthians 16:13). Three days for men who are willing to heal, to be present, and to build something different. Honesty, faith, and the quiet work of becoming a man of character, legacy, and purpose.",
     photos: menWhoStandPhotos,
     videos: [
       {
         src: "/media/a_man_who_stands/VIDEO-2026-06-17-19-31-46.mp4",
+        // Distinct frames per clip: without a poster all three fell back to
+        // the event cover, so the film row read as the same image three times.
+        poster: "/media/a_man_who_stands/day2/KCS_3104.jpg",
         title: "Men Who Stand · The Podcast — Ep. 1",
       },
       {
         src: "/media/a_man_who_stands/VIDEO-2026-06-19-19-10-54.mp4",
+        poster: "/media/a_man_who_stands/day1/KCS_2732.jpg",
         title: "Men Who Stand · The Podcast — Ep. 2",
       },
       {
         src: "/media/a_man_who_stands/VIDEO-2026-06-24-16-35-47.mp4",
+        poster: "/media/a_man_who_stands/day2/KCS_3235.jpg",
         title: "Men Who Stand · Recap",
       },
     ],
@@ -345,6 +352,20 @@ export const EVENTS: ACWEvent[] = [
     program: [],
   },
 ];
+
+/**
+ * Galleries read as a mix rather than a run of consecutive frames from the
+ * photographer's card, which is how they arrive and which makes a set look
+ * mechanical: several near-identical shots of one moment land side by side.
+ *
+ * Seeded by event id, so the order is identical on the server and the client
+ * (shuffling with Math.random would break hydration) and stays put between
+ * builds — a visitor returning to a gallery finds it as they left it.
+ */
+export const EVENTS: ACWEvent[] = RAW_EVENTS.map((event) => ({
+  ...event,
+  photos: shuffleSeeded(event.photos, seedFromString(event.id)),
+}));
 
 function startOfDay(d: Date) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
