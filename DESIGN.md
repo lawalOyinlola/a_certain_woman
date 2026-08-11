@@ -165,7 +165,7 @@ Type & ornament:
 
 Section backgrounds (replace inline gradients):
 - `.acw-bg-hero` — hero radial-cream gradient.
-- `.acw-bg-cream-down` — top-down cream-1 → cream-2 gradient (Pillars).
+- `.acw-bg-cream-down` — top-down cream-1 → cream-2 gradient (Partner).
 - `.acw-bg-cream-up` — bottom-up cream-2 → cream-1 gradient (Join).
 - `.acw-bg-quote-glow` — gold radial highlight, used over forest sections.
 - `.acw-grain` — subtle two-spot grain overlay.
@@ -192,18 +192,39 @@ Layout utilities (`@layer utilities`):
 | Hover (links, buttons) | 250 ms | `ease` |
 | Manifesto parallax | drives transform from scroll progress, 1:1 | linear |
 | Marquee | 40 s | `linear` infinite |
+| Hero sprig drift (`.acw-sway`) | 11 s, 15 s on the second sprig | `ease-in-out` infinite |
+| Loading mark (`.acw-float`) | 2.6 s | `ease-in-out` infinite |
+| Newsletter panel reveal | 1000 ms, fades and scales from 0.94 | `power2.out` |
+| Delivery toggle thumb | 300 ms, slides and resizes | `cubic-bezier(.34,1.56,.64,1)` |
+| Field swap on channel change | 350 ms, 60 ms stagger | `power2.out` |
 
-Scroll-linked effects use `requestAnimationFrame`-friendly listeners with
-`{ passive: true }`. Intersection observers gate counters and card reveals
-so animations only fire once visible.
+Scroll reveals run through GSAP ScrollTrigger, wrapped by `useGsapReveal` and
+the `<Reveal>` helper. Pass `batch` when the targets are spread down a long
+section: without it the whole section shares one trigger and anything below the
+fold finishes animating before anyone scrolls to it.
+
+Two transforms cannot share one element. The hero sprigs keep their scroll
+parallax on the outer element and their drift on a nested wrapper.
+
+Everything infinite is disabled under `prefers-reduced-motion`, and
+`useGsapReveal` returns early when it is set.
 
 ---
 
 ## 7. Imagery
 
-- Always served via `next/image` from `/public/photos/*`.
+- Always served via `next/image` from `/public/media/*`, one folder per event.
+- Committed at **2560px on the long edge, quality 85**. Camera originals are
+  6000×4000 and far past anything the site serves; the difference is invisible
+  at display size and enormous on the wire.
+- Gallery order is shuffled per event, seeded by event id (`src/lib/shuffle.ts`),
+  so a set reads as a mix rather than a run of near-identical frames. Seeded
+  rather than random because the server and client must agree.
 - Gallery uses a `2×2 → 4×n` asymmetric grid with `wide` (col-span-2) and
   `tall` (row-span-2) tiles; the video tile is `2×2`.
+- Event films lay out by count: one keeps the wide hero ratio at half width,
+  two split the row, three or more go 3-up and wrap. Single column on mobile.
+  Give every film its own `poster`, or they all fall back to the event cover.
 - Hover state: photo zooms 1.03–1.04 over 700 ms; a forest gradient overlay
   with caption fades in at the bottom.
 - Inset borders (`absolute inset-3 border border-cream-1/30`) add a print-frame
@@ -228,31 +249,47 @@ so animations only fire once visible.
 ```
 src/
 ├── app/
-│   ├── layout.tsx          ← fonts, root <html>
+│   ├── layout.tsx          ← fonts, root <html>, root metadata
 │   ├── globals.css         ← all design tokens + .acw-* primitives
 │   ├── page.tsx            ← homepage composition
-│   ├── events/page.tsx     ← /events
+│   ├── not-found.tsx       ← 404 with nearest-page suggestion
+│   ├── loading.tsx         ← route-level loading fallback
+│   ├── events/             ← /events (server page + client browser)
 │   └── gallery/page.tsx    ← /gallery
 ├── components/
-│   ├── ui/                 ← shadcn primitives
+│   ├── ui/                 ← shadcn primitives, lightbox, phone field
 │   ├── site/
 │   │   ├── nav.tsx
 │   │   ├── footer.tsx
+│   │   ├── page-hero.tsx
+│   │   ├── reveal.tsx      ← client wrapper for GSAP scroll reveals
 │   │   └── icons.tsx       ← Crown, Sprig, Diamond, PillarIcon, Play
 │   └── sections/
 │       ├── hero.tsx
-│       ├── about.tsx
-│       ├── pillars.tsx
-│       ├── quotes.tsx
+│       ├── who-we-serve.tsx
 │       ├── manifesto.tsx
+│       ├── impact.tsx
+│       ├── founder.tsx
+│       ├── anthem.tsx
 │       ├── events.tsx
 │       ├── event-detail.tsx
 │       ├── gallery.tsx
+│       ├── programs.tsx / women-programs.tsx / men-who-stand.tsx
+│       ├── our-work.tsx
+│       ├── faq.tsx
 │       └── join.tsx
+├── hooks/use-gsap-reveal.ts
 └── lib/
     ├── data/events.ts      ← single source for event + photo content
+    ├── data/programs.ts    ← programs content
+    ├── routes.ts           ← public routes + nearest match for the 404
+    ├── shuffle.ts          ← seeded, hydration-safe shuffling
     └── utils.ts            ← shadcn `cn()`
 ```
+
+The homepage composes Hero, WhoWeServe, Manifesto, Impact, Founder, Anthem,
+and Join. Programs, events, and the men's work each have their own section
+components reused across the inner pages.
 
 ---
 
