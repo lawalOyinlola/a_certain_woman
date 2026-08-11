@@ -351,6 +351,22 @@ const RAW_EVENTS: ACWEvent[] = [
     speakers: [],
     program: [],
   },
+  {
+    id: "faith-and-flowers-fruitful-woman-2026",
+    date: "October 31, 2026",
+    dateISO: "2026-10-31",
+    title: "Faith & Flowers",
+    subtitle: "The Fruitful Woman",
+    theme: "A celebration of abundance, grace & growth",
+    tags: ["Edition II"],
+    location: "Freetown, Sierra Leone",
+    cover: "/media/Faith_and_Flowers_II/the-fruitful-woman-banner.jpg",
+    blurb:
+      "Faith & Flowers returns for its second edition with The Fruitful Woman, an intimate faith, feelings and fashion experience exploring what it means to become rooted, whole, and fruitful. Meaningful conversations, reflection, connection, beautiful food, music, and thoughtfully curated moments for women to pause, breathe, and grow. Come dressed in the Fruitful Garden palette: florals, fruits, leaves, rich earth tones, and elegant expressions of colour, because “those that be planted in the house of the Lord shall flourish in the courts of our God” (Psalm 92:13). Limited seating; ticket details and featured conversations coming soon.",
+    photos: [],
+    speakers: [],
+    program: [],
+  },
 ];
 
 /**

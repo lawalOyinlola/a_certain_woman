@@ -24,20 +24,11 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "all", label: "All" },
 ];
 
+// Title, theme, and tag only. The heading renders title and subtitle as one
+// line, so the subtitle counts as part of the title a visitor is typing.
 function matches(e: ACWEvent, q: string): boolean {
   if (!q) return true;
-  const haystack = [
-    e.title,
-    e.subtitle,
-    e.location,
-    e.blurb,
-    e.date,
-    e.theme ?? "",
-    e.venue ?? "",
-    ...(e.tags ?? []),
-    ...e.speakers,
-    ...e.program.map((p) => p.item),
-  ]
+  const haystack = [e.title, e.subtitle, e.theme ?? "", ...(e.tags ?? [])]
     .join(" ")
     .toLowerCase();
   return q
@@ -188,7 +179,7 @@ export function EventsBrowser({
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by title, place, or speaker"
+              placeholder="Search by title, theme, or tag"
               className="w-full border-0 border-b border-border bg-transparent py-2 pl-7 pr-3 font-display text-[16px] italic text-forest placeholder:text-muted-foreground placeholder:opacity-60 focus:border-gold focus:outline-none"
               aria-label="Search events"
             />
