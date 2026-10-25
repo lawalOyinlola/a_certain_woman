@@ -49,7 +49,6 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
 ) {
   const ref = useRef<T>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useIsomorphicLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -100,7 +99,7 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
     }, el);
 
     return () => ctx.revert();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   return ref;
 }

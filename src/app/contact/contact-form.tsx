@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { ArrowRight } from "@/components/site/icons";
@@ -70,9 +70,14 @@ export function ContactForm() {
   const [reason, setReason] = useState<string>(initialReason);
   const [phone, setPhone] = useState("");
 
-  useEffect(() => {
+  // A client-side navigation to a new ?reason= keeps this component mounted,
+  // so resync the select during render rather than in an effect (one render,
+  // no cascade). See react.dev/learn/you-might-not-need-an-effect.
+  const [syncedReason, setSyncedReason] = useState(initialReason);
+  if (initialReason !== syncedReason) {
+    setSyncedReason(initialReason);
     setReason(initialReason);
-  }, [initialReason]);
+  }
 
   const validate = (fd: FormData, phoneValue: string) => {
     const errs: Record<string, string> = {};

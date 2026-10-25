@@ -29,6 +29,9 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default function GalleryPage() {
+  // A server component that renders once per revalidate window, so a fresh
+  // seed per render is the intent, not a purity bug.
+  // eslint-disable-next-line react-hooks/purity
   const seed = Date.now();
   return (
     <>

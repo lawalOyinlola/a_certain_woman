@@ -1,4 +1,42 @@
+# Packages whose install scripts pnpm may run. Every other dependency's
+# postinstall is blocked, so a compromised transitive package can't execute
+# code on install.
 allowBuilds:
-  msw: set this to true or false
-  sharp: set this to true or false
-  unrs-resolver: set this to true or false
+  # Native image library behind next/image optimisation.
+  sharp: true
+  # Native resolver used by eslint-config-next's import plugin.
+  unrs-resolver: true
+
+# Refuse any release younger than 14 days (in minutes). Malicious or broken
+# releases are usually caught and pulled within days; this keeps them out.
+# Matches the Dependabot cooldown in .github/dependabot.yml.
+minimumReleaseAge: 20160
+
+# Security patches younger than 14 days, admitted by exact version only.
+# Each one fixes an advisory reported by `pnpm audit` that has no patched
+# release old enough yet. Remove an entry once its version is 14 days old.
+minimumReleaseAgeExclude:
+  # GHSA-2464-fhr4-w9xw, GHSA-673q-mjm6-r5xr (critical RCE), GHSA-p3m5-59mp-jv5r
+  - next@16.4.2
+  - "@next/env@16.4.2"
+  - "@next/swc-darwin-arm64@16.4.2"
+  - "@next/swc-darwin-x64@16.4.2"
+  - "@next/swc-linux-x64-gnu@16.4.2"
+  - "@next/swc-linux-x64-musl@16.4.2"
+  - "@next/swc-linux-arm64-gnu@16.4.2"
+  - "@next/swc-linux-arm64-musl@16.4.2"
+  - "@next/swc-win32-x64-msvc@16.4.2"
+  - "@next/swc-win32-arm64-msvc@16.4.2"
+  # GHSA-mrhx-c7xc-m3w5 (memory exhaustion); zod validates API input.
+  - zod@4.6.6
+
+# Force patched versions of vulnerable transitive dependencies. All of them
+# sit under dev tooling (eslint, eslint-config-next, tailwind); none ship to
+# the browser. Drop an override once its parent package pulls the patched
+# version on its own.
+overrides:
+  "brace-expansion@<1.1.21": ^1.1.21
+  "brace-expansion@>=4.0.0 <5.0.12": ^5.0.12
+  "browserslist@<4.28.7": ^4.28.7
+  "baseline-browser-mapping@<2.11.0": ^2.11.0
+  "source-map-js@<1.2.2": ^1.2.2

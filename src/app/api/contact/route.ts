@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { z } from "zod/v4";
 import {
   contactEmailHtml,
   contactEmailText,
 } from "@/lib/email/contact-template";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getMailer } from "@/lib/email/resend";
 
 function strip(value: string): string {
   return value
@@ -45,6 +43,17 @@ const schema = z
   });
 
 export async function POST(req: Request) {
+  const mailer = getMailer();
+  if (!mailer) {
+    console.error(
+      "Email is not configured: set RESEND_API_KEY, RESEND_FROM_EMAIL and CONTACT_TO_EMAIL.",
+    );
+    return NextResponse.json(
+      { error: "Failed to send message. Please try again." },
+      { status: 503 },
+    );
+  }
+
   try {
     const raw = await req.json();
     const body =
@@ -73,9 +82,9 @@ export async function POST(req: Request) {
 
     const data = result.data;
 
-    const { error } = await resend.emails.send({
-      from: `A Certain Woman <${process.env.RESEND_FROM_EMAIL}>`,
-      to: process.env.CONTACT_TO_EMAIL!,
+    const { error } = await mailer.resend.emails.send({
+      from: `A Certain Woman <${mailer.from}>`,
+      to: mailer.to,
       replyTo: data.email ?? undefined,
       subject: `[ACW Contact] ${data.reason} — ${data.name}`,
       html: contactEmailHtml(data),
