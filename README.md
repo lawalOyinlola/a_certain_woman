@@ -1,5 +1,8 @@
 # A Certain Woman
 
+[![CI](https://github.com/lawalOyinlola/a_certain_woman/actions/workflows/ci.yml/badge.svg)](https://github.com/lawalOyinlola/a_certain_woman/actions/workflows/ci.yml)
+[![Security](https://github.com/lawalOyinlola/a_certain_woman/actions/workflows/security.yml/badge.svg)](https://github.com/lawalOyinlola/a_certain_woman/actions/workflows/security.yml)
+
 A faith-rooted women's movement based in Freetown, Sierra Leone — restoring hearts, reclaiming crowns. This repository contains the public website.
 
 **Tagline:** _Restoring Hearts. Reclaiming Crowns._
@@ -9,7 +12,7 @@ A faith-rooted women's movement based in Freetown, Sierra Leone — restoring he
 - [Next.js 16](https://nextjs.org) (App Router, Turbopack)
 - React 19, TypeScript
 - [Tailwind CSS v4](https://tailwindcss.com) with `@theme inline` design tokens
-- [shadcn/ui](https://ui.shadcn.com) (base-nova style) on top of Radix and `@base-ui/react`
+- [shadcn/ui](https://ui.shadcn.com) (base-nova style) on top of Radix and `@base-ui/react`. The shadcn stylesheet is vendored in `src/app/shadcn.css`, and the CLI runs on demand (see [docs/dependencies.md](./docs/dependencies.md)).
 - [GSAP](https://gsap.com) + ScrollTrigger for scroll reveals
 - [Resend](https://resend.com) for contact and newsletter email
 - [Zod](https://zod.dev) for API input validation
@@ -17,7 +20,7 @@ A faith-rooted women's movement based in Freetown, Sierra Leone — restoring he
 
 ## Getting started
 
-This project uses [pnpm](https://pnpm.io).
+Requirements: Node.js 24 or later, and [pnpm](https://pnpm.io). The pnpm version is pinned in `packageManager` in `package.json`. Run `corepack enable` once to use it.
 
 ```bash
 pnpm install
@@ -29,14 +32,15 @@ Open <http://localhost:3000>.
 Other scripts:
 
 ```bash
-pnpm build   # Production build
-pnpm start   # Run the production build
-pnpm lint    # ESLint
+pnpm build      # Production build
+pnpm start      # Run the production build
+pnpm lint       # ESLint
+pnpm typecheck  # tsc --noEmit
 ```
 
 ## Environment
 
-Copy the keys below into `.env.local`. The contact and newsletter routes need Resend credentials; everything else runs without them.
+Copy the keys below into `.env.local`. The contact and newsletter routes need the three Resend values. Without them, those two routes answer `503` and the rest of the site works. The build needs no env vars.
 
 ```bash
 # Canonical origin. Absolute metadata, canonical links, OG images,
@@ -51,6 +55,23 @@ CONTACT_TO_EMAIL=where-alerts-land@example.com
 
 If `NEXT_PUBLIC_SITE_URL` is unset the code falls back to `https://www.acertainwoman.org`.
 
+## Architecture
+
+Every page is a Server Component, prerendered at build time. `/`, `/gallery` and `/programs` regenerate at most once an hour. `/events` renders on each request. The only server-side work at runtime is the two form routes, which send email through Resend.
+
+```mermaid
+flowchart LR
+    Visitor((Visitor)) --> Vercel[Vercel]
+    Vercel --> Static["Prerendered pages<br/>/about, /founder, /partner, /contact"]
+    Vercel --> ISR["Hourly ISR pages<br/>/, /gallery, /programs"]
+    Vercel --> Dynamic["Per-request page<br/>/events"]
+    Vercel --> API["API routes<br/>/api/contact, /api/newsletter"]
+    Data[("src/lib/data<br/>events + programs")] --> Static & ISR & Dynamic
+    API -->|zod validation| Mailer["getMailer()<br/>src/lib/email/resend.ts"]
+    Mailer -->|env set| Resend[Resend] --> Inbox["CONTACT_TO_EMAIL inbox"]
+    Mailer -->|env missing| E503["503 response"]
+```
+
 ## Project layout
 
 ```text
@@ -61,6 +82,7 @@ src/
     not-found.tsx           # 404, with a nearest-page suggestion
     loading.tsx             # Route-level loading fallback
     globals.css             # Tailwind v4 layers + ACW design tokens
+    shadcn.css              # vendored from the shadcn package
     robots.ts               # robots.txt
     sitemap.ts              # sitemap.xml
     llms.txt/               # llms.txt — plain-text site summary for models
@@ -88,11 +110,21 @@ src/
   hooks/                    # useGsapReveal
   lib/
     data/                   # events + programs content
-    email/                  # Resend email templates
+    email/                  # Resend client (resend.ts) + email templates
     hooks/                  # useDebouncedValue
     routes.ts               # public route list + nearest-match for the 404
     shuffle.ts              # seeded, hydration-safe shuffling
     utils.ts                # shadcn `cn()`
+
+docs/
+  ci.md                     # workflows, branch protection, failing checks
+  dependencies.md           # update policy, advisories, overrides
+  assets/                   # diagrams used by the docs
+
+.github/
+  workflows/ci.yml          # lint, typecheck, build, audit, dependency review
+  workflows/security.yml    # gitleaks secret scan + CodeQL
+  dependabot.yml            # weekly npm + Actions updates, 14-day cooldown
 
 public/
   assets/                   # logos, icons, OG image, anthem audio, portraits
@@ -139,9 +171,18 @@ Tokens live in `:root` and are re-exported through `@theme inline` in `src/app/g
 
 Set `NEXT_PUBLIC_SITE_URL` to the production origin so canonical URLs, the sitemap, and `llms.txt` resolve correctly.
 
+## CI and dependencies
+
+Every pull request runs five checks: `Lint, typecheck and build`, `Dependency audit`, `Dependency review`, `Secret scan` and `CodeQL`. Branch protection on `main` should require all five.
+
+![CI and security pipeline](./docs/assets/ci-pipeline.svg)
+
+- [docs/ci.md](./docs/ci.md): what each workflow does, how to set up branch protection, and what to do when a check fails.
+- [docs/dependencies.md](./docs/dependencies.md): the 14-day release age rule, how to fix an advisory, and how to clean up overrides.
+
 ## Deploy
 
-The recommended host is [Vercel](https://vercel.com). Push the repo, set the environment variables above in project settings, and ship.
+The recommended host is [Vercel](https://vercel.com). Set the environment variables above in project settings. Vercel deploys `main` after a merge, so the CI checks are the gate before production.
 
 Any platform that runs `next build` + `next start` will work. Note the repository carries its own photography in `public/media`, so a shallow clone is the fastest way to build.
 
