@@ -20,7 +20,7 @@ A faith-rooted women's movement based in Freetown, Sierra Leone — restoring he
 
 ## Getting started
 
-Requirements: Node.js 24 or later, and [pnpm](https://pnpm.io). The pnpm version is pinned in `packageManager` in `package.json`. Run `corepack enable` once to use it.
+Requirements: Node.js 24 or later, and [pnpm](https://pnpm.io). The pnpm version is pinned in `packageManager` in `package.json`. Run `corepack enable` once to use it. Node.js 25 and later do not include corepack, so install it first with `npm install -g corepack`.
 
 ```bash
 pnpm install

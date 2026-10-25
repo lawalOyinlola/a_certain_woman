@@ -1,6 +1,6 @@
 # Dependencies
 
-This project uses pnpm. The exact version is in `packageManager` in [`package.json`](../package.json). Run `corepack enable` once, and corepack then selects that version for you.
+This project uses pnpm. The exact version is in `packageManager` in [`package.json`](../package.json). Run `corepack enable` once, and corepack then selects that version for you. Node.js 25 and later do not include corepack. Install it first with `npm install -g corepack`.
 
 ## Rules
 
