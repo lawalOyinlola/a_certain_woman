@@ -1,0 +1,5 @@
+# Reviewed false positives. Each line is a gitleaks finding fingerprint.
+# Add a fingerprint only after you confirm that the match is not a secret.
+
+# STORAGE_KEY = "acw-banner-dismissed-v1": a localStorage key name, not a credential.
+7d7483ae98cc35fcb38ee97154e3d742dc53976f:src/components/site/announcement-banner.tsx:generic-api-key:8
