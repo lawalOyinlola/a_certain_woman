@@ -11,7 +11,12 @@ import {
   newsletterWelcomeText,
 } from "@/lib/email/newsletter-welcome-template";
 import { getMailer } from "@/lib/email/mailer";
-import { clientKey, rateLimit, tooManyRequests } from "@/lib/rate-limit";
+import {
+  PER_RECIPIENT,
+  clientKey,
+  rateLimit,
+  tooManyRequests,
+} from "@/lib/rate-limit";
 
 // Normalises only. HTML is escaped where it is used (src/lib/email/escape.ts).
 function stripHtml(value: string): string {
@@ -30,13 +35,6 @@ function sanitizePhone(raw: string): string {
 // Per client address. See src/lib/rate-limit.ts for the limits of an
 // in-memory store.
 const PER_CLIENT = { name: "newsletter-ip", max: 5, windowMs: 10 * 60_000 };
-// Per recipient of the welcome email, so nobody can use the form to mail a
-// stranger repeatedly. Over it, only the welcome email is skipped.
-const PER_RECIPIENT = {
-  name: "newsletter-recipient",
-  max: 2,
-  windowMs: 60 * 60_000,
-};
 
 const schema = z
   .object({

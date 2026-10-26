@@ -19,6 +19,17 @@ export type Limit = { name: string; max: number; windowMs: number };
 
 export type Result = { ok: true } | { ok: false; retryAfterSeconds: number };
 
+/**
+ * Replies sent to one visitor address per hour, shared by the contact and
+ * newsletter forms so the two together cannot be used to mail a stranger more
+ * than this. Over it, only the reply is skipped.
+ */
+export const PER_RECIPIENT: Limit = {
+  name: "reply-recipient",
+  max: 2,
+  windowMs: 60 * 60_000,
+};
+
 export function rateLimit(limit: Limit, key: string, now = Date.now()): Result {
   let store = stores.get(limit.name);
   if (!store) {

@@ -10,7 +10,12 @@ import {
   autoReplyText,
 } from "@/lib/email/autoreply-template";
 import { getMailer } from "@/lib/email/mailer";
-import { clientKey, rateLimit, tooManyRequests } from "@/lib/rate-limit";
+import {
+  PER_RECIPIENT,
+  clientKey,
+  rateLimit,
+  tooManyRequests,
+} from "@/lib/rate-limit";
 
 // Normalises only. HTML is escaped where it is used (src/lib/email/escape.ts),
 // not removed here: removing tags corrupts real input such as "a < b".
@@ -21,12 +26,11 @@ function strip(value: string): string {
     .slice(0, 2000);
 }
 
-// Per client address, so one visitor cannot flood the inbox. Per recipient of
-// the auto-reply, so nobody can use the form to mail a stranger repeatedly.
-// The recipient limit only skips the auto-reply: the team still gets the
-// message. See src/lib/rate-limit.ts for the limits of an in-memory store.
+// Per client address, so one visitor cannot flood the inbox. The per-recipient
+// limit (shared with the newsletter form) only skips the auto-reply: the team
+// still gets the message. See src/lib/rate-limit.ts for the limits of an
+// in-memory store.
 const PER_CLIENT = { name: "contact-ip", max: 5, windowMs: 10 * 60_000 };
-const PER_RECIPIENT = { name: "contact-recipient", max: 2, windowMs: 60 * 60_000 };
 
 const schema = z
   .object({
