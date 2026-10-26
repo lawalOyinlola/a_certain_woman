@@ -14,7 +14,7 @@ A faith-rooted women's movement based in Freetown, Sierra Leone — restoring he
 - [Tailwind CSS v4](https://tailwindcss.com) with `@theme inline` design tokens
 - [shadcn/ui](https://ui.shadcn.com) (base-nova style) on top of Radix and `@base-ui/react`. The shadcn stylesheet is vendored in `src/app/shadcn.css`, and the CLI runs on demand (see [docs/dependencies.md](./docs/dependencies.md)).
 - [GSAP](https://gsap.com) + ScrollTrigger for scroll reveals
-- [Resend](https://resend.com) for contact and newsletter email
+- [Nodemailer](https://nodemailer.com) over SMTP for contact and newsletter email. The mailbox is hosted at Hostinger.
 - [Zod](https://zod.dev) for API input validation
 - DM Serif Display + Manrope + Caveat via `next/font/google`
 
@@ -40,24 +40,37 @@ pnpm typecheck  # tsc --noEmit
 
 ## Environment
 
-Copy the keys below into `.env.local`. The contact and newsletter routes need the three Resend values. Without them, those two routes answer `503` and the rest of the site works. The build needs no env vars.
+Copy the keys below into `.env.local`. The contact and newsletter routes need `SMTP_USER`, `SMTP_PASS` and `CONTACT_TO_EMAIL`. Without them, those two routes answer `503` and the rest of the site works. The build needs no env vars.
 
 ```bash
 # Canonical origin. Absolute metadata, canonical links, OG images,
 # robots.txt, sitemap.xml, and llms.txt all resolve against this.
 NEXT_PUBLIC_SITE_URL=https://www.acertainwoman.org
 
-# Email delivery for /api/contact and /api/newsletter
-RESEND_API_KEY=re_...
-RESEND_FROM_EMAIL=hello@your-verified-domain
+# Email delivery for /api/contact and /api/newsletter, over SMTP.
+# SMTP_USER and SMTP_PASS sign in to the Hostinger mailbox.
+SMTP_USER=info@acertainwoman.org
+SMTP_PASS=the-mailbox-password
 CONTACT_TO_EMAIL=where-alerts-land@example.com
+
+# Optional. The sender shown to the reader. The address must be the mailbox
+# or one of its aliases. Defaults: SMTP_USER and "A Certain Woman".
+# SMTP_FROM=hello@acertainwoman.org
+# SMTP_FROM_NAME=A Certain Woman
+
+# Optional. These are the defaults, which are Hostinger's.
+# Port 465 uses implicit TLS. Port 587 uses STARTTLS.
+# SMTP_HOST=smtp.hostinger.com
+# SMTP_PORT=465
 ```
+
+Set the same variables in the Vercel project settings. Use a mailbox password that is only for this site, so you can rotate it without locking yourself out of webmail. The contact form also sends an automatic reply to the visitor when they gave an email address. It names the reason they chose and says that a member will reply shortly. A failed auto-reply is logged and does not fail the request. If a request returns `502`, the SMTP login or the network failed. The function log shows the SMTP reply, never the password.
 
 If `NEXT_PUBLIC_SITE_URL` is unset the code falls back to `https://www.acertainwoman.org`.
 
 ## Architecture
 
-Every page is a Server Component, prerendered at build time. `/`, `/gallery` and `/programs` regenerate at most once an hour. `/events` renders on each request. The only server-side work at runtime is the two form routes, which send email through Resend.
+Every page is a Server Component, prerendered at build time. `/`, `/gallery` and `/programs` regenerate at most once an hour. `/events` renders on each request. The only server-side work at runtime is the two form routes, which send email over SMTP.
 
 ```mermaid
 flowchart LR
@@ -67,10 +80,39 @@ flowchart LR
     Vercel --> Dynamic["Per-request page<br/>/events"]
     Vercel --> API["API routes<br/>/api/contact, /api/newsletter"]
     Data[("src/lib/data<br/>events + programs")] --> Static & ISR & Dynamic
-    API -->|zod validation| Mailer["getMailer()<br/>src/lib/email/resend.ts"]
-    Mailer -->|env set| Resend[Resend] --> Inbox["CONTACT_TO_EMAIL inbox"]
+    API -->|"over limit"| E429["429 response"]
+    API -->|zod validation| Mailer["getMailer()<br/>src/lib/email/mailer.ts"]
+    Mailer -->|env set| SMTP["Hostinger SMTP<br/>smtp.hostinger.com:465"] --> Inbox["CONTACT_TO_EMAIL inbox"]
+    Mailer -->|SMTP fails| E502["502 response"]
     Mailer -->|env missing| E503["503 response"]
 ```
+
+## Email
+
+```mermaid
+sequenceDiagram
+    actor V as Visitor
+    participant F as /api/contact
+    participant L as Rate limiter
+    participant H as Hostinger SMTP
+    V->>F: POST form
+    F->>L: check client address
+    L-->>F: allowed (5 per 10 min)
+    F->>F: validate with zod
+    F->>L: check visitor email
+    L-->>F: allowed (2 per hour)
+    F->>H: notify CONTACT_TO_EMAIL
+    H-->>F: accepted
+    opt visitor gave an email
+        F->>H: auto-reply to visitor
+    end
+    F-->>V: 200
+```
+
+- **Templates** live in `src/lib/email/`. Every visitor value goes through `escapeHtml` before it enters the HTML.
+- **Logo:** headers use `public/assets/email-logo.png` (160px, 14 KB) at an absolute URL built from `NEXT_PUBLIC_SITE_URL`. Email clients block SVG, so it must be a PNG. The logo shows once the file is deployed. In local previews it points at production and stays broken until then.
+- **Auto-reply:** sent only when the visitor gave an email. A failure is logged and does not fail the request.
+- **Rate limits** (`src/lib/rate-limit.ts`): `/api/contact` allows 5 requests per 10 minutes per client address and 2 auto-replies per hour per recipient address. `/api/newsletter` allows 5 per 10 minutes per client address. Over the limit, the routes answer `429` with `Retry-After`. The store is in memory, so each serverless instance counts on its own and a cold start resets it. It stops one script from hammering the form. It does not stop a distributed attack. For a hard limit, move the store to Redis or Vercel KV and keep the same function signature. Add a bot check such as Cloudflare Turnstile before a large launch.
 
 ## Project layout
 
@@ -95,7 +137,7 @@ src/
     partner/                # /partner
     contact/                # /contact — server page + client form
     api/
-      contact/              # POST — contact form, sends via Resend
+      contact/              # POST — contact form, sends over SMTP
       newsletter/           # POST — newsletter signup
 
   components/
@@ -110,8 +152,9 @@ src/
   hooks/                    # useGsapReveal
   lib/
     data/                   # events + programs content
-    email/                  # Resend client (resend.ts) + email templates
+    email/                  # SMTP transport (mailer.ts), templates, escape + logo helpers
     hooks/                  # useDebouncedValue
+    rate-limit.ts           # in-memory sliding-window limiter for the form routes
     routes.ts               # public route list + nearest-match for the 404
     shuffle.ts              # seeded, hydration-safe shuffling
     utils.ts                # shadcn `cn()`

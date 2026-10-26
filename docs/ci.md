@@ -37,7 +37,7 @@ flowchart LR
 - **Actions are pinned by commit SHA.** A tag can move. A SHA cannot. The comment after each SHA shows the version. Dependabot updates the SHAs weekly.
 - **gitleaks runs as a CLI, not as gitleaks-action.** On a pull request, the action scans with `--no-merges --first-parent`, so it skips commits that arrive through a merged branch. The CLI scans every commit. The download is pinned to a version and a SHA-256. Dependabot does not update it. To update, change `GITLEAKS_VERSION` and `GITLEAKS_SHA256` in `security.yml`, and copy the hash from the `checksums.txt` file of the release.
 - **The token is read-only.** Only the CodeQL job gets `security-events: write`, so that it can upload results to the Security tab.
-- **The build uses no secrets.** The Resend client starts on the first request, not when the module loads (see [`src/lib/email/resend.ts`](../src/lib/email/resend.ts)). A fork's PR therefore cannot read production credentials, and a missing env var cannot break CI.
+- **The build uses no secrets.** The SMTP transport starts on the first request, not when the module loads (see [`src/lib/email/mailer.ts`](../src/lib/email/mailer.ts)). A fork's PR therefore cannot read production credentials, and a missing env var cannot break CI.
 - **Install uses the lockfile.** `pnpm install --frozen-lockfile` fails if `package.json` and `pnpm-lock.yaml` disagree. Install scripts run only for the packages in `allowBuilds` in [`pnpm-workspace.yaml`](../pnpm-workspace.yaml).
 - **Concurrency cancels stale runs.** A new push to the same branch cancels the older run for that branch. A scheduled run and a push to `main` do not cancel each other.
 
