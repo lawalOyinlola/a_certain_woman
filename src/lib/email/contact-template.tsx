@@ -1,5 +1,5 @@
 import { escapeHtml as esc } from "./escape";
-import { emailFooterHtml, emailLogoHtml } from "./layout";
+import { emailFooterHtml, emailFooterText, emailLogoHtml } from "./layout";
 
 export type ContactEmailData = {
   name: string;
@@ -49,6 +49,7 @@ export function contactEmailHtml(d: ContactEmailData): string {
 
     <p class="label">Message</p>
     <p class="message">${esc(d.message)}</p>
+    <p style="margin:32px 0 0;font-size:13px;color:#6F6857;font-family:Helvetica,sans-serif">${replyHint(d, true)}</p>
   </div>
   ${emailFooterHtml}
 </div>
@@ -56,9 +57,18 @@ export function contactEmailHtml(d: ContactEmailData): string {
 </html>`;
 }
 
+// Tells the team how to answer: hitting reply works when the visitor left an
+// email, because the notification carries it as Reply-To.
+function replyHint(d: ContactEmailData, html: boolean): string {
+  const name = html ? esc(d.name) : d.name;
+  return d.email
+    ? `Hit reply and your answer goes straight to ${name}. They have also had an automatic note saying someone will be in touch.`
+    : `${name} left no email, so reach them on the phone number above.`;
+}
+
 export function contactEmailText(d: ContactEmailData): string {
   return [
-    "A CERTAIN WOMAN — New Contact Form Submission",
+    "A CERTAIN WOMAN: new message from the website",
     "=".repeat(48),
     `Name:    ${d.name}`,
     d.email ? `Email:   ${d.email}` : null,
@@ -67,6 +77,11 @@ export function contactEmailText(d: ContactEmailData): string {
     `Reason:  ${d.reason}`,
     "",
     d.message,
+    "",
+    replyHint(d, false),
+    "",
+    "--",
+    emailFooterText,
   ]
     .filter((l) => l !== null)
     .join("\n");
