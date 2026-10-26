@@ -5,6 +5,11 @@ import {
   newsletterEmailHtml,
   newsletterEmailText,
 } from "@/lib/email/newsletter-template";
+import {
+  WELCOME_SUBJECT,
+  newsletterWelcomeHtml,
+  newsletterWelcomeText,
+} from "@/lib/email/newsletter-welcome-template";
 import { getMailer } from "@/lib/email/mailer";
 import { clientKey, rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
@@ -25,6 +30,13 @@ function sanitizePhone(raw: string): string {
 // Per client address. See src/lib/rate-limit.ts for the limits of an
 // in-memory store.
 const PER_CLIENT = { name: "newsletter-ip", max: 5, windowMs: 10 * 60_000 };
+// Per recipient of the welcome email, so nobody can use the form to mail a
+// stranger repeatedly. Over it, only the welcome email is skipped.
+const PER_RECIPIENT = {
+  name: "newsletter-recipient",
+  max: 2,
+  windowMs: 60 * 60_000,
+};
 
 const schema = z
   .object({
@@ -124,6 +136,28 @@ export async function POST(req: Request) {
         { error: "Could not subscribe. Please try again." },
         { status: 502 },
       );
+    }
+
+    // Welcome the subscriber. Skipped for phone-only signups, or when that
+    // address already got its allowance this hour. Spent after the team was
+    // notified, so a failed send does not use it up. A failure here is logged,
+    // not returned: the team already has the signup.
+    if (email && rateLimit(PER_RECIPIENT, email.toLowerCase()).ok) {
+      try {
+        await mailer.transport.sendMail({
+          from: mailer.from,
+          to: email,
+          subject: WELCOME_SUBJECT,
+          html: newsletterWelcomeHtml(),
+          text: newsletterWelcomeText(),
+          headers: { "Auto-Submitted": "auto-replied" },
+        });
+      } catch (err) {
+        console.error(
+          "SMTP failed to send newsletter welcome:",
+          err instanceof Error ? err.message : err,
+        );
+      }
     }
 
     return NextResponse.json({ ok: true });
