@@ -14,7 +14,7 @@ Every change passes through two GitHub Actions workflows before it reaches `main
 | [`security.yml`](../.github/workflows/security.yml) | Secret scan | pull request, push to `main`, Mondays 05:00 UTC | the gitleaks CLI finds a secret in any commit in git history |
 | | CodeQL | pull request, push to `main`, Mondays 05:00 UTC | CodeQL `security-extended` queries find an issue |
 
-The scheduled runs are there because the world changes even when the code doesn't. A new advisory can land against a package that was fine yesterday, and CodeQL adds queries over time, so the audit runs daily and the security scans weekly. When a scheduled run fails, GitHub emails the repository owner.
+The scheduled runs are there because the world changes even when the code doesn't. A new advisory can land against a package that was fine yesterday, and CodeQL adds queries over time, so the audit runs daily and the security scans weekly. GitHub notifies the person who last changed the cron schedule in the workflow file, and whether that turns into an email depends on their own notification settings. So don't rely on a scheduled failure reaching anyone: check the Actions tab now and then, or turn on notifications for failed workflows.
 
 ## What happens on a pull request
 
@@ -58,14 +58,16 @@ The checks only block a merge if `main` requires them, and that's a one-time set
 5. Turn on **Block force pushes** and **Restrict deletions**.
 6. Do not add a bypass for administrators.
 
-Read the result back to confirm it:
+Read the result back to confirm it. This repository uses a ruleset, so ask the rules endpoint, which lists every active rule that applies to `main`:
 
 ```bash
-gh api repos/lawalOyinlola/a_certain_woman/branches/main/protection \
-  --jq '{checks: .required_status_checks.contexts, admins: .enforce_admins.enabled, force: .allow_force_pushes.enabled}'
+gh api repos/lawalOyinlola/a_certain_woman/rules/branches/main \
+  --jq '[.[] | {type, checks: [.parameters.required_status_checks[]?.context]}]'
 ```
 
-A `404` means that `main` has no protection.
+You should see `pull_request`, `required_status_checks` listing the five checks, `code_scanning`, `non_fast_forward` and `deletion`. If the list is empty, nothing protects `main`.
+
+The older classic endpoint, `repos/OWNER/REPO/branches/main/protection`, only reports classic branch protection. It answers `404` for a branch that is protected by a ruleset, so a `404` there doesn't mean `main` is unprotected.
 
 ## When a check fails
 
