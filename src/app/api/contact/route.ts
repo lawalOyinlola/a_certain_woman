@@ -21,9 +21,10 @@ function strip(value: string): string {
     .slice(0, 2000);
 }
 
-// Per client address, and per recipient of the auto-reply, so one visitor
-// cannot flood the inbox and nobody can use the form to mail a stranger
-// repeatedly. See src/lib/rate-limit.ts for the limits of an in-memory store.
+// Per client address, so one visitor cannot flood the inbox. Per recipient of
+// the auto-reply, so nobody can use the form to mail a stranger repeatedly.
+// The recipient limit only skips the auto-reply: the team still gets the
+// message. See src/lib/rate-limit.ts for the limits of an in-memory store.
 const PER_CLIENT = { name: "contact-ip", max: 5, windowMs: 10 * 60_000 };
 const PER_RECIPIENT = { name: "contact-recipient", max: 2, windowMs: 60 * 60_000 };
 
@@ -98,11 +99,6 @@ export async function POST(req: Request) {
 
     const data = result.data;
 
-    if (data.email) {
-      const recipient = rateLimit(PER_RECIPIENT, data.email.toLowerCase());
-      if (!recipient.ok) return tooManyRequests(recipient.retryAfterSeconds);
-    }
-
     try {
       await mailer.transport.sendMail({
         from: mailer.from,
@@ -124,10 +120,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // Acknowledge the sender. Skipped when no email was given (phone only).
-    // The team already has the message, so a failure here is logged, not
-    // returned. Auto-Submitted stops other auto-responders from replying back.
-    if (data.email) {
+    // Acknowledge the sender. Skipped when no email was given (phone only), or
+    // when that address already got its allowance this hour. The allowance is
+    // spent here, after the team was notified, so a failed send does not use
+    // it up. The team already has the message, so a failure here is logged,
+    // not returned. Auto-Submitted stops other auto-responders from replying
+    // back.
+    if (data.email && rateLimit(PER_RECIPIENT, data.email.toLowerCase()).ok) {
       try {
         await mailer.transport.sendMail({
           from: mailer.from,
