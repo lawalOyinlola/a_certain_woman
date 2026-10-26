@@ -15,9 +15,6 @@ export const siteUrl = (
 
 export const siteName = "A Certain Woman";
 export const siteTagline = "Restoring Hearts. Reclaiming Crowns.";
-export const menTagline =
-  "Restoring Strength. Redefining Manhood. Building Legacy.";
-export const founderName = "Namaari Inanna Kargbo";
 
 export const contact = {
   email: "info@acertainwoman.org",
