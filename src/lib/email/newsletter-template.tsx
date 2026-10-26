@@ -1,4 +1,5 @@
 import { escapeHtml as esc } from "./escape";
+import { emailLogoHtml } from "./layout";
 
 type Subscriber = { email?: string; phone?: string };
 
@@ -26,6 +27,7 @@ export function newsletterEmailHtml({ email, phone }: Subscriber): string {
 <body>
 <div class="wrap">
   <div class="header">
+    ${emailLogoHtml}
     <h1>A Certain Woman</h1>
     <p>New newsletter subscriber</p>
   </div>

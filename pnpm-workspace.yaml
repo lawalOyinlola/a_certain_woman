@@ -27,6 +27,9 @@ minimumReleaseAgeExclude:
   - "@next/swc-linux-arm64-musl@16.4.2"
   - "@next/swc-win32-x64-msvc@16.4.2"
   - "@next/swc-win32-arm64-msvc@16.4.2"
+  # Three moderate nodemailer address-parser advisories (fixed in 10.1.4). The
+  # contact form passes the visitor's email as replyTo. Remove on 2026-11-01.
+  - nodemailer@10.1.4
   # GHSA-mrhx-c7xc-m3w5 (memory exhaustion); zod validates API input.
   - zod@4.6.6
 

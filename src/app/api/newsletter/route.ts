@@ -5,7 +5,8 @@ import {
   newsletterEmailHtml,
   newsletterEmailText,
 } from "@/lib/email/newsletter-template";
-import { getMailer } from "@/lib/email/resend";
+import { getMailer } from "@/lib/email/mailer";
+import { clientKey, rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 // Normalises only. HTML is escaped where it is used (src/lib/email/escape.ts).
 function stripHtml(value: string): string {
@@ -20,6 +21,10 @@ function sanitizePhone(raw: string): string {
     .replace(/(?!^)\+/g, "")
     .slice(0, 20);
 }
+
+// Per client address. See src/lib/rate-limit.ts for the limits of an
+// in-memory store.
+const PER_CLIENT = { name: "newsletter-ip", max: 5, windowMs: 10 * 60_000 };
 
 const schema = z
   .object({
@@ -62,13 +67,16 @@ export async function POST(req: Request) {
   const mailer = getMailer();
   if (!mailer) {
     console.error(
-      "Email is not configured: set RESEND_API_KEY, RESEND_FROM_EMAIL and CONTACT_TO_EMAIL.",
+      "Email is not configured: set SMTP_USER, SMTP_PASS and CONTACT_TO_EMAIL.",
     );
     return NextResponse.json(
       { error: "Could not subscribe. Please try again." },
       { status: 503 },
     );
   }
+
+  const client = rateLimit(PER_CLIENT, clientKey(req));
+  if (!client.ok) return tooManyRequests(client.retryAfterSeconds);
 
   try {
     const raw = await req.json();
@@ -98,16 +106,20 @@ export async function POST(req: Request) {
 
     const { email, phone } = result.data;
 
-    const { error } = await mailer.resend.emails.send({
-      from: `A Certain Woman <${mailer.from}>`,
-      to: mailer.to,
-      subject: `[ACW Newsletter] New subscriber: ${email ?? phone}`,
-      html: newsletterEmailHtml({ email, phone }),
-      text: newsletterEmailText({ email, phone }),
-    });
-
-    if (error) {
-      console.error("Resend failed to send newsletter email:", error);
+    try {
+      await mailer.transport.sendMail({
+        from: mailer.from,
+        to: mailer.to,
+        subject: `[ACW Newsletter] New subscriber: ${email ?? phone}`,
+        html: newsletterEmailHtml({ email, phone }),
+        text: newsletterEmailText({ email, phone }),
+      });
+    } catch (err) {
+      // Log the SMTP reply, never the transport config (it holds the password).
+      console.error(
+        "SMTP failed to send newsletter email:",
+        err instanceof Error ? err.message : err,
+      );
       return NextResponse.json(
         { error: "Could not subscribe. Please try again." },
         { status: 502 },

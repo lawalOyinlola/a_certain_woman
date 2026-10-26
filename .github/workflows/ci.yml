@@ -62,8 +62,8 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      # No secrets here on purpose. The Resend client is built on first
-      # request (src/lib/email/resend.ts), so the build needs no env vars, a
+      # No secrets here on purpose. The SMTP transport is built on first
+      # request (src/lib/email/mailer.ts), so the build needs no env vars, a
       # fork's PR can't read production credentials, and a missing env var
       # can't break CI.
       - name: Build
