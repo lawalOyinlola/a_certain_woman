@@ -99,11 +99,11 @@ sequenceDiagram
     F->>L: check client address
     L-->>F: allowed (5 per 10 min)
     F->>F: validate with zod
-    F->>L: check visitor email
-    L-->>F: allowed (2 per hour)
     F->>H: notify CONTACT_TO_EMAIL
     H-->>F: accepted
     opt visitor gave an email
+        F->>L: check visitor email (2 per hour)
+        L-->>F: allowed, otherwise skip the auto-reply
         F->>H: auto-reply to visitor
     end
     F-->>V: 200
@@ -112,7 +112,7 @@ sequenceDiagram
 - **Templates** live in `src/lib/email/`. Every visitor value goes through `escapeHtml` before it enters the HTML.
 - **Logo:** headers use `public/assets/email-logo.png` (160px, 14 KB) at an absolute URL built from `NEXT_PUBLIC_SITE_URL`. Email clients block SVG, so it must be a PNG. The logo shows once the file is deployed. In local previews it points at production and stays broken until then.
 - **Auto-reply:** sent only when the visitor gave an email. A failure is logged and does not fail the request.
-- **Rate limits** (`src/lib/rate-limit.ts`): `/api/contact` allows 5 requests per 10 minutes per client address and 2 auto-replies per hour per recipient address. `/api/newsletter` allows 5 per 10 minutes per client address. Over the limit, the routes answer `429` with `Retry-After`. The store is in memory, so each serverless instance counts on its own and a cold start resets it. It stops one script from hammering the form. It does not stop a distributed attack. For a hard limit, move the store to Redis or Vercel KV and keep the same function signature. Add a bot check such as Cloudflare Turnstile before a large launch.
+- **Rate limits** (`src/lib/rate-limit.ts`): `/api/contact` allows 5 requests per 10 minutes per client address and 2 auto-replies per hour per recipient address. Over the per-recipient limit, the team still gets the message and only the auto-reply is skipped. A failed notification does not use up the recipient allowance. `/api/newsletter` allows 5 per 10 minutes per client address. Over the per-client limit, the routes answer `429` with `Retry-After`. The store is in memory, so each serverless instance counts on its own and a cold start resets it. It stops one script from hammering the form. It does not stop a distributed attack. For a hard limit, move the store to Redis or Vercel KV and keep the same function signature. Add a bot check such as Cloudflare Turnstile before a large launch.
 
 ## Project layout
 
@@ -228,6 +228,8 @@ Every pull request runs five checks: `Lint, typecheck and build`, `Dependency au
 The recommended host is [Vercel](https://vercel.com). Set the environment variables above in project settings. Vercel deploys `main` after a merge, so the CI checks are the gate before production.
 
 Any platform that runs `next build` + `next start` will work. Note the repository carries its own photography in `public/media`, so a shallow clone is the fastest way to build.
+
+For non-Vercel deployments, use an ingress that overwrites `x-real-ip` and `x-forwarded-for`. Otherwise callers can choose their own rate-limit keys.
 
 ## Conventions
 
