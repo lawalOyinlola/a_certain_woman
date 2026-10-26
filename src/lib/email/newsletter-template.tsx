@@ -3,12 +3,12 @@ import { emailFooterHtml, emailFooterText, emailLogoHtml } from "./layout";
 
 type Subscriber = { email?: string; phone?: string };
 
-// Email subscribers already have a welcome note, so the team only needs to add
-// them to the list. Phone-only subscribers heard nothing back yet.
+// The welcome email can be skipped or fail, so this does not say it arrived.
+// Phone-only subscribers have no address to write to.
 function note(hasEmail: boolean): string {
   return hasEmail
-    ? "Add them to the mailing list before the next dispatch. They have already had a welcome note."
-    : "They signed up with a phone number only, so no welcome note went out. A WhatsApp message or a call is the way to welcome them.";
+    ? "Add them to the mailing list before the next dispatch."
+    : "They signed up with a phone number only, so no email went out to them. A WhatsApp message or a call is a good way to welcome them.";
 }
 
 export function newsletterEmailHtml({ email, phone }: Subscriber): string {

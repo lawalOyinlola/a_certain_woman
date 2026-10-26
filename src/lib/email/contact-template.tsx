@@ -62,7 +62,7 @@ export function contactEmailHtml(d: ContactEmailData): string {
 function replyHint(d: ContactEmailData, html: boolean): string {
   const name = html ? esc(d.name) : d.name;
   return d.email
-    ? `Hit reply and your answer goes straight to ${name}. They have also had an automatic note saying someone will be in touch.`
+    ? `Hit reply and your answer goes straight to ${name}.`
     : `${name} left no email, so reach them on the phone number above.`;
 }
 
