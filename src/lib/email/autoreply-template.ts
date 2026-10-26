@@ -35,7 +35,7 @@ export function autoReplyHtml({ name, reason }: AutoReply): string {
   <div class="body">
     <p>Dear ${esc(name)},</p>
     <p>We received your message about <strong>${esc(reason)}</strong>. A member of our team will reply to you shortly.</p>
-    <p>This is an automatic message. You can reply to this email if you want to add anything.</p>
+    <p>This note was sent automatically, but replies to it reach a real person, so write back if there is anything you would like to add.</p>
     <p>In the meantime, see our upcoming gatherings on the <a href="${eventsUrl}" style="${linkStyle}">events page</a>.</p>
     <p>With warmth,<br />A Certain Woman</p>
   </div>
@@ -50,7 +50,7 @@ export function autoReplyText({ name, reason }: AutoReply): string {
 
 We received your message about ${reason}. A member of our team will reply to you shortly.
 
-This is an automatic message. You can reply to this email if you want to add anything.
+This note was sent automatically, but replies to it reach a real person, so write back if there is anything you would like to add.
 
 In the meantime, see our upcoming gatherings on the events page:
 ${eventsUrl}
