@@ -1,7 +1,15 @@
 import { escapeHtml as esc } from "./escape";
-import { emailFooterHtml, emailLogoHtml } from "./layout";
+import { emailFooterHtml, emailFooterText, emailLogoHtml } from "./layout";
 
 type Subscriber = { email?: string; phone?: string };
+
+// Email subscribers already have a welcome note, so the team only needs to add
+// them to the list. Phone-only subscribers heard nothing back yet.
+function note(hasEmail: boolean): string {
+  return hasEmail
+    ? "Add them to the mailing list before the next dispatch. They have already had a welcome note."
+    : "They signed up with a phone number only, so no welcome note went out. A WhatsApp message or a call is the way to welcome them.";
+}
 
 export function newsletterEmailHtml({ email, phone }: Subscriber): string {
   const label = email ? "Email address" : "WhatsApp / Phone";
@@ -34,7 +42,7 @@ export function newsletterEmailHtml({ email, phone }: Subscriber): string {
   <div class="body">
     <p class="label">${label}</p>
     <p class="value">${esc(value)}</p>
-    <p class="note">Add this contact to your mailing list.</p>
+    <p class="note">${note(Boolean(email))}</p>
   </div>
   ${emailFooterHtml}
 </div>
@@ -45,5 +53,5 @@ export function newsletterEmailHtml({ email, phone }: Subscriber): string {
 export function newsletterEmailText({ email, phone }: Subscriber): string {
   const label = email ? "Email" : "WhatsApp / Phone";
   const value = email ?? phone ?? "";
-  return `A CERTAIN WOMAN — New Newsletter Subscriber\n${"=".repeat(44)}\n\n${label}: ${value}\n\nAdd this contact to your mailing list.`;
+  return `A CERTAIN WOMAN: new newsletter subscriber\n${"=".repeat(44)}\n\n${label}: ${value}\n\n${note(Boolean(email))}\n\n--\n${emailFooterText}`;
 }
