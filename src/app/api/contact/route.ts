@@ -6,9 +6,10 @@ import {
 } from "@/lib/email/contact-template";
 import { getMailer } from "@/lib/email/resend";
 
+// Normalises only. HTML is escaped where it is used (src/lib/email/escape.ts),
+// not removed here: removing tags corrupts real input such as "a < b".
 function strip(value: string): string {
   return value
-    .replace(/<[^>]*>/g, "") // strip HTML tags
     .replace(/[\x00-\x1F\x7F]/g, "") // strip control chars
     .trim()
     .slice(0, 2000);
