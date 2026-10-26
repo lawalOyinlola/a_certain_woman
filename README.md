@@ -40,7 +40,7 @@ pnpm typecheck  # tsc --noEmit
 
 ## Environment
 
-Copy the keys below into `.env.local`. The contact and newsletter routes need `SMTP_USER`, `SMTP_PASS` and `CONTACT_TO_EMAIL`. Without them, those two routes answer `503` and the rest of the site works. The build needs no env vars.
+Copy `.env.example` to `.env.local`, or copy the keys below. The contact and newsletter routes need `SMTP_USER`, `SMTP_PASS` and `CONTACT_TO_EMAIL`. Without them, those two routes answer `503` and the rest of the site works. The build needs no env vars.
 
 ```bash
 # Canonical origin. Absolute metadata, canonical links, OG images,
