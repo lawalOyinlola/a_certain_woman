@@ -1,3 +1,5 @@
+import { escapeHtml as esc } from "./escape";
+
 type Subscriber = { email?: string; phone?: string };
 
 export function newsletterEmailHtml({ email, phone }: Subscriber): string {
@@ -29,7 +31,7 @@ export function newsletterEmailHtml({ email, phone }: Subscriber): string {
   </div>
   <div class="body">
     <p class="label">${label}</p>
-    <p class="value">${value}</p>
+    <p class="value">${esc(value)}</p>
     <p class="note">Add this contact to your mailing list.</p>
   </div>
   <div class="footer">Restoring Hearts. Reclaiming Crowns.</div>

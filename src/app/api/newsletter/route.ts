@@ -7,9 +7,9 @@ import {
 } from "@/lib/email/newsletter-template";
 import { getMailer } from "@/lib/email/resend";
 
+// Normalises only. HTML is escaped where it is used (src/lib/email/escape.ts).
 function stripHtml(value: string): string {
   return value
-    .replace(/<[^>]*>/g, "")
     .replace(/[\x00-\x1F\x7F]/g, "")
     .trim();
 }

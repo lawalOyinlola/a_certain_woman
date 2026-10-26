@@ -1,3 +1,5 @@
+import { escapeHtml as esc } from "./escape";
+
 export type ContactEmailData = {
   name: string;
   email?: string;
@@ -34,17 +36,17 @@ export function contactEmailHtml(d: ContactEmailData): string {
   </div>
   <div class="body">
     <p class="label">From</p>
-    <p class="value">${d.email ? `${d.name} &lt;${d.email}&gt;` : d.name}</p>
+    <p class="value">${d.email ? `${esc(d.name)} &lt;${esc(d.email)}&gt;` : esc(d.name)}</p>
 
-    ${d.email ? `<p class="label">Email</p><p class="value">${d.email}</p>` : ""}
-    ${d.phone ? `<p class="label">Phone / WhatsApp</p><p class="value">${d.phone}</p>` : ""}
-    ${d.organization ? `<p class="label">Organization</p><p class="value">${d.organization}</p>` : ""}
+    ${d.email ? `<p class="label">Email</p><p class="value">${esc(d.email)}</p>` : ""}
+    ${d.phone ? `<p class="label">Phone / WhatsApp</p><p class="value">${esc(d.phone)}</p>` : ""}
+    ${d.organization ? `<p class="label">Organization</p><p class="value">${esc(d.organization)}</p>` : ""}
 
     <p class="label">Reason</p>
-    <div><span class="reason-badge">${d.reason}</span></div>
+    <div><span class="reason-badge">${esc(d.reason)}</span></div>
 
     <p class="label">Message</p>
-    <p class="message">${d.message.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
+    <p class="message">${esc(d.message)}</p>
   </div>
   <div class="footer">Restoring Hearts. Reclaiming Crowns.</div>
 </div>
