@@ -4,7 +4,13 @@ import {
   contactEmailHtml,
   contactEmailText,
 } from "@/lib/email/contact-template";
-import { getMailer } from "@/lib/email/resend";
+import {
+  AUTOREPLY_SUBJECT,
+  autoReplyHtml,
+  autoReplyText,
+} from "@/lib/email/autoreply-template";
+import { getMailer } from "@/lib/email/mailer";
+import { clientKey, rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 // Normalises only. HTML is escaped where it is used (src/lib/email/escape.ts),
 // not removed here: removing tags corrupts real input such as "a < b".
@@ -14,6 +20,12 @@ function strip(value: string): string {
     .trim()
     .slice(0, 2000);
 }
+
+// Per client address, and per recipient of the auto-reply, so one visitor
+// cannot flood the inbox and nobody can use the form to mail a stranger
+// repeatedly. See src/lib/rate-limit.ts for the limits of an in-memory store.
+const PER_CLIENT = { name: "contact-ip", max: 5, windowMs: 10 * 60_000 };
+const PER_RECIPIENT = { name: "contact-recipient", max: 2, windowMs: 60 * 60_000 };
 
 const schema = z
   .object({
@@ -47,13 +59,16 @@ export async function POST(req: Request) {
   const mailer = getMailer();
   if (!mailer) {
     console.error(
-      "Email is not configured: set RESEND_API_KEY, RESEND_FROM_EMAIL and CONTACT_TO_EMAIL.",
+      "Email is not configured: set SMTP_USER, SMTP_PASS and CONTACT_TO_EMAIL.",
     );
     return NextResponse.json(
       { error: "Failed to send message. Please try again." },
       { status: 503 },
     );
   }
+
+  const client = rateLimit(PER_CLIENT, clientKey(req));
+  if (!client.ok) return tooManyRequests(client.retryAfterSeconds);
 
   try {
     const raw = await req.json();
@@ -83,21 +98,51 @@ export async function POST(req: Request) {
 
     const data = result.data;
 
-    const { error } = await mailer.resend.emails.send({
-      from: `A Certain Woman <${mailer.from}>`,
-      to: mailer.to,
-      replyTo: data.email ?? undefined,
-      subject: `[ACW Contact] ${data.reason} — ${data.name}`,
-      html: contactEmailHtml(data),
-      text: contactEmailText(data),
-    });
+    if (data.email) {
+      const recipient = rateLimit(PER_RECIPIENT, data.email.toLowerCase());
+      if (!recipient.ok) return tooManyRequests(recipient.retryAfterSeconds);
+    }
 
-    if (error) {
-      console.error("Resend failed to send contact email:", error);
+    try {
+      await mailer.transport.sendMail({
+        from: mailer.from,
+        to: mailer.to,
+        replyTo: data.email ?? undefined,
+        subject: `[ACW Contact] ${data.reason} — ${data.name}`,
+        html: contactEmailHtml(data),
+        text: contactEmailText(data),
+      });
+    } catch (err) {
+      // Log the SMTP reply, never the transport config (it holds the password).
+      console.error(
+        "SMTP failed to send contact email:",
+        err instanceof Error ? err.message : err,
+      );
       return NextResponse.json(
         { error: "Failed to send message. Please try again." },
         { status: 502 },
       );
+    }
+
+    // Acknowledge the sender. Skipped when no email was given (phone only).
+    // The team already has the message, so a failure here is logged, not
+    // returned. Auto-Submitted stops other auto-responders from replying back.
+    if (data.email) {
+      try {
+        await mailer.transport.sendMail({
+          from: mailer.from,
+          to: data.email,
+          subject: AUTOREPLY_SUBJECT,
+          html: autoReplyHtml(data),
+          text: autoReplyText(data),
+          headers: { "Auto-Submitted": "auto-replied" },
+        });
+      } catch (err) {
+        console.error(
+          "SMTP failed to send auto-reply:",
+          err instanceof Error ? err.message : err,
+        );
+      }
     }
 
     return NextResponse.json({ ok: true });
