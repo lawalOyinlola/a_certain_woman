@@ -1,5 +1,5 @@
 import { escapeHtml as esc } from "./escape";
-import { emailLogoHtml } from "./layout";
+import { emailFooterHtml, emailLogoHtml } from "./layout";
 
 export type ContactEmailData = {
   name: string;
@@ -26,7 +26,7 @@ export function contactEmailHtml(d: ContactEmailData): string {
   .value { font-size: 16px; color: #1F2620; margin: 0 0 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(31,38,32,0.12); }
   .reason-badge { display: inline-block; background: #1F3D2B; color: #FAF6EE; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; padding: 5px 14px; border-radius: 99px; margin: 0 0 24px; font-family: Helvetica, sans-serif; }
   .message { font-size: 15px; line-height: 1.8; color: #3A4138; white-space: pre-wrap; margin: 0; }
-  .footer { background: #F2EADB; padding: 20px 40px; text-align: center; font-size: 11px; color: #6F6857; letter-spacing: 0.18em; text-transform: uppercase; font-family: Helvetica, sans-serif; }
+  .footer { background: #F2EADB; padding: 20px 40px; text-align: center; font-size: 11px; color: #6F6857; letter-spacing: 0.18em; text-transform: uppercase; font-family: Helvetica, sans-serif; line-height: 2; }
 </style>
 </head>
 <body>
@@ -50,7 +50,7 @@ export function contactEmailHtml(d: ContactEmailData): string {
     <p class="label">Message</p>
     <p class="message">${esc(d.message)}</p>
   </div>
-  <div class="footer">Restoring Hearts. Reclaiming Crowns.</div>
+  ${emailFooterHtml}
 </div>
 </body>
 </html>`;

@@ -1,5 +1,5 @@
 import { escapeHtml as esc } from "./escape";
-import { emailLogoHtml } from "./layout";
+import { emailFooterHtml, emailLogoHtml } from "./layout";
 
 type Subscriber = { email?: string; phone?: string };
 
@@ -21,7 +21,7 @@ export function newsletterEmailHtml({ email, phone }: Subscriber): string {
   .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: #6F6857; margin-bottom: 4px; font-family: Helvetica, sans-serif; }
   .value { font-size: 18px; color: #1F2620; margin: 0 0 8px; }
   .note { font-size: 14px; color: #6F6857; margin: 20px 0 0; font-family: Helvetica, sans-serif; }
-  .footer { background: #F2EADB; padding: 20px 40px; text-align: center; font-size: 11px; color: #6F6857; letter-spacing: 0.18em; text-transform: uppercase; font-family: Helvetica, sans-serif; }
+  .footer { background: #F2EADB; padding: 20px 40px; text-align: center; font-size: 11px; color: #6F6857; letter-spacing: 0.18em; text-transform: uppercase; font-family: Helvetica, sans-serif; line-height: 2; }
 </style>
 </head>
 <body>
@@ -36,7 +36,7 @@ export function newsletterEmailHtml({ email, phone }: Subscriber): string {
     <p class="value">${esc(value)}</p>
     <p class="note">Add this contact to your mailing list.</p>
   </div>
-  <div class="footer">Restoring Hearts. Reclaiming Crowns.</div>
+  ${emailFooterHtml}
 </div>
 </body>
 </html>`;
