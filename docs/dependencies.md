@@ -1,17 +1,20 @@
 # Dependencies
 
-This project uses pnpm. The exact version is in `packageManager` in [`package.json`](../package.json). Run `corepack enable` once, and corepack then selects that version for you. Node.js 25 and later do not include corepack. Install it first with `npm install -g corepack`.
+Every package in this project is a person you're trusting to run code on your machine and in production, so the rules here are mostly about slowing that trust down. The project uses pnpm, pinned through `packageManager` in [`package.json`](../package.json). Running `corepack enable` once gets you the right version, and on Node.js 25 or later, which dropped corepack from the install, run `npm install -g corepack` first.
 
-## Rules
+## The rules
 
-- **Commit the lockfile.** CI installs with `--frozen-lockfile` and fails if the lockfile does not match `package.json`.
-- **Packages wait 14 days.** `minimumReleaseAge` in [`pnpm-workspace.yaml`](../pnpm-workspace.yaml) makes pnpm refuse a release that is younger than 14 days. Most malicious or broken releases are found and removed within days. The Dependabot cooldown uses the same 14 days.
-- **Install scripts are blocked by default.** Only the packages under `allowBuilds` can run a postinstall script. Today that is `sharp` (image optimisation for `next/image`) and `unrs-resolver` (used by the ESLint import plugin).
-- **Fewer packages is better.** Each package is a maintainer who can be compromised. For example, the site needs only the stylesheet from the `shadcn` package, so that stylesheet is copied into [`src/app/shadcn.css`](../src/app/shadcn.css). The `shadcn` package itself is not installed. It brought in its CLI, an MCP server, Express and an HTTP client, which caused most of the audit advisories. To add a shadcn component, run the CLI on demand:
+The lockfile is committed and CI installs from it with `--frozen-lockfile`, so a change to `package.json` without a matching lockfile fails straight away.
 
-  ```bash
-  pnpm dlx shadcn@<version> add <component>
-  ```
+New releases wait 14 days before pnpm will install them. `minimumReleaseAge` in [`pnpm-workspace.yaml`](../pnpm-workspace.yaml) enforces it, and the Dependabot cooldown uses the same window. The reasoning is that malicious or broken releases are usually spotted and pulled within days, so a short wait keeps most of them out at almost no cost.
+
+Install scripts are blocked unless a package is listed under `allowBuilds`. Right now that's only `sharp`, which does image optimisation for `next/image`, and `unrs-resolver`, which the ESLint import plugin needs.
+
+Fewer packages is better, and the `shadcn` package is the example of why. The site only ever used its stylesheet, but installing it also brought in its CLI, an MCP server, Express and an HTTP client, and those caused most of the audit advisories. The stylesheet now lives in [`src/app/shadcn.css`](../src/app/shadcn.css) and the package isn't installed. When you need a new shadcn component, run the CLI on demand:
+
+```bash
+pnpm dlx shadcn@<version> add <component>
+```
 
 ## How updates arrive
 
@@ -33,7 +36,7 @@ flowchart TD
     CI --> Review[Human review, then merge]
 ```
 
-[`.github/dependabot.yml`](../.github/dependabot.yml) holds back three major upgrades that need a deliberate migration:
+Three major upgrades are held back in [`.github/dependabot.yml`](../.github/dependabot.yml), because each one needs a deliberate migration rather than a Monday-morning PR:
 
 | Package | Held at | Reason |
 | --- | --- | --- |
@@ -76,7 +79,7 @@ Remove a line from `ignore` when you start that upgrade.
 
 ## Clean up exceptions
 
-`minimumReleaseAgeExclude` and `overrides` are temporary. Check them when you update dependencies:
+Both `minimumReleaseAgeExclude` and `overrides` are meant to be temporary, and they rot quietly if nobody looks at them. Check them whenever you update dependencies:
 
 - Remove an exclude entry when its version is older than 14 days.
 - Remove an override when `pnpm why <package>` shows that the parent package now brings the patched version without it.
