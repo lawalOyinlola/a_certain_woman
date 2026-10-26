@@ -104,7 +104,7 @@ export async function POST(req: Request) {
         from: mailer.from,
         to: mailer.to,
         replyTo: data.email ?? undefined,
-        subject: `[ACW Contact] ${data.reason} — ${data.name}`,
+        subject: `[ACW Contact] ${data.reason}: ${data.name}`,
         html: contactEmailHtml(data),
         text: contactEmailText(data),
       });
