@@ -1,5 +1,11 @@
 import { escapeHtml as esc } from "./escape";
-import { emailLogoHtml } from "./layout";
+import {
+  emailFooterHtml,
+  emailFooterText,
+  emailLogoHtml,
+  eventsUrl,
+  linkStyle,
+} from "./layout";
 
 type AutoReply = { name: string; reason: string };
 
@@ -17,7 +23,7 @@ export function autoReplyHtml({ name, reason }: AutoReply): string {
   .header h1 { color: #D4AE6B; font-size: 22px; margin: 0; letter-spacing: 0.04em; font-weight: normal; }
   .body { padding: 36px 40px; font-size: 16px; line-height: 1.8; color: #3A4138; }
   .body p { margin: 0 0 18px; }
-  .footer { background: #F2EADB; padding: 20px 40px; text-align: center; font-size: 11px; color: #6F6857; letter-spacing: 0.18em; text-transform: uppercase; font-family: Helvetica, sans-serif; }
+  .footer { background: #F2EADB; padding: 20px 40px; text-align: center; font-size: 11px; color: #6F6857; letter-spacing: 0.18em; text-transform: uppercase; font-family: Helvetica, sans-serif; line-height: 2; }
 </style>
 </head>
 <body>
@@ -29,10 +35,11 @@ export function autoReplyHtml({ name, reason }: AutoReply): string {
   <div class="body">
     <p>Dear ${esc(name)},</p>
     <p>We received your message about <strong>${esc(reason)}</strong>. A member of our team will reply to you shortly.</p>
-    <p>This is an automatic message. You can reply to this email if you want to add anything.</p>
+    <p>This note was sent automatically, but replies to it reach a real person, so write back if there is anything you would like to add.</p>
+    <p>In the meantime, see our upcoming gatherings on the <a href="${eventsUrl}" style="${linkStyle}">events page</a>.</p>
     <p>With warmth,<br />A Certain Woman</p>
   </div>
-  <div class="footer">Restoring Hearts. Reclaiming Crowns.</div>
+  ${emailFooterHtml}
 </div>
 </body>
 </html>`;
@@ -43,8 +50,14 @@ export function autoReplyText({ name, reason }: AutoReply): string {
 
 We received your message about ${reason}. A member of our team will reply to you shortly.
 
-This is an automatic message. You can reply to this email if you want to add anything.
+This note was sent automatically, but replies to it reach a real person, so write back if there is anything you would like to add.
+
+In the meantime, see our upcoming gatherings on the events page:
+${eventsUrl}
 
 With warmth,
-A Certain Woman`;
+A Certain Woman
+
+--
+${emailFooterText}`;
 }

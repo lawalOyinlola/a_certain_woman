@@ -5,8 +5,18 @@ import {
   newsletterEmailHtml,
   newsletterEmailText,
 } from "@/lib/email/newsletter-template";
+import {
+  WELCOME_SUBJECT,
+  newsletterWelcomeHtml,
+  newsletterWelcomeText,
+} from "@/lib/email/newsletter-welcome-template";
 import { getMailer } from "@/lib/email/mailer";
-import { clientKey, rateLimit, tooManyRequests } from "@/lib/rate-limit";
+import {
+  PER_RECIPIENT,
+  clientKey,
+  rateLimit,
+  tooManyRequests,
+} from "@/lib/rate-limit";
 
 // Normalises only. HTML is escaped where it is used (src/lib/email/escape.ts).
 function stripHtml(value: string): string {
@@ -124,6 +134,28 @@ export async function POST(req: Request) {
         { error: "Could not subscribe. Please try again." },
         { status: 502 },
       );
+    }
+
+    // Welcome the subscriber. Skipped for phone-only signups, or when that
+    // address already got its allowance this hour. Spent after the team was
+    // notified, so a failed send does not use it up. A failure here is logged,
+    // not returned: the team already has the signup.
+    if (email && rateLimit(PER_RECIPIENT, email.toLowerCase()).ok) {
+      try {
+        await mailer.transport.sendMail({
+          from: mailer.from,
+          to: email,
+          subject: WELCOME_SUBJECT,
+          html: newsletterWelcomeHtml(),
+          text: newsletterWelcomeText(),
+          headers: { "Auto-Submitted": "auto-replied" },
+        });
+      } catch (err) {
+        console.error(
+          "SMTP failed to send newsletter welcome:",
+          err instanceof Error ? err.message : err,
+        );
+      }
     }
 
     return NextResponse.json({ ok: true });

@@ -48,7 +48,7 @@ The shadcn primitives are themed via the same tokens:
 - `--ring` = gold (focus rings)
 - `--border` / `--input` = the hairline rule
 
-This keeps `<Button>`, `<Card>`, `<Input>`, `<Checkbox>`, and `<Dialog>` on
+This keeps `<Button>`, `<Separator>` and the phone field's `<Select>` on
 brand with no per-instance overrides.
 
 ---
@@ -140,13 +140,16 @@ via `cva`. **Always prefer a `variant` + `size` pair over passing
 
 ### Other primitives
 
-- `Card` — `rounded-md`, hairline border, cream-1 surface. No drop shadow
-  except the join form (`shadow-[0_30px_60px_-30px_rgba(31,61,43,0.18)]`).
-- `Input` / `Label` — `h-11`, hairline border, gold focus ring at 30% opacity.
-- `Checkbox` — used inside chip-style `<Label>` toggles for role selection.
-- `Dialog` — full-bleed cream-1 surface for the lightbox/video player. No
-  rounded corners on the image inside.
-- `Separator` — hairline on dark uses `bg-cream-1/15`.
+- `FormField` (`src/components/ui/form-field.tsx`): the label, hint and error
+  wrapper around every form input, styled through the `acw-field` classes.
+- `Lightbox` (`src/components/ui/lightbox.tsx`): the full-screen photo and
+  video viewer, built on base-ui's `Dialog` and used by the gallery and event
+  pages. No rounded corners on the image inside.
+- `Separator`: a hairline. On dark surfaces it uses `bg-cream-1/15`.
+
+The shadcn `Card`, `Input`, `Label`, `Checkbox` and `Dialog` primitives were
+removed because nothing used them. Add one back with
+`pnpm dlx shadcn@<version> add <component>` when a page needs it.
 
 ### Custom editorial primitives (in `globals.css` `@layer components`)
 
@@ -245,7 +248,8 @@ Everything infinite is disabled under `prefers-reduced-motion`, and
 - All interactive elements use real `<button>` / `<a>` with `aria-label`s
   on icon-only controls.
 - Focus rings are visible — gold at 50% opacity (`outline-ring/50`).
-- Lightbox / video dialog uses shadcn `Dialog` with `DialogTitle` (sr-only).
+- The lightbox is built on base-ui's `Dialog`. It labels each photo or video
+  with its caption, and its Close, Previous and Next buttons carry `aria-label`s.
 - Keyboard nav: `ArrowLeft` / `ArrowRight` cycle photos in event lightboxes;
   `Esc` closes.
 
@@ -270,7 +274,7 @@ src/
 │   │   ├── footer.tsx
 │   │   ├── page-hero.tsx
 │   │   ├── reveal.tsx      ← client wrapper for GSAP scroll reveals
-│   │   └── icons.tsx       ← Crown, Sprig, Diamond, PillarIcon, Play
+│   │   └── icons.tsx       ← Crown, Sprig, Diamond, Play
 │   └── sections/
 │       ├── hero.tsx
 │       ├── who-we-serve.tsx

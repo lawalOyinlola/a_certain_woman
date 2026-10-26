@@ -1,7 +1,15 @@
 import { escapeHtml as esc } from "./escape";
-import { emailLogoHtml } from "./layout";
+import { emailFooterHtml, emailFooterText, emailLogoHtml } from "./layout";
 
 type Subscriber = { email?: string; phone?: string };
+
+// The welcome email can be skipped or fail, so this does not say it arrived.
+// Phone-only subscribers have no address to write to.
+function note(hasEmail: boolean): string {
+  return hasEmail
+    ? "Add them to the mailing list before the next dispatch."
+    : "They signed up with a phone number only, so no email went out to them. A WhatsApp message or a call is a good way to welcome them.";
+}
 
 export function newsletterEmailHtml({ email, phone }: Subscriber): string {
   const label = email ? "Email address" : "WhatsApp / Phone";
@@ -21,7 +29,7 @@ export function newsletterEmailHtml({ email, phone }: Subscriber): string {
   .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: #6F6857; margin-bottom: 4px; font-family: Helvetica, sans-serif; }
   .value { font-size: 18px; color: #1F2620; margin: 0 0 8px; }
   .note { font-size: 14px; color: #6F6857; margin: 20px 0 0; font-family: Helvetica, sans-serif; }
-  .footer { background: #F2EADB; padding: 20px 40px; text-align: center; font-size: 11px; color: #6F6857; letter-spacing: 0.18em; text-transform: uppercase; font-family: Helvetica, sans-serif; }
+  .footer { background: #F2EADB; padding: 20px 40px; text-align: center; font-size: 11px; color: #6F6857; letter-spacing: 0.18em; text-transform: uppercase; font-family: Helvetica, sans-serif; line-height: 2; }
 </style>
 </head>
 <body>
@@ -34,9 +42,9 @@ export function newsletterEmailHtml({ email, phone }: Subscriber): string {
   <div class="body">
     <p class="label">${label}</p>
     <p class="value">${esc(value)}</p>
-    <p class="note">Add this contact to your mailing list.</p>
+    <p class="note">${note(Boolean(email))}</p>
   </div>
-  <div class="footer">Restoring Hearts. Reclaiming Crowns.</div>
+  ${emailFooterHtml}
 </div>
 </body>
 </html>`;
@@ -45,5 +53,5 @@ export function newsletterEmailHtml({ email, phone }: Subscriber): string {
 export function newsletterEmailText({ email, phone }: Subscriber): string {
   const label = email ? "Email" : "WhatsApp / Phone";
   const value = email ?? phone ?? "";
-  return `A CERTAIN WOMAN — New Newsletter Subscriber\n${"=".repeat(44)}\n\n${label}: ${value}\n\nAdd this contact to your mailing list.`;
+  return `A CERTAIN WOMAN: new newsletter subscriber\n${"=".repeat(44)}\n\n${label}: ${value}\n\n${note(Boolean(email))}\n\n--\n${emailFooterText}`;
 }

@@ -1,5 +1,5 @@
 import { escapeHtml as esc } from "./escape";
-import { emailLogoHtml } from "./layout";
+import { emailFooterHtml, emailFooterText, emailLogoHtml } from "./layout";
 
 export type ContactEmailData = {
   name: string;
@@ -26,7 +26,7 @@ export function contactEmailHtml(d: ContactEmailData): string {
   .value { font-size: 16px; color: #1F2620; margin: 0 0 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(31,38,32,0.12); }
   .reason-badge { display: inline-block; background: #1F3D2B; color: #FAF6EE; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; padding: 5px 14px; border-radius: 99px; margin: 0 0 24px; font-family: Helvetica, sans-serif; }
   .message { font-size: 15px; line-height: 1.8; color: #3A4138; white-space: pre-wrap; margin: 0; }
-  .footer { background: #F2EADB; padding: 20px 40px; text-align: center; font-size: 11px; color: #6F6857; letter-spacing: 0.18em; text-transform: uppercase; font-family: Helvetica, sans-serif; }
+  .footer { background: #F2EADB; padding: 20px 40px; text-align: center; font-size: 11px; color: #6F6857; letter-spacing: 0.18em; text-transform: uppercase; font-family: Helvetica, sans-serif; line-height: 2; }
 </style>
 </head>
 <body>
@@ -49,16 +49,26 @@ export function contactEmailHtml(d: ContactEmailData): string {
 
     <p class="label">Message</p>
     <p class="message">${esc(d.message)}</p>
+    <p style="margin:32px 0 0;font-size:13px;color:#6F6857;font-family:Helvetica,sans-serif">${replyHint(d, true)}</p>
   </div>
-  <div class="footer">Restoring Hearts. Reclaiming Crowns.</div>
+  ${emailFooterHtml}
 </div>
 </body>
 </html>`;
 }
 
+// Tells the team how to answer: hitting reply works when the visitor left an
+// email, because the notification carries it as Reply-To.
+function replyHint(d: ContactEmailData, html: boolean): string {
+  const name = html ? esc(d.name) : d.name;
+  return d.email
+    ? `Hit reply and your answer goes straight to ${name}.`
+    : `${name} left no email, so reach them on the phone number above.`;
+}
+
 export function contactEmailText(d: ContactEmailData): string {
   return [
-    "A CERTAIN WOMAN — New Contact Form Submission",
+    "A CERTAIN WOMAN: new message from the website",
     "=".repeat(48),
     `Name:    ${d.name}`,
     d.email ? `Email:   ${d.email}` : null,
@@ -67,6 +77,11 @@ export function contactEmailText(d: ContactEmailData): string {
     `Reason:  ${d.reason}`,
     "",
     d.message,
+    "",
+    replyHint(d, false),
+    "",
+    "--",
+    emailFooterText,
   ]
     .filter((l) => l !== null)
     .join("\n");

@@ -1,7 +1,6 @@
 "use client";
 
 import type { ReactNode } from "react";
-import type gsap from "gsap";
 import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 /**
