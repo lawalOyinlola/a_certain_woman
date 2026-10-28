@@ -42,8 +42,13 @@ jobs:
           rm gitleaks.tar.gz
 
       # Reads .gitleaksignore for reviewed false positives.
+      #
+      # --log-opts keeps gitleaks' default scope (--full-history --all
+      # --diff-filter=tuxdb) and adds --diff-merges=separate. Without it,
+      # `git log -p` prints no patch for a merge commit, so a secret added only
+      # while resolving a conflict is never scanned.
       - name: Scan full history
-        run: ./gitleaks git . --redact --no-banner --verbose
+        run: ./gitleaks git . --redact --no-banner --verbose --log-opts="--full-history --all --diff-filter=tuxdb --diff-merges=separate"
 
   codeql:
     name: CodeQL
