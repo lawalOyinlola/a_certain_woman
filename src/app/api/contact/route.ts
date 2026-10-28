@@ -105,7 +105,7 @@ export async function POST(req: Request) {
 
     try {
       await mailer.transport.sendMail({
-        from: mailer.from,
+        from: mailer.alertFrom,
         to: mailer.to,
         replyTo: data.email ?? undefined,
         subject: `[ACW Contact] ${data.reason}: ${data.name}`,

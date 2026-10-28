@@ -80,6 +80,9 @@ CONTACT_TO_EMAIL=where-alerts-land@example.com
 # or one of its aliases. Defaults: SMTP_USER and "A Certain Woman".
 # SMTP_FROM=hello@acertainwoman.org
 # SMTP_FROM_NAME=A Certain Woman
+# Optional. The sender name on the alerts to the team, so they stand out in the
+# inbox. Same address as SMTP_FROM. Default: "ACW Website".
+# SMTP_ALERT_FROM_NAME=ACW Website
 
 # Optional. These are the defaults, which are Hostinger's.
 # Port 465 uses implicit TLS. Port 587 uses STARTTLS.

@@ -3,6 +3,7 @@ import nodemailer, { type Transporter } from "nodemailer";
 type Mailer = {
   transport: Transporter;
   from: { name: string; address: string };
+  alertFrom: { name: string; address: string };
   to: string;
 };
 
@@ -18,6 +19,10 @@ let cached: Mailer | null = null;
  * SMTP_FROM is the optional sender address (an alias of that mailbox) and
  * SMTP_FROM_NAME its display name. Hostinger may reject a From that is not
  * the mailbox or one of its aliases; the logged SMTP reply says so.
+ *
+ * `from` is what visitors see. `alertFrom` is the same address under another
+ * display name (SMTP_ALERT_FROM_NAME), so the team can tell website alerts
+ * apart from other mail in the inbox.
  */
 export function getMailer(): Mailer | null {
   if (cached) return cached;
@@ -27,6 +32,7 @@ export function getMailer(): Mailer | null {
   if (!user || !pass || !to) return null;
 
   const port = Number(process.env.SMTP_PORT ?? 465);
+  const address = process.env.SMTP_FROM || user;
   cached = {
     transport: nodemailer.createTransport({
       host: process.env.SMTP_HOST?.trim() || "smtp.hostinger.com",
@@ -42,7 +48,11 @@ export function getMailer(): Mailer | null {
     }),
     from: {
       name: process.env.SMTP_FROM_NAME || "A Certain Woman",
-      address: process.env.SMTP_FROM || user,
+      address,
+    },
+    alertFrom: {
+      name: process.env.SMTP_ALERT_FROM_NAME || "ACW Website",
+      address,
     },
     to,
   };
