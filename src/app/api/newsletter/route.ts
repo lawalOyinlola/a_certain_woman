@@ -118,7 +118,7 @@ export async function POST(req: Request) {
 
     try {
       await mailer.transport.sendMail({
-        from: mailer.from,
+        from: mailer.alertFrom,
         to: mailer.to,
         subject: `[ACW Newsletter] New subscriber: ${email ?? phone}`,
         html: newsletterEmailHtml({ email, phone }),
