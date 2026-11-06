@@ -1210,9 +1210,9 @@
   .acw-flow-select {
     @apply mt-6;
   }
-  /* Dropdown (SelectField): same underline as the text questions. */
+  /* Dropdown (SelectField): a bordered box, so it reads as a control. */
   .acw-flow-select-trigger {
-    @apply mt-2 flex h-14 w-full cursor-pointer items-center gap-3 border-0 border-b-[1.5px] border-ink/30 bg-transparent text-left text-[18px] text-ink outline-none transition-colors duration-200 hover:border-gold/70 focus-visible:border-gold data-popup-open:border-gold;
+    @apply mt-2 flex h-14 w-full cursor-pointer items-center gap-3 rounded-md border-[1.5px] border-ink/25 bg-cream-1 pr-4 pl-4 text-left text-[17px] text-ink outline-none transition-colors duration-200 hover:border-gold/70 focus-visible:border-gold focus-visible:ring-3 focus-visible:ring-gold/20 data-popup-open:border-gold;
   }
   .acw-flow-select-value {
     @apply min-w-0 flex-1 truncate;
