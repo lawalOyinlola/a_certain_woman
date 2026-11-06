@@ -284,7 +284,8 @@ export function ApplicationForm({ onExit }: { onExit?: () => void }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
-          started_at: startedAt.current ?? nowMs(),
+          // A duration on the device's own clock, so clock errors cancel out.
+          elapsed_ms: Math.max(0, nowMs() - (startedAt.current ?? nowMs())),
           website: honeypot.current?.value ?? "",
         }),
       });
