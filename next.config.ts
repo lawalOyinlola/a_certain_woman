@@ -28,6 +28,12 @@ const nextConfig: NextConfig = {
       { source: "/programmes", destination: "/programs", permanent: true },
       { source: "/programme", destination: "/programs", permanent: true },
       { source: "/event", destination: "/events", permanent: true },
+      // BecomingHER spellings people will type from a flyer or a WhatsApp
+      // message. /apply stays temporary (307), so a later cohort or another
+      // programme can claim it.
+      { source: "/becomingher", destination: "/becoming-her", permanent: true },
+      { source: "/crown-circle", destination: "/becoming-her", permanent: true },
+      { source: "/apply", destination: "/contact?reason=becoming-her", permanent: false },
       // Stories is shelved until there are real ones to tell. Its URL and the
       // words people search for instead all land on the gallery, which is the
       // closest thing the site now has to the stories of a gathering. These
