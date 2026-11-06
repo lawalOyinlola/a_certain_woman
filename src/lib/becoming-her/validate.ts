@@ -76,8 +76,12 @@ const schema = z
     referral_source: z.enum(values(REFERRAL)),
     referral_other: optionalText(LIMITS.short),
     declaration: z.literal("yes"),
-    /** When the form was opened, in ms since the epoch. Bot check only. */
-    started_at: z.number().int().positive(),
+    /**
+     * How long the form took, in ms, measured by the browser on its own clock.
+     * A duration, not a timestamp, so a phone whose clock is wrong is not
+     * mistaken for a bot. Capped at 30 days.
+     */
+    elapsed_ms: z.number().int().min(0).max(30 * 24 * 60 * 60 * 1000),
     /** Honeypot. People never see it, so it must stay empty. */
     website: z.string().max(200).optional().default(""),
   })
@@ -85,7 +89,7 @@ const schema = z
 
 export type ValidApplication = ApplicationData & {
   age: number;
-  started_at: number;
+  elapsed_ms: number;
   website: string;
 };
 
@@ -103,7 +107,9 @@ export function validateApplication(
     // Messages written in this file are shown as they are. Zod's own (wrong
     // type, unknown key) describe the schema, not the applicant's answer.
     const issue = parsed.error.issues[0];
-    const authored = issue && ["too_small", "custom"].includes(issue.code);
+    const hiddenField = ["elapsed_ms", "website"].includes(String(issue?.path[0]));
+    const authored =
+      issue && !hiddenField && ["too_small", "custom"].includes(issue.code);
     return {
       ok: false,
       error: authored ? issue.message : "Check your answers and try again.",
