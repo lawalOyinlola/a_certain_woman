@@ -4,6 +4,7 @@ import {
   getUpcomingEvents,
 } from "@/lib/data/events";
 import { siteUrl, contact } from "@/config/site";
+import { BECOMING_HER, longDate } from "@/lib/data/becoming-her";
 
 export const dynamic = "force-static";
 
@@ -49,6 +50,7 @@ All programs below are run by A Certain Woman.
 - [Crown Table Spotlight Breakfast](${siteUrl}/programs): an invitation-only leadership and recognition experience honoring women of impact, legacy, and purpose.
 - [Women's Healing Circles](${siteUrl}/programs): safe spaces for reflection, prayer, release, and restoration.
 - [Community Outreach](${siteUrl}/programs): compassion-led initiatives supporting vulnerable women, mothers, girls, and families.
+- [BecomingHER: The Crown Circle](${siteUrl}/becoming-her): a free, faith-based mentorship and personal-development pilot for 20 girls and young women aged 14–21 in Freetown, January–March 2027. Six Saturday sessions on identity and self-worth, emotional wellbeing, boundaries and relationships, digital safety, menstrual dignity, and leadership and purpose, plus a mentored Becoming Project. Free to apply and to take part. Apply at ${siteUrl}/contact?reason=becoming-her. Applications open ${longDate(BECOMING_HER.applicationsOpen)} and close ${longDate(BECOMING_HER.applicationsClose)}.
 - [Men Who Stand](${siteUrl}/programs): the male engagement program within A Certain Woman, for responsible fatherhood, positive masculinity, family leadership, and legacy-building. Built on the conviction that women's restoration and family wellbeing are strengthened when men also rise in responsibility, healing, and purpose.
 
 ## Upcoming events
