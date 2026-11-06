@@ -103,16 +103,22 @@ function Flow({
   testMode,
 }: Props) {
   // The link wins over a saved draft: someone who opens a new link wants that
-  // form. A saved draft is used when the link matches it (a refresh).
+  // form. A saved draft resumes only when nothing in the link contradicts it
+  // (a refresh). An event id that is not an open event counts as absent.
   const [saved] = useState(() => readDraft<FlowDraft>(FLOW_KEY));
+  const isOpenEvent = (id: string | null) => events.some((e) => e.id === id);
   const linkReason = findReason(initialReason)?.slug ?? null;
-  const resume = saved && (linkReason === null || saved.reason === linkReason);
+  const linkEvent = isOpenEvent(initialEvent) ? initialEvent : null;
+  const resume =
+    saved &&
+    (linkReason === null || saved.reason === linkReason) &&
+    (linkEvent === null || saved.event === linkEvent);
 
   const [reasonSlug, setReasonSlug] = useState<string>(
     (resume ? saved.reason : linkReason) ?? DEFAULT_REASON,
   );
   const [eventId, setEventId] = useState<string | null>(
-    resume ? saved.event : initialEvent,
+    linkEvent ?? (resume && isOpenEvent(saved.event) ? saved.event : null),
   );
   const [picking, setPicking] = useState(resume ? saved.picking : true);
   // Nothing is saved until the reason has been confirmed once.
@@ -175,6 +181,7 @@ function Flow({
             eventId={eventId}
             setEventId={setEventId}
             prefill={reason.slug === linkReason ? prefill : ""}
+            linkEvent={linkEvent}
             onExit={() => setPicking(true)}
             onSwitch={switchTo}
           />
@@ -498,6 +505,7 @@ function GeneralFlow({
   eventId,
   setEventId,
   prefill,
+  linkEvent,
   onExit,
   onSwitch,
 }: {
@@ -506,6 +514,8 @@ function GeneralFlow({
   eventId: string | null;
   setEventId: (id: string | null) => void;
   prefill: string;
+  /** A valid event from the link. It replaces the event in a saved draft. */
+  linkEvent: string | null;
   onExit: () => void;
   onSwitch: (slug: string) => void;
 }) {
@@ -513,17 +523,28 @@ function GeneralFlow({
   const [draft] = useState(() =>
     readDraft<{ data: GeneralData; step: GeneralStep }>(key),
   );
-  const [data, setData] = useState<GeneralData>(
-    draft?.data ?? {
-      event: eventId ?? "",
-      name: "",
-      organisation: "",
-      email: "",
-      phone: "",
-      message: prefill,
-      consent: "",
-    },
-  );
+  const [data, setData] = useState<GeneralData>(() => {
+    if (!draft) {
+      return {
+        event: eventId ?? "",
+        name: "",
+        organisation: "",
+        email: "",
+        phone: "",
+        message: prefill,
+        consent: "",
+      };
+    }
+    // Keep the saved answers, but take the event from the link, and drop a
+    // saved event that is no longer open.
+    const savedEvent = draft.data.event;
+    const event =
+      linkEvent ??
+      (savedEvent === OTHER_EVENT || events.some((e) => e.id === savedEvent)
+        ? savedEvent
+        : "");
+    return { ...draft.data, event };
+  });
   const [current, setCurrent] = useState<GeneralStep>(
     draft?.step ?? (reason.slug === "attend" ? "event" : "name"),
   );
