@@ -62,8 +62,6 @@ export async function POST(req: Request) {
     );
   }
 
-  // Local testing: validate everything, send nothing. Ignored in production
-  // builds, so it cannot switch off delivery on the live site by mistake.
   // Validate everything, send nothing: local testing (BECOMING_HER_DRY_RUN)
   // and, TEMPORARILY, every Vercel preview deployment.
   const dryRun = applicationsDryRun();
@@ -109,8 +107,8 @@ export async function POST(req: Request) {
 
   // Bots: the honeypot was filled, or the whole form took a few seconds.
   // Answer as if it worked, so the bot learns nothing, and send nothing.
-  const tooFast = now - app.started_at < MIN_FILL_SECONDS * 1000;
-  if (app.website || tooFast || app.started_at > now) {
+  const tooFast = app.elapsed_ms < MIN_FILL_SECONDS * 1000;
+  if (app.website || tooFast) {
     return NextResponse.json({ ok: true, reference });
   }
 
