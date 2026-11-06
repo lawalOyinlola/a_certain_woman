@@ -17,6 +17,7 @@ export const SITE_ROUTES: SiteRoute[] = [
   { path: "/about", label: "About" },
   { path: "/founder", label: "Founder's Letter" },
   { path: "/programs", label: "Programs" },
+  { path: "/becoming-her", label: "BecomingHER: The Crown Circle" },
   { path: "/events", label: "Events" },
   { path: "/gallery", label: "Gallery" },
   { path: "/partner", label: "Partner With Us" },
