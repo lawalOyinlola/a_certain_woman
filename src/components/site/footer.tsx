@@ -17,6 +17,7 @@ const NAV_COLS = [
       ["About", "/about"],
       ["Founder's Letter", "/founder"],
       ["Programs", "/programs"],
+      ["BecomingHER", "/becoming-her"],
       ["Events", "/events"],
     ] as const,
   },

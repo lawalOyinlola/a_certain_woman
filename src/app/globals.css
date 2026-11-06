@@ -95,6 +95,18 @@
   body {
     @apply overflow-x-hidden;
   }
+  /* In-page anchors glide; route changes stay instant because <html> carries
+     data-scroll-behavior="smooth" (Next.js 16). */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  /* Sections focused by an anchor click (see hash-links.tsx) take focus
+     without drawing a ring around the whole section. */
+  section[tabindex="-1"]:focus {
+    outline: none;
+  }
   em {
     @apply italic;
   }
@@ -734,5 +746,709 @@
   }
   .acw-float {
     animation: acw-float 2.6s ease-in-out infinite;
+  }
+}
+
+/* ============== BecomingHER: The Crown Circle (/becoming-her) ==============
+   One page with its own composition inside the brand: flat cream and forest
+   fields, the display face set very large, no rules or cards. Section order
+   and geometry follow .taste-skill's "type-only statement" direction. */
+
+@layer components {
+  .acw-bh-wrap {
+    @apply mx-auto w-full max-w-320;
+  }
+  .acw-bh-seat {
+    @apply opacity-25 transition-opacity duration-300;
+  }
+  .acw-bh-seat[data-on] {
+    @apply opacity-100;
+  }
+  .acw-bh-press {
+    @apply transition-[transform,background-color] duration-150 ease-out active:scale-[0.97];
+  }
+  main:has(.acw-bh-hero) [id] {
+    @apply scroll-mt-20;
+  }
+  .acw-bh-intro figcaption,
+  .acw-bh-diptych figcaption,
+  .acw-bh-journey figcaption {
+    @apply mt-3 text-[14px] leading-snug text-muted-foreground;
+  }
+
+  /* ── Hero: fills the screen, and only grows when the content cannot fit ── */
+  .acw-bh-hero {
+    @apply grid min-h-svh overflow-hidden grid-rows-[1fr_auto] bg-cream-1 px-5 pt-[calc(88px+2svh)] pb-7 md:px-12;
+  }
+  .acw-bh-hero-mark {
+    @apply self-center;
+  }
+  .acw-bh-title {
+    @apply flex flex-col font-display font-normal text-forest leading-[0.86] tracking-[-0.035em];
+    font-size: clamp(64px, min(19vw, 22svh), 120px);
+  }
+  @media (min-width: 768px) {
+    .acw-bh-title {
+      font-size: clamp(96px, min(15.5vw, 24svh), 250px);
+    }
+  }
+  .acw-bh-title em {
+    @apply italic text-gold;
+  }
+  /* Each line rises from behind its own baseline. */
+  /* The padding keeps descenders (the g) inside the mask; the negative
+     margin gives the space back so the leading stays tight. */
+  .acw-bh-line {
+    @apply -mb-[0.14em] flex items-center overflow-hidden pb-[0.22em];
+  }
+  .acw-bh-line > span {
+    @apply inline-block;
+    animation: acw-bh-rise 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .acw-bh-line--right {
+    @apply flex-row-reverse justify-end gap-[0.18em] md:flex-row md:justify-end;
+  }
+  .acw-bh-line--right > span {
+    animation-delay: 110ms;
+  }
+  .acw-bh-hero-ring-wrap {
+    @apply flex size-[0.62em] flex-none;
+  }
+  .acw-bh-hero-ring {
+    @apply size-full;
+    animation: acw-bh-ring-in 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 200ms both;
+  }
+  .acw-bh-subtitle {
+    @apply mt-2 font-display italic text-gold md:text-right;
+    font-size: clamp(22px, 2.3vw, 34px);
+    animation: acw-fade-up 0.9s ease-out 350ms both;
+  }
+  .acw-bh-hero-foot {
+    @apply mt-[5svh] flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-12;
+    animation: acw-fade-up 0.9s ease-out 450ms both;
+  }
+  .acw-bh-lede {
+    @apply max-w-[24ch] font-display text-ink leading-[1.15] text-balance;
+    font-size: clamp(22px, 2.2vw, 32px);
+  }
+  .acw-bh-lede em {
+    @apply italic text-gold;
+  }
+  .acw-bh-hero-facts {
+    @apply mt-3 max-w-[46ch] text-[16px] leading-[1.55] text-ink-2 text-pretty;
+  }
+  .acw-bh-hero-action {
+    @apply flex flex-col items-stretch gap-3 md:items-end;
+  }
+  .acw-bh-hero-action [data-slot="button"] {
+    @apply w-full md:w-auto;
+  }
+  .acw-bh-journey-action {
+    @apply mt-8 flex;
+  }
+  .acw-bh-closed {
+    @apply cursor-not-allowed opacity-60;
+  }
+  .acw-bh-status {
+    @apply inline-flex items-center gap-2.5 text-[15px] text-ink-2;
+  }
+  .acw-bh-status-dot {
+    @apply relative size-2 flex-none rounded-full bg-gold;
+  }
+  .acw-bh-status-dot::after {
+    content: "";
+    @apply absolute inset-0 rounded-full bg-gold;
+    animation: acw-bh-breathe 2.8s ease-out infinite;
+  }
+  .acw-bh-status[data-status="closed"] .acw-bh-status-dot,
+  .acw-bh-status[data-status="closed"] .acw-bh-status-dot::after {
+    @apply bg-muted-foreground;
+    animation: none;
+  }
+
+  /* ── What it is ── */
+  .acw-bh-intro {
+    @apply bg-cream-1 px-5 py-28 md:px-12 md:py-40;
+  }
+  .acw-bh-intro-grid {
+    @apply mx-auto grid max-w-320 grid-cols-1 gap-10 md:grid-cols-12 md:gap-x-6 md:gap-y-20;
+  }
+  .acw-bh-intro-title {
+    @apply md:col-span-6 md:row-start-1;
+  }
+  .acw-bh-intro-copy {
+    @apply flex max-w-[44ch] flex-col gap-5 text-[18px] leading-[1.6] text-ink md:col-span-5 md:row-start-2 md:self-end;
+  }
+  .acw-bh-intro-photo {
+    @apply md:col-span-5 md:col-start-8 md:row-span-2 md:row-start-1;
+  }
+  /* A photograph framed, slightly taller than its frame so it can move
+     inside it (see data-bh-parallax in ./becoming-her/motion.tsx). */
+  .acw-bh-frame {
+    @apply relative overflow-hidden bg-cream-3;
+  }
+  .acw-bh-frame-inner {
+    @apply absolute inset-x-0 -top-[10%] -bottom-[10%];
+  }
+  .acw-bh-frame-inner img {
+    @apply object-cover;
+  }
+
+  /* ── The belief, one forest field ── */
+  .acw-bh-field {
+    @apply bg-forest px-5 py-10 text-cream-1 md:px-12 md:py-12;
+  }
+  .acw-bh-field-inner {
+    @apply mx-auto grid min-h-[64svh] gap-10 max-w-320 grid-rows-[auto_1fr_auto] md:min-h-[76svh] md:grid-cols-12;
+  }
+  .acw-bh-field-note {
+    @apply max-w-[34ch] text-[18px] leading-[1.6] text-cream-1/85 md:col-span-4 md:col-start-9;
+  }
+  .acw-bh-field-phrase {
+    @apply row-start-3 font-display leading-[0.92] tracking-[-0.02em] md:col-span-12;
+    font-size: clamp(56px, 10vw, 160px);
+  }
+  .acw-bh-field-phrase em {
+    @apply italic text-gold-2;
+  }
+  /* Each line rises from behind its own mask. */
+  .acw-bh-field-phrase > span {
+    @apply -mb-[0.12em] block overflow-hidden pb-[0.12em];
+  }
+  .acw-bh-field-phrase > span > span {
+    @apply inline-block;
+  }
+
+  /* ── Six themes as large rows ── */
+  .acw-bh-themes {
+    @apply bg-cream-1 px-5 py-28 md:px-12 md:py-40;
+  }
+  /* The heading column stays put while the six themes scroll past it. */
+  .acw-bh-themes-grid {
+    @apply grid gap-14 lg:grid-cols-12 lg:gap-x-6;
+  }
+  .acw-bh-themes-side {
+    @apply lg:sticky lg:top-32 lg:col-span-5 lg:self-start;
+  }
+  .acw-bh-themes-side .acw-page-h2 {
+    @apply lg:text-[clamp(40px,4.1vw,62px)];
+  }
+  .acw-bh-theme-list {
+    @apply flex flex-col gap-12 md:gap-16 lg:col-span-6 lg:col-start-7 lg:gap-20 lg:py-[12svh];
+  }
+  .acw-bh-theme-list li {
+    @apply flex flex-col gap-3;
+  }
+  .acw-bh-theme-list.is-focusing li {
+    @apply opacity-30 transition-opacity duration-500 ease-out;
+  }
+  .acw-bh-theme-list.is-focusing li.is-on {
+    @apply opacity-100;
+  }
+  .acw-bh-theme-title {
+    @apply font-display text-forest leading-[1.05] tracking-[-0.015em];
+    font-size: clamp(30px, 3.6vw, 56px);
+  }
+  .acw-bh-theme-body {
+    @apply max-w-[38ch] text-[17px] leading-[1.55] text-ink-2;
+  }
+  .acw-bh-project {
+    @apply mt-10 max-w-[36ch] font-display text-ink leading-[1.35] md:mt-14;
+    font-size: clamp(20px, 1.8vw, 26px);
+  }
+  .acw-bh-project em {
+    @apply italic text-gold;
+  }
+
+  /* ── Two photographs at different sizes ── */
+  .acw-bh-diptych {
+    @apply grid grid-cols-1 gap-8 bg-cream-1 px-5 pb-28 md:grid-cols-[1.9fr_1fr] md:items-end md:gap-6 md:px-12 md:pb-40;
+  }
+
+
+  /* ── The journey: a dated slip that knows today's date ── */
+  .acw-bh-journey {
+    @apply bg-cream-2 px-5 py-28 md:px-12 md:py-40;
+  }
+  .acw-bh-journey-grid {
+    @apply mx-auto grid max-w-320 grid-cols-1 gap-14 md:grid-cols-12 md:gap-x-6;
+  }
+  .acw-bh-journey-copy {
+    @apply md:col-span-6;
+  }
+  .acw-bh-journey-grid > div:last-child {
+    @apply md:col-span-5 md:col-start-8;
+  }
+  .acw-bh-journey-now {
+    @apply mt-6 max-w-[30ch] text-ink-2 leading-[1.4] text-balance;
+    font-size: clamp(19px, 1.5vw, 22px);
+  }
+  .acw-bh-journey-photo {
+    @apply mt-14 hidden md:block;
+  }
+  .acw-bh-slip {
+    @apply mx-auto max-w-[480px] bg-cream-1 px-6 pt-8 pb-10 text-[16px] text-ink tabular-nums md:px-8;
+    /* Torn, zigzag bottom edge, like a printed itinerary. */
+    mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 18px 100%;
+  }
+  .acw-bh-slip-group + .acw-bh-slip-group {
+    @apply mt-7;
+  }
+  .acw-bh-slip h3 {
+    @apply mb-2 text-[15px] font-semibold text-ink;
+  }
+  .acw-bh-slip li {
+    @apply relative flex min-h-9 items-baseline gap-2 pl-5;
+  }
+  .acw-bh-slip li::before {
+    content: "";
+    @apply absolute left-0 top-[0.55em] size-2 rounded-full border border-ink/30;
+  }
+  .acw-bh-slip li[data-state="done"] {
+    @apply text-muted-foreground;
+  }
+  .acw-bh-slip li[data-state="done"]::before {
+    @apply border-gold bg-gold;
+  }
+  .acw-bh-slip li[data-state="next"]::before,
+  .acw-bh-slip li[data-state="today"]::before {
+    @apply border-forest bg-forest;
+    animation: acw-bh-breathe-ring 2.8s ease-out infinite;
+  }
+  .acw-bh-slip-label {
+    @apply flex items-baseline gap-2;
+  }
+  .acw-bh-slip-label em {
+    @apply rounded-full bg-forest px-2 py-0.5 text-[13px] not-italic text-cream-1;
+  }
+  .acw-bh-slip-dots {
+    @apply min-w-4 flex-1 -translate-y-1 border-b-2 border-dotted border-ink/25;
+  }
+  .acw-bh-slip time {
+    @apply whitespace-nowrap;
+  }
+  .acw-bh-slip-final {
+    @apply mt-7 flex items-center justify-between gap-4 bg-forest px-4 py-3 text-cream-1;
+  }
+
+  /* ── Questions: large questions, answers beside, nothing folded ── */
+  .acw-bh-faq {
+    @apply bg-cream-1 px-5 py-28 md:px-12 md:py-40;
+  }
+  .acw-bh-faq-heading,
+  .acw-bh-faq-row dt {
+    @apply font-display leading-[1.12];
+    font-size: clamp(24px, 2.6vw, 40px);
+  }
+  .acw-bh-faq-heading {
+    @apply text-muted-foreground;
+  }
+  .acw-bh-faq-table {
+    @apply mt-14 flex flex-col gap-14 md:mt-20 md:gap-20;
+  }
+  .acw-bh-faq-row {
+    @apply grid gap-3 md:grid-cols-12 md:gap-x-6;
+  }
+  .acw-bh-faq-row dt {
+    @apply text-forest md:col-span-6;
+  }
+  .acw-bh-faq-row dd {
+    @apply max-w-[42ch] text-[17px] leading-[1.6] text-ink-2 md:col-span-5 md:col-start-8 md:pt-2;
+  }
+
+  /* ── Apply: the page inverts ── */
+  .acw-bh-apply {
+    @apply bg-forest px-4 py-24 text-cream-1 md:px-12 md:py-36;
+  }
+  .acw-bh-apply-grid {
+    @apply mx-auto grid max-w-320 grid-cols-1 gap-12 md:grid-cols-12 md:gap-x-6;
+  }
+  .acw-bh-apply-copy {
+    @apply px-1 md:col-span-5;
+  }
+  .acw-bh-apply-copy h2 {
+    @apply font-display leading-[0.95] tracking-[-0.02em];
+    font-size: clamp(48px, 6.4vw, 104px);
+  }
+  .acw-bh-apply-copy h2 em {
+    @apply italic text-gold-2;
+  }
+  .acw-bh-apply-copy p {
+    @apply mt-6 max-w-[30ch] text-[18px] leading-[1.6] text-cream-1/85;
+  }
+  .acw-bh-apply-grid > :last-child {
+    @apply md:col-span-6 md:col-start-7;
+  }
+  .acw-bh-guide-action {
+    @apply mt-8 flex;
+  }
+  .acw-bh-apply .acw-bh-closed {
+    @apply border-cream-1/40 text-cream-1;
+  }
+  .acw-bh-guide-opens {
+    @apply max-w-[34ch] font-display text-[22px] italic leading-snug text-gold-2;
+  }
+  .acw-bh-guide {
+    @apply rounded-md bg-cream-1 px-6 py-8 text-ink md:px-10 md:py-10;
+  }
+  .acw-bh-guide a {
+    @apply text-forest underline decoration-gold/60 underline-offset-4;
+  }
+  .acw-bh-guide-steps {
+    @apply flex flex-col gap-7;
+  }
+  .acw-bh-guide-steps h3 {
+    @apply font-display text-[24px] leading-tight text-forest;
+  }
+  .acw-bh-guide-steps p {
+    @apply mt-1.5 text-[16px] leading-[1.6] text-ink-2;
+  }
+  .acw-bh-guide-ready {
+    @apply mt-10 text-[16px] font-semibold text-ink;
+  }
+
+  /* The form panel */
+  .acw-flow-panel {
+    @apply scroll-mt-24 rounded-md bg-cream-1 px-5 py-7 text-ink outline-none md:px-10 md:py-10;
+  }
+  .acw-flow-panel a {
+    @apply text-forest underline decoration-gold/60 underline-offset-4 hover:decoration-gold;
+  }
+  .acw-flow-panel-head {
+    @apply flex items-center gap-3 text-[15px] text-ink-2;
+  }
+  .acw-flow-panel-ring {
+    @apply size-11 flex-none;
+  }
+  .acw-flow-step .acw-flow-panel-ring {
+    @apply size-16;
+  }
+  .acw-flow-back {
+    @apply ml-auto min-h-11 cursor-pointer px-2 text-[15px] text-forest underline decoration-gold/50 underline-offset-4 hover:decoration-gold;
+  }
+  .acw-flow-step {
+    animation: acw-flow-step-in 220ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+  .acw-flow-q {
+    @apply mt-7 block w-full font-display text-forest leading-[1.15] text-balance;
+    font-size: clamp(26px, 2.6vw, 36px);
+  }
+  .acw-flow-q-hint {
+    @apply mt-3 max-w-[52ch] text-[16px] leading-[1.6] text-ink-2;
+  }
+  .acw-flow-prose p + p {
+    @apply mt-3;
+  }
+  .acw-flow-q-label {
+    @apply mt-7 block text-[16px] font-semibold text-ink;
+  }
+  .acw-flow-q-input {
+    @apply mt-5 block h-14 w-full rounded-none border-0 border-b-[1.5px] border-ink/30 bg-transparent text-[20px] text-ink outline-none transition-colors duration-200 focus:border-gold;
+  }
+  .acw-flow-q-textarea {
+    @apply h-auto min-h-40 resize-y py-3 text-[18px] leading-[1.5];
+  }
+  .acw-flow-phone {
+    @apply mt-5 h-14 border-ink/30 text-[20px];
+  }
+  .acw-flow-q-note,
+  .acw-flow-q-count {
+    @apply mt-2 text-[14px] text-muted-foreground;
+  }
+  .acw-flow-q-count {
+    @apply text-right;
+  }
+  .acw-flow-fieldset {
+    @apply m-0 min-w-0 border-0 p-0;
+  }
+  .acw-flow-choices {
+    @apply mt-5 grid gap-2.5;
+  }
+  .acw-flow-choice {
+    @apply relative mt-5 flex min-h-14 cursor-pointer items-center gap-3.5 rounded-md bg-cream-2 px-4 py-3 text-[17px] leading-snug text-ink transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.99];
+  }
+  .acw-flow-choices .acw-flow-choice {
+    @apply mt-0;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .acw-flow-choice:hover {
+      @apply bg-cream-3;
+    }
+  }
+  .acw-flow-choice[data-on] {
+    @apply bg-forest text-cream-1;
+  }
+  .acw-flow-choice input {
+    @apply absolute size-px opacity-0;
+  }
+  .acw-flow-choice:has(input:focus-visible) {
+    @apply outline-2 outline-offset-2 outline-gold;
+  }
+  .acw-flow-choice-mark {
+    @apply relative size-5 flex-none rounded-full border-[1.5px] border-current;
+  }
+  .acw-flow-choice--check .acw-flow-choice-mark {
+    @apply rounded-[4px];
+  }
+  .acw-flow-choice[data-on] .acw-flow-choice-mark {
+    @apply border-gold-2 bg-gold-2;
+  }
+  .acw-flow-choice[data-on] .acw-flow-choice-mark::after {
+    content: "";
+    @apply absolute left-[5px] top-[1.5px] h-[10px] w-[6px] rotate-45 border-forest border-r-2 border-b-2;
+  }
+  .acw-flow-error {
+    @apply mt-5 text-[15px] leading-snug text-destructive;
+  }
+  .acw-flow-panel-foot {
+    @apply mt-8 flex flex-wrap items-center gap-4;
+  }
+  /* "Optional" beside a question that can be skipped. */
+  .acw-flow-optional {
+    @apply ml-3 inline-block translate-y-[-0.25em] rounded-full bg-cream-2 px-2.5 py-0.5 align-middle font-sans text-[13px] font-medium not-italic tracking-normal text-ink-2;
+  }
+  .acw-flow-select {
+    @apply mt-6;
+  }
+  .acw-flow-select-box {
+    @apply relative mt-2;
+  }
+  .acw-flow-select-box select {
+    @apply h-14 w-full cursor-pointer appearance-none rounded-md border-[1.5px] border-ink/25 bg-cream-1 pr-11 pl-4 text-[17px] text-ink outline-none transition-colors focus:border-gold;
+  }
+  .acw-flow-select-box svg {
+    @apply pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-ink-2;
+  }
+  .acw-flow-start-over {
+    @apply ml-auto min-h-11 cursor-pointer px-2 text-[14px] text-muted-foreground underline decoration-border underline-offset-4 hover:text-forest;
+  }
+  .acw-flow-panel--loading {
+    @apply min-h-[420px];
+  }
+  .acw-flow-enter-hint {
+    @apply text-[14px] text-muted-foreground;
+  }
+  @media (hover: none) {
+    .acw-flow-enter-hint {
+      @apply hidden;
+    }
+  }
+  .acw-flow-review {
+    @apply mt-5 flex flex-col;
+  }
+  .acw-flow-review > div {
+    @apply grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 py-2.5 sm:grid-cols-[9rem_minmax(0,1fr)_auto];
+  }
+  .acw-flow-review > div:nth-child(odd) {
+    @apply -mx-3 rounded-sm bg-cream-2 px-3;
+  }
+  .acw-flow-review dt {
+    @apply col-span-2 text-[14px] text-muted-foreground sm:col-span-1;
+  }
+  .acw-flow-review dd {
+    @apply line-clamp-3 text-[16px] whitespace-pre-wrap wrap-anywhere text-ink;
+  }
+  .acw-flow-review button {
+    @apply cursor-pointer self-start text-[14px] text-forest underline decoration-gold/50 underline-offset-4 hover:decoration-gold;
+  }
+  .acw-flow-prepare {
+    @apply mt-5 flex flex-col gap-3;
+  }
+  .acw-flow-prepare li {
+    @apply relative pl-6 text-[17px] leading-[1.5] text-ink;
+  }
+  .acw-flow-prepare li::before {
+    content: "";
+    @apply absolute left-0 top-[0.6em] size-2 rounded-full bg-gold;
+  }
+  .acw-flow-hp {
+    @apply absolute -left-[10000px] size-px overflow-hidden;
+  }
+
+  /* ── Help and partners: display rows, each with a visible action ── */
+  .acw-bh-contact {
+    @apply flex flex-col;
+  }
+  .acw-bh-contact-row {
+    @apply grid gap-6 px-5 py-12 md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-12 md:px-12 md:py-16;
+  }
+  .acw-bh-contact-row:nth-child(1) {
+    @apply bg-cream-2;
+  }
+  .acw-bh-contact-row:nth-child(2) {
+    @apply bg-cream-3;
+  }
+  .acw-bh-contact-row [data-slot="button"] {
+    @apply w-full md:w-auto;
+  }
+  .acw-bh-contact-big {
+    @apply font-display text-forest leading-none tracking-[-0.015em];
+    font-size: clamp(34px, 5.4vw, 84px);
+  }
+  .acw-bh-contact-small {
+    @apply mt-4 max-w-[52ch] text-[17px] leading-[1.55] text-ink-2;
+  }
+  .acw-bh-contact-small a {
+    @apply text-forest underline decoration-gold/50 underline-offset-4 wrap-anywhere hover:decoration-gold;
+  }
+  .acw-bh-contact-close {
+    @apply bg-cream-1 px-5 py-16 font-display text-forest leading-none tracking-[-0.015em] md:px-12 md:py-24;
+    font-size: clamp(34px, 5.4vw, 84px);
+  }
+}
+
+@keyframes acw-bh-rise {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes acw-bh-ring-in {
+  from {
+    opacity: 0;
+    transform: rotate(-60deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes acw-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes acw-flow-step-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes acw-bh-breathe {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  80%,
+  100% {
+    opacity: 0;
+    transform: scale(3.2);
+  }
+}
+@keyframes acw-bh-breathe-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgb(31 61 43 / 0.45);
+  }
+  80%,
+  100% {
+    box-shadow: 0 0 0 8px rgb(31 61 43 / 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acw-bh-line > span,
+  .acw-bh-hero-ring,
+  .acw-bh-status-dot::after,
+  .acw-bh-slip li::before {
+    animation: none;
+  }
+  .acw-bh-subtitle,
+  .acw-bh-hero-foot {
+    animation: acw-fade 0.4s ease-out both;
+  }
+  .acw-flow-step {
+    animation-name: acw-fade;
+    animation-duration: 160ms;
+  }
+}
+
+/* ============== Contact page (/contact) ==============
+   The heading takes the identity of the reason in the link (or an event's,
+   or BecomingHER's); the form below asks one question at a time and shares
+   the acw-flow-* styles with the BecomingHER application. */
+
+@layer components {
+  .acw-cf-head {
+    @apply mx-auto grid max-w-336 items-end gap-10 px-5 pt-[calc(96px+5svh)] pb-14 md:grid-cols-12 md:gap-x-6 md:px-12 md:pb-20;
+  }
+  .acw-cf-head-copy {
+    @apply md:col-span-7;
+  }
+  .acw-cf-title {
+    @apply font-display text-forest leading-[0.95] tracking-[-0.02em] text-balance;
+    font-size: clamp(52px, 7.4vw, 120px);
+  }
+  .acw-cf-title em {
+    @apply italic text-gold;
+  }
+  .acw-cf-subtitle {
+    @apply mt-4 font-display italic text-gold;
+    font-size: clamp(20px, 2vw, 28px);
+  }
+  .acw-cf-meta {
+    @apply mt-5 text-[16px] font-semibold text-ink;
+  }
+  .acw-cf-desc {
+    @apply mt-5 max-w-[52ch] text-[18px] leading-[1.6] text-ink-2 text-pretty;
+  }
+  .acw-cf-link {
+    @apply mt-6 inline-flex items-center gap-2 text-[16px] text-forest underline decoration-gold/50 underline-offset-4 hover:decoration-gold;
+  }
+  .acw-cf-ring {
+    @apply hidden w-full max-w-64 justify-self-end md:col-span-4 md:col-start-9 md:block;
+    animation: acw-bh-ring-in 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .acw-cf-head-media {
+    @apply relative aspect-[4/3] overflow-hidden bg-cream-3 md:col-span-5 md:col-start-8;
+  }
+  .acw-cf-head-media img {
+    @apply object-cover;
+  }
+  .acw-cf-test {
+    @apply mb-4 rounded-md bg-gold-2/30 px-4 py-3 text-[15px] leading-snug text-ink;
+  }
+  .acw-cf-body {
+    @apply bg-cream-2 px-4 py-14 md:px-12 md:py-20;
+  }
+  .acw-cf-grid {
+    @apply mx-auto grid max-w-320 gap-12 lg:grid-cols-12 lg:gap-x-6;
+  }
+  .acw-cf-main {
+    @apply min-w-0 lg:col-span-7;
+  }
+  .acw-cf-aside {
+    @apply px-1 lg:sticky lg:top-28 lg:col-span-4 lg:col-start-9 lg:self-start;
+  }
+  .acw-cf-aside h2 {
+    @apply font-display text-[30px] leading-tight text-forest;
+  }
+  .acw-cf-aside dl {
+    @apply mt-6 flex flex-col gap-5;
+  }
+  .acw-cf-aside dt {
+    @apply text-[14px] text-muted-foreground;
+  }
+  .acw-cf-aside dd {
+    @apply mt-1 text-[18px] text-ink wrap-anywhere;
+  }
+  .acw-cf-aside a {
+    @apply text-forest underline decoration-gold/50 underline-offset-4 hover:decoration-gold;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acw-cf-ring {
+    animation: none;
   }
 }

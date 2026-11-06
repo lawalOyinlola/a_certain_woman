@@ -1,6 +1,7 @@
 import { DM_Serif_Display, Manrope, Caveat } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { AnnouncementBanner } from "@/components/site/announcement-banner";
+import { HashLinks } from "@/components/site/hash-links";
 import { organizationLd, websiteLd } from "@/config/jsonld";
 import "./globals.css";
 
@@ -31,10 +32,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${display.variable} ${body.variable} ${hand.variable}`}
     >
       <body className="min-h-screen bg-background text-foreground antialiased">
         <AnnouncementBanner />
+        <HashLinks />
         {children}
         <Analytics />
         <script

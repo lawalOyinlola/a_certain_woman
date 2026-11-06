@@ -103,7 +103,7 @@ export function EventDetail({ event }: { event: ACWEvent }) {
               <Link
                 href={contactHref({
                   reason: "Attend an Event",
-                  prefill: `I would like to attend ${event.title} (${event.date}).`,
+                  event: event.id,
                 })}
               >
                 Tell us you&apos;re coming <ArrowRight />

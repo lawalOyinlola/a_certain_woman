@@ -145,6 +145,19 @@ Rate limits keep the forms from being turned against anyone. The contact and new
 
 Those limits live in memory (`src/lib/rate-limit.ts`), and that's a real limitation. Each serverless instance counts on its own and a cold start resets the count, so the limiter stops one person or script hammering the form but won't stop a distributed attack. A hard limit needs a shared store such as Redis or Vercel KV behind the same function, and a bot check like Cloudflare Turnstile is worth adding before a big launch.
 
+## BecomingHER applications
+
+`/becoming-her` presents BecomingHER: The Crown Circle. The application form is on the contact page, at `/contact?reason=becoming-her` (`/apply` redirects there), so the link can be shared on its own. The form shows one question at a time and posts to `/api/becoming-her/apply`. The route validates the answers with the same rules as the KoboToolbox form, then does two things:
+
+1. It writes the application into the Kobo form through the OpenRosa submission endpoint (`KOBO_API_TOKEN`). Field names and choice values in `src/lib/becoming-her/application.ts` match the Kobo form exactly. If someone edits the form in Kobo, update that file and the form version in `src/lib/becoming-her/kobo.ts`.
+2. It emails a copy to `BECOMING_HER_TO_EMAIL`, with `BECOMING_HER_CC_EMAIL` (default: the info address) in copy.
+
+An application counts as received when at least one of the two succeeds. When Kobo fails, the email says so, so the team can enter it by hand. The dates in `src/lib/data/becoming-her.ts` open and close the form, and the page works out the current stage of the programme from the date. Set `BECOMING_HER_APPLICATIONS=open` on a preview deployment to test the form before the opening date. Locally, add `BECOMING_HER_DRY_RUN=1` as well: the route then validates applications and sends nothing.
+
+## Contact page
+
+`/contact` asks one question at a time, starting with the reason for writing. Each reason has a shareable link (`/contact?reason=partner`, `?reason=attend&event=<event id>`) and its own heading, set in `src/lib/contact/reasons.ts`; build links with `contactHref()` from `src/config/site.ts`. Unsent answers survive a refresh: they are kept in `sessionStorage` for up to two hours and cleared when sent (`src/lib/draft.ts`).
+
 ## Content and media
 
 There's no CMS. Events and programs are plain TypeScript data in `src/lib/data/`, so adding a gathering means adding an entry to `EVENTS` and putting its photographs in `public/media/<event>/`.

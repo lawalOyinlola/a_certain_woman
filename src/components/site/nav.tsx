@@ -35,7 +35,13 @@ const items: NavItem[] = [
       { label: "Gallery", href: "/gallery" },
     ],
   },
-  { label: "Programs", href: "/programs" },
+  {
+    label: "Programs",
+    children: [
+      { label: "All Programs", href: "/programs" },
+      { label: "Becoming HER", href: "/becoming-her" },
+    ],
+  },
   { label: "Events", href: "/events" },
   { label: "Partner", href: "/partner" },
   { label: "Contact", href: "/contact" },
