@@ -33,13 +33,16 @@ export function buildSubmissionXml(
   instanceId: string,
   endedAt: Date,
 ): string {
+  // Start time on the server's clock: submission time minus the duration the
+  // browser measured. The device's own clock may be wrong.
+  const startedAt = new Date(endedAt.getTime() - a.elapsed_ms);
   const el = (name: string, value = "") =>
     value ? `<${name}>${xmlEscape(value)}</${name}>` : `<${name}/>`;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <${FORM_ID} xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" id="${FORM_ID}" version="${xmlEscape(FORM_VERSION)}">
 <formhub>${el("uuid", FORMHUB_UUID)}</formhub>
-${el("start", new Date(a.started_at).toISOString())}
+${el("start", startedAt.toISOString())}
 ${el("end", endedAt.toISOString())}
 ${el("deviceid", "acertainwoman.org")}
 ${el("intro")}
