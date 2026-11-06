@@ -35,37 +35,53 @@ export const mobileMoney = [
 ] as const;
 
 /**
- * The reasons offered in the contact form's "Reason for Contact" dropdown.
- * Single-sourced here so deep links (`contactHref`) and the form stay in sync;
- * a `reason` that isn't in this list is ignored by the form.
+ * Why someone is writing. Each reason has a short slug, used in shareable
+ * links (`/contact?reason=attend`), and a label, shown in the form and sent
+ * with the message. The full per-reason copy lives in
+ * src/lib/contact/reasons.ts.
  */
 export const CONTACT_REASONS = [
   "Join the Movement",
   "Attend an Event",
+  "Apply to BecomingHER",
   "Partner / Sponsor",
-  "Media Inquiry",
   "Volunteer",
   "Invite ACW",
+  "Media Inquiry",
   "Share My Story",
   "General Inquiry",
 ] as const;
 
 export type ContactReason = (typeof CONTACT_REASONS)[number];
 
+export const CONTACT_REASON_SLUGS: Record<ContactReason, string> = {
+  "Join the Movement": "join",
+  "Attend an Event": "attend",
+  "Apply to BecomingHER": "becoming-her",
+  "Partner / Sponsor": "partner",
+  Volunteer: "volunteer",
+  "Invite ACW": "invite",
+  "Media Inquiry": "media",
+  "Share My Story": "story",
+  "General Inquiry": "general",
+};
+
 /**
- * Build a deep link to the contact form that preselects a reason, prefills the
- * message, and scrolls to the form (`#write`). Lets any "purposeful" CTA across
- * the site land the visitor on a pre-contextualised form instead of a blank one.
+ * A shareable link to the contact form, opened on the given reason. `event`
+ * (an event id from src/lib/data/events.ts) gives the page that event's
+ * title and date; `prefill` starts the message.
  */
 export function contactHref(opts?: {
   reason?: ContactReason;
+  event?: string;
   prefill?: string;
 }): string {
   const params = new URLSearchParams();
-  if (opts?.reason) params.set("reason", opts.reason);
+  if (opts?.reason) params.set("reason", CONTACT_REASON_SLUGS[opts.reason]);
+  if (opts?.event) params.set("event", opts.event);
   if (opts?.prefill) params.set("prefill", opts.prefill);
   const qs = params.toString();
-  return `/contact${qs ? `?${qs}` : ""}#write`;
+  return `/contact${qs ? `?${qs}` : ""}`;
 }
 
 /** Build a WhatsApp deep link, optionally with a prefilled message. */
