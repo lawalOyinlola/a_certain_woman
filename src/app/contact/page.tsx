@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { Nav } from "@/components/site/nav";
 import { Footer } from "@/components/site/footer";
-import { PageHero } from "@/components/site/page-hero";
-import { Join } from "@/components/sections/join";
 import { Faq } from "@/components/sections/faq";
-import { ContactForm } from "./contact-form";
-import { contact, socials, mailtoHref } from "@/config/site";
+import { getUpcomingEvents } from "@/lib/data/events";
+import { applicationsDryRun, applicationsOverride } from "@/lib/data/becoming-her";
+import { BECOMING_HER_SLUG, findReason } from "@/lib/contact/reasons";
+import { ContactFlow, type EventSummary } from "./contact-flow";
 
 const FAQS = [
   {
@@ -31,100 +30,82 @@ const FAQS = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Get in touch with A Certain Woman in Freetown, Sierra Leone. Write to join the movement, partner with us, attend an event, invite ACW to collaborate, or share your story.",
-  alternates: { canonical: "/contact" },
-  openGraph: {
-    title: "Contact | A Certain Woman",
-    description:
-      "Write to A Certain Woman in Freetown, Sierra Leone. Join the movement, partner with us, attend an event, or share your story.",
-    url: "/contact",
-  },
-  twitter: {
-    title: "Contact | A Certain Woman",
-    description:
-      "Write to ACW in Freetown, Sierra Leone. Join, partner, attend, or share.",
-  },
-};
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
-export default function ContactPage() {
+const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? null;
+
+const BASE_DESCRIPTION =
+  "Get in touch with A Certain Woman in Freetown, Sierra Leone. Write to join the movement, come to a gathering, partner with us, invite ACW, or share your story.";
+
+/**
+ * A shared link names its purpose (`?reason=becoming-her`), so its preview on
+ * WhatsApp or social media says what the link is for. The canonical address
+ * stays /contact.
+ */
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}): Promise<Metadata> {
+  const reason = findReason(one((await searchParams).reason));
+
+  const title =
+    reason?.slug === BECOMING_HER_SLUG
+      ? "Apply to BecomingHER"
+      : reason
+        ? `${reason.title.join(" ").replace(/\.$/, "")}`
+        : "Contact";
+  const description =
+    reason?.slug === BECOMING_HER_SLUG
+      ? "Apply for one of twenty places in BecomingHER: The Crown Circle, a free mentorship programme for girls and young women aged 14 to 21 in Freetown."
+      : (reason?.description ?? BASE_DESCRIPTION);
+  const url = reason ? `/contact?reason=${reason.slug}` : "/contact";
+
+  return {
+    title,
+    description,
+    alternates: { canonical: "/contact" },
+    openGraph: { title: `${title} | A Certain Woman`, description, url },
+    twitter: { title: `${title} | A Certain Woman`, description },
+  };
+}
+
+/** Rounded to the minute, matching the browser clock in becoming-her/live. */
+function renderMinute(): number {
+  return Math.floor(Date.now() / 60_000) * 60_000;
+}
+
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const sp = await searchParams;
+  const events: EventSummary[] = getUpcomingEvents().map((e) => ({
+    id: e.id,
+    title: e.title,
+    subtitle: e.subtitle,
+    date: e.date,
+    place: e.venue ? `${e.venue}, ${e.location}` : e.location,
+    cover: e.cover,
+  }));
+
   return (
     <>
       <Nav />
       <main id="top">
-        <PageHero
-          eyebrow="CONTACT US  ·  WE'D LOVE TO HEAR FROM YOU"
-          title={
-            <>
-              Write to <em>us.</em>
-            </>
-          }
-          sub="Whether you want to join the movement, partner with us, invite ACW to collaborate, support an outreach, attend an event, or share your story, you are welcome here."
+        <ContactFlow
+          initialReason={one(sp.reason)}
+          initialEvent={one(sp.event)}
+          prefill={(one(sp.prefill) ?? "").slice(0, 600)}
+          events={events}
+          serverNow={renderMinute()}
+          override={applicationsOverride()}
+          testMode={applicationsDryRun()}
         />
-        {/* Form first: most visitors who reach this page have already decided
-            to write, so we lead with the form (and WhatsApp), FAQ follows. The
-            #write anchor lets CTAs across the site deep-link straight here. */}
-        <section
-          id="write"
-          className="scroll-mt-28 bg-cream-1 px-6 py-24 md:px-12 md:py-28"
-        >
-          <div className="mx-auto max-w-280">
-            <Suspense fallback={null}>
-              <ContactForm />
-            </Suspense>
-
-            <div className="acw-contact-info">
-              <div>
-                <small>LOCATION</small>
-                <span>{contact.location}</span>
-              </div>
-              <div>
-                <small>EMAIL</small>
-                <span>
-                  <a
-                    href={mailtoHref}
-                    className="text-forest transition-colors hover:text-gold"
-                  >
-                    {contact.email}
-                  </a>
-                </span>
-              </div>
-              <div>
-                <small>PHONE / WHATSAPP</small>
-                <span>
-                  <a
-                    href={contact.whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-forest transition-colors hover:text-gold"
-                    aria-label={`Message A Certain Woman on WhatsApp at ${contact.phoneDisplay} (opens in a new tab)`}
-                  >
-                    {contact.phoneDisplay}
-                  </a>
-                </span>
-              </div>
-              <div>
-                <small>SOCIAL</small>
-                <span>
-                  <a
-                    href={socials.instagram.url}
-                    target="_blank"
-                    rel="noopener noreferrer me"
-                    className="text-forest transition-colors hover:text-gold"
-                    aria-label={`A Certain Woman on Instagram, ${socials.instagram.handle} (opens in a new tab)`}
-                  >
-                    {socials.instagram.handle}
-                  </a>
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
 
         <Faq
-          className="bg-cream-2"
+          className="bg-cream-1"
           label="Common questions"
           heading={
             <>
@@ -135,10 +116,6 @@ export default function ContactPage() {
           }
           items={FAQS}
         />
-
-        {/* Newsletter only: visitors here are already writing, so the onward
-            pathway cards (which would link back to contact) are dropped. */}
-        <Join withLabel={false} paths={[]} />
       </main>
       <Footer />
     </>
