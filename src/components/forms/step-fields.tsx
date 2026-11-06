@@ -1,5 +1,7 @@
 "use client";
 
+import { Select as SelectPrimitive } from "@base-ui/react/select";
+import { Check as CheckIcon, ChevronDown } from "lucide-react";
 import type { Choice } from "@/lib/becoming-her/application";
 import { cn } from "@/lib/utils";
 
@@ -166,7 +168,11 @@ export function OptionalTag() {
   return <span className="acw-flow-optional">Optional</span>;
 }
 
-/** A styled native select: the phone's own picker on mobile, typeahead on desktop. */
+/**
+ * A dropdown in the form's own style. Base UI handles the keyboard
+ * (arrows, typeahead, Escape), focus and the listbox roles. An empty
+ * `value` shows the placeholder.
+ */
 export function SelectField({
   id,
   label,
@@ -184,24 +190,43 @@ export function SelectField({
 }) {
   return (
     <div className="acw-flow-select">
-      <label htmlFor={id} className="acw-flow-q-label">
-        {label}
-      </label>
-      <div className="acw-flow-select-box">
-        <select id={id} value={value} onChange={(e) => onChange(e.target.value)}>
-          <option value="" disabled>
-            {placeholder}
-          </option>
-          {options.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
-        <svg aria-hidden viewBox="0 0 12 8" width="12" height="8" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M1 1.5l5 5 5-5" />
-        </svg>
-      </div>
+      <SelectPrimitive.Root
+        id={id}
+        items={options}
+        value={value || null}
+        onValueChange={(v) => {
+          if (typeof v === "string" && v) onChange(v);
+        }}
+      >
+        <SelectPrimitive.Label className="acw-flow-q-label">{label}</SelectPrimitive.Label>
+        <SelectPrimitive.Trigger className="acw-flow-select-trigger">
+          <SelectPrimitive.Value placeholder={placeholder} className="acw-flow-select-value" />
+          <SelectPrimitive.Icon className="acw-flow-select-icon">
+            <ChevronDown aria-hidden />
+          </SelectPrimitive.Icon>
+        </SelectPrimitive.Trigger>
+        <SelectPrimitive.Portal>
+          <SelectPrimitive.Positioner
+            className="acw-flow-select-positioner"
+            align="start"
+            sideOffset={6}
+            alignItemWithTrigger={false}
+          >
+            <SelectPrimitive.Popup className="acw-flow-select-popup">
+              <SelectPrimitive.List>
+                {options.map((o) => (
+                  <SelectPrimitive.Item key={o.value} value={o.value} className="acw-flow-select-item">
+                    <SelectPrimitive.ItemText>{o.label}</SelectPrimitive.ItemText>
+                    <SelectPrimitive.ItemIndicator className="acw-flow-select-check">
+                      <CheckIcon aria-hidden />
+                    </SelectPrimitive.ItemIndicator>
+                  </SelectPrimitive.Item>
+                ))}
+              </SelectPrimitive.List>
+            </SelectPrimitive.Popup>
+          </SelectPrimitive.Positioner>
+        </SelectPrimitive.Portal>
+      </SelectPrimitive.Root>
     </div>
   );
 }

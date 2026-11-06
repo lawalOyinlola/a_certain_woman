@@ -1210,14 +1210,52 @@
   .acw-flow-select {
     @apply mt-6;
   }
-  .acw-flow-select-box {
-    @apply relative mt-2;
+  /* Dropdown (SelectField): a bordered box, so it reads as a control. */
+  .acw-flow-select-trigger {
+    @apply mt-2 flex h-14 w-full cursor-pointer items-center gap-3 rounded-md border-[1.5px] border-ink/25 bg-cream-1 pr-4 pl-4 text-left text-[17px] text-ink outline-none transition-colors duration-200 hover:border-gold/70 focus-visible:border-gold focus-visible:ring-3 focus-visible:ring-gold/20 data-popup-open:border-gold;
   }
-  .acw-flow-select-box select {
-    @apply h-14 w-full cursor-pointer appearance-none rounded-md border-[1.5px] border-ink/25 bg-cream-1 pr-11 pl-4 text-[17px] text-ink outline-none transition-colors focus:border-gold;
+  .acw-flow-select-value {
+    @apply min-w-0 flex-1 truncate;
   }
-  .acw-flow-select-box svg {
-    @apply pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-ink-2;
+  .acw-flow-select-value[data-placeholder] {
+    @apply text-muted-foreground italic;
+  }
+  .acw-flow-select-icon {
+    @apply flex shrink-0 text-ink-2 transition-transform duration-200 ease-out;
+  }
+  .acw-flow-select-icon svg {
+    @apply size-[18px];
+  }
+  .acw-flow-select-trigger[data-popup-open] .acw-flow-select-icon {
+    @apply rotate-180;
+  }
+  .acw-flow-select-positioner {
+    @apply z-50 outline-none;
+  }
+  .acw-flow-select-popup {
+    @apply max-h-[min(22rem,var(--available-height))] w-(--anchor-width) origin-(--transform-origin) overflow-y-auto rounded-md border border-border bg-cream-1 p-1.5 shadow-[0_12px_40px_-12px_rgba(31,38,32,0.22)] outline-none;
+    transition:
+      opacity 160ms cubic-bezier(0.23, 1, 0.32, 1),
+      transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .acw-flow-select-popup[data-starting-style],
+  .acw-flow-select-popup[data-ending-style] {
+    @apply -translate-y-1 scale-[0.98] opacity-0;
+  }
+  .acw-flow-select-item {
+    @apply relative flex min-h-12 cursor-pointer items-center gap-3 rounded-sm py-2.5 pr-10 pl-3 text-[16px] text-ink outline-none select-none data-highlighted:bg-cream-2 data-highlighted:text-forest data-selected:text-forest;
+  }
+  .acw-flow-select-check {
+    @apply absolute right-3 flex text-gold;
+  }
+  .acw-flow-select-check svg {
+    @apply size-4;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .acw-flow-select-popup,
+    .acw-flow-select-icon {
+      transition: none;
+    }
   }
   .acw-flow-start-over {
     @apply ml-auto min-h-11 cursor-pointer px-2 text-[14px] text-muted-foreground underline decoration-border underline-offset-4 hover:text-forest;
