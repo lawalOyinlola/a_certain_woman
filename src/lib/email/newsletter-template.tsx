@@ -1,5 +1,5 @@
 import { escapeHtml as esc } from "./escape";
-import { emailFooterHtml, emailFooterText, emailLogoHtml } from "./layout";
+import { emailDocument, emailFooterText, emailStyle } from "./layout";
 
 type Subscriber = { email?: string; phone?: string };
 
@@ -15,39 +15,14 @@ export function newsletterEmailHtml({ email, phone }: Subscriber): string {
   const label = email ? "Email address" : "WhatsApp / Phone";
   const value = email ?? phone ?? "";
 
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<style>
-  body { margin: 0; padding: 0; background: #FAF6EE; font-family: Georgia, serif; }
-  .wrap { max-width: 600px; margin: 0 auto; background: #FAF6EE; }
-  .header { background: #1F3D2B; padding: 32px 40px; }
-  .header h1 { color: #D4AE6B; font-size: 22px; margin: 0; letter-spacing: 0.04em; font-weight: normal; }
-  .header p { color: #F2EADB; font-size: 12px; margin: 6px 0 0; letter-spacing: 0.2em; text-transform: uppercase; }
-  .body { padding: 36px 40px; }
-  .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: #6F6857; margin-bottom: 4px; font-family: Helvetica, sans-serif; }
-  .value { font-size: 18px; color: #1F2620; margin: 0 0 8px; }
-  .note { font-size: 14px; color: #6F6857; margin: 20px 0 0; font-family: Helvetica, sans-serif; }
-  .footer { background: #F2EADB; padding: 20px 40px; text-align: center; font-size: 11px; color: #6F6857; letter-spacing: 0.18em; text-transform: uppercase; font-family: Helvetica, sans-serif; line-height: 2; }
-</style>
-</head>
-<body>
-<div class="wrap">
-  <div class="header">
-    ${emailLogoHtml}
-    <h1>A Certain Woman</h1>
-    <p>New newsletter subscriber</p>
-  </div>
-  <div class="body">
-    <p class="label">${label}</p>
-    <p class="value">${esc(value)}</p>
-    <p class="note">${note(Boolean(email))}</p>
-  </div>
-  ${emailFooterHtml}
-</div>
-</body>
-</html>`;
+  return emailDocument(
+    `<div style="${emailStyle.alert}">
+    <p style="${emailStyle.label}">${label}</p>
+    <p style="margin:0 0 8px;font-size:18px;color:#1F2620">${esc(value)}</p>
+    <p style="${emailStyle.note}">${note(Boolean(email))}</p>
+  </div>`,
+    "New newsletter subscriber",
+  );
 }
 
 export function newsletterEmailText({ email, phone }: Subscriber): string {
