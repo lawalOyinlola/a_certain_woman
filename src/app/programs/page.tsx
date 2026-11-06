@@ -5,6 +5,10 @@ import { PageHero } from "@/components/site/page-hero";
 import { Programs } from "@/components/sections/programs";
 import { Join } from "@/components/sections/join";
 import { Faq } from "@/components/sections/faq";
+import { CrownCircle } from "@/components/site/crown-circle";
+import { ArrowRight } from "@/components/site/icons";
+import Link from "next/link";
+import { BECOMING_HER } from "@/lib/data/becoming-her";
 
 // Revalidate hourly so the Men Who Stand date badge stays current.
 export const revalidate = 3600;
@@ -68,6 +72,32 @@ export default function ProgramsPage() {
           }
           sub="Our programs are designed to meet women at different stages of their journey: from healing to leadership, from restoration to service, from private pain to public purpose."
         />
+
+        {/* Feature: the girls' mentorship pilot, which has its own page. */}
+        <section className="bg-cream-2 px-6 py-14 md:px-12">
+          <Link
+            href={BECOMING_HER.path}
+            className="group mx-auto flex max-w-280 flex-col items-center gap-6 border border-gold/40 bg-cream-1 px-7 py-9 text-center transition-colors hover:border-gold md:flex-row md:gap-10 md:px-12 md:text-left"
+          >
+            <CrownCircle decorative className="h-24 w-24 shrink-0" />
+            <div className="flex-1">
+              <small className="acw-section-label-mini">
+                New · Founding pilot · {BECOMING_HER.season}
+              </small>
+              <h2 className="font-display text-[clamp(30px,3.4vw,44px)] leading-tight text-forest">
+                Becoming<em className="text-gold">HER</em>: The Crown Circle
+              </h2>
+              <p className="mt-2 text-[16px] leading-[1.65] text-muted-foreground text-pretty">
+                Mentorship for {BECOMING_HER.places} girls and young women aged{" "}
+                {BECOMING_HER.ages} in {BECOMING_HER.location}. Free to apply.
+                Free to participate.
+              </p>
+            </div>
+            <span className="acw-link-arrow shrink-0 group-hover:gap-4.5 group-hover:text-gold">
+              Discover the programme <ArrowRight />
+            </span>
+          </Link>
+        </section>
 
         <Programs withLabel={false} layout="stacked" withDevotional />
 
