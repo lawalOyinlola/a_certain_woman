@@ -23,9 +23,13 @@ export function isTurnstileConfigured(): boolean {
 /**
  * True when the check is required but cannot run: production without a
  * secret key. The route must then refuse, not let requests through unchecked.
+ * Production means VERCEL_ENV=production, or NODE_ENV=production off Vercel.
+ * Vercel previews are exempt (their builds also run with NODE_ENV=production).
  */
 export function turnstileMisconfigured(): boolean {
-  return !isTurnstileConfigured() && process.env.VERCEL_ENV === "production";
+  const env = process.env.VERCEL_ENV;
+  const production = env ? env === "production" : process.env.NODE_ENV === "production";
+  return !isTurnstileConfigured() && production;
 }
 
 export async function verifyTurnstile(
@@ -62,7 +66,13 @@ export async function verifyTurnstile(
   }
 
   if (!data.success) {
-    console.warn("Turnstile: token rejected:", (data["error-codes"] ?? []).join(", "));
+    const codes = data["error-codes"] ?? [];
+    // Cloudflare's own failure, not a bad token: the applicant can retry.
+    if (codes.includes("internal-error")) {
+      console.error("Turnstile: siteverify internal-error");
+      return { ok: false, reason: "unavailable" };
+    }
+    console.warn("Turnstile: token rejected:", codes.join(", "));
     return { ok: false, reason: "rejected" };
   }
   // A token made for another form on the site must not be reused here.
