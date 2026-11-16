@@ -111,6 +111,8 @@ export function Turnstile({
       cancelled = true;
       if (widget.current) window.turnstile?.remove(widget.current);
       widget.current = null;
+      // The token belonged to the removed widget; the form must wait for a new one.
+      tokenCb.current("");
     };
   }, [action]);
 
