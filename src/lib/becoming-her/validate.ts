@@ -18,10 +18,17 @@ const values = (choices: Choice[]) =>
 
 // Normalises only: control characters out, whitespace trimmed. HTML and XML
 // are escaped where the value is written (email, Kobo XML), not here.
+// toWellFormed() replaces lone surrogates, and U+FFFE/U+FFFF are removed:
+// XML 1.0 forbids both, and Kobo rejects a submission that contains them.
 const clean = (max: number) =>
   z
     .string()
-    .transform((v) => v.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim())
+    .transform((v) =>
+      v
+        .toWellFormed()
+        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F\uFFFE\uFFFF]/g, "")
+        .trim(),
+    )
     .pipe(z.string().max(max));
 
 const optionalText = (max: number) => clean(max).optional().default("");
