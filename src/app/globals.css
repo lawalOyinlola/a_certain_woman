@@ -1302,6 +1302,10 @@
   .acw-flow-hp {
     @apply absolute -left-[10000px] size-px overflow-hidden;
   }
+  /* Turnstile: empty unless Cloudflare asks for a click. */
+  .acw-flow-turnstile {
+    @apply mt-6 empty:hidden;
+  }
 
   /* ── Help and partners: display rows, each with a visible action ── */
   .acw-bh-contact {
