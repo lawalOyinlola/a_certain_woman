@@ -43,3 +43,7 @@ overrides:
   "browserslist@<4.28.7": ^4.28.7
   "baseline-browser-mapping@<2.11.0": ^2.11.0
   "source-map-js@<1.2.2": ^1.2.2
+  # GHSA-g3hv-75wg-m249 (moderate). Fixed only in minimatch 11, under
+  # @typescript-eslint/typescript-estree (eslint). Drop once typescript-eslint
+  # depends on minimatch 11 itself.
+  "minimatch@>=7.0.0 <11.0.1": ^11.0.1
