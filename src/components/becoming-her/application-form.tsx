@@ -20,6 +20,7 @@ import {
 } from "@/lib/becoming-her/application";
 import { BECOMING_HER, ageOn, freetownToday } from "@/lib/data/becoming-her";
 import { Check, Choices, Long, OptionalTag, Text } from "@/components/forms/step-fields";
+import { TURNSTILE_SITE_KEY, Turnstile } from "@/components/forms/turnstile";
 import { clearDraft, readDraft, writeDraft } from "@/lib/draft";
 
 // Same lazy split as the contact form: the phone library (libphonenumber
@@ -183,6 +184,9 @@ export function ApplicationForm({ onExit }: { onExit?: () => void }) {
   const [sendError, setSendError] = useState("");
   const [status, setStatus] = useState<Status>("editing");
   const [reference, setReference] = useState("");
+  // Cloudflare Turnstile token for the send; empty until the check passes.
+  const [captcha, setCaptcha] = useState("");
+  const [captchaReset, setCaptchaReset] = useState(0);
   const [returnToReview, setReturnToReview] = useState(
     draft?.returnToReview ?? false,
   );
@@ -276,6 +280,10 @@ export function ApplicationForm({ onExit }: { onExit?: () => void }) {
   };
 
   async function send() {
+    if (TURNSTILE_SITE_KEY && !captcha) {
+      setSendError("One moment: we are still checking this browser. Try again in a few seconds.");
+      return;
+    }
     setStatus("sending");
     setSendError("");
     try {
@@ -287,6 +295,7 @@ export function ApplicationForm({ onExit }: { onExit?: () => void }) {
           // A duration on the device's own clock, so clock errors cancel out.
           elapsed_ms: Math.max(0, nowMs() - (startedAt.current ?? nowMs())),
           website: honeypot.current?.value ?? "",
+          turnstile_token: captcha,
         }),
       });
       const json = await res.json().catch(() => ({}));
@@ -301,6 +310,8 @@ export function ApplicationForm({ onExit }: { onExit?: () => void }) {
           ? err.message
           : "We could not send your application. Please try again.",
       );
+      // The token was used up by this attempt; get a fresh one.
+      setCaptchaReset((n) => n + 1);
       setStatus("editing");
     }
   }
@@ -378,6 +389,10 @@ export function ApplicationForm({ onExit }: { onExit?: () => void }) {
         <div key={step} className="acw-flow-step">
           <Step step={step} data={data} set={set} age={age} edit={edit} />
         </div>
+
+        {step === "review" && (
+          <Turnstile action="becoming-her" onToken={setCaptcha} resetSignal={captchaReset} />
+        )}
 
         {error && (
           <p role="alert" className="acw-flow-error">

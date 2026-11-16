@@ -1,6 +1,55 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
+
+// Cloudflare Turnstile (the BecomingHER application) loads its script and its
+// challenge frame from this origin.
+const TURNSTILE = "https://challenges.cloudflare.com";
+
+/**
+ * Content Security Policy, sent as Report-Only for now: browsers report what
+ * it would block and block nothing. Switch the header name to
+ * Content-Security-Policy once the reports are clean.
+ *
+ * Scripts keep 'unsafe-inline' because the pages are static: Next.js inlines
+ * its bootstrap scripts, and a nonce would make every page render on demand.
+ * The policy still limits where scripts, frames and connections can come
+ * from, who can frame the site, and where forms can post.
+ */
+const csp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' ${TURNSTILE}${isDev ? " 'unsafe-eval'" : ""}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' blob: data:",
+  "font-src 'self'",
+  "media-src 'self' blob:",
+  `connect-src 'self' ${TURNSTILE}`,
+  `frame-src ${TURNSTILE}`,
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "upgrade-insecure-requests",
+].join("; ");
+
+const securityHeaders = [
+  { key: "Content-Security-Policy-Report-Only", value: csp },
+  // Older browsers ignore frame-ancestors; this covers them.
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
+  },
+];
+
 const nextConfig: NextConfig = {
+  // No "x-powered-by: Next.js" banner.
+  poweredByHeader: false,
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders }];
+  },
   images: {
     // Prefer AVIF (~20% smaller than WebP) with WebP/source fallback.
     // Targets the Lighthouse "Improve image delivery" insight.

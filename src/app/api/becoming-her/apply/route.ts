@@ -19,6 +19,7 @@ import {
 } from "@/lib/email/becoming-her-template";
 import { getMailer } from "@/lib/email/mailer";
 import { clientKey, rateLimit, tooManyRequests } from "@/lib/rate-limit";
+import { turnstileMisconfigured, verifyTurnstile } from "@/lib/turnstile";
 
 /**
  * POST /api/becoming-her/apply
@@ -29,6 +30,10 @@ import { clientKey, rateLimit, tooManyRequests } from "@/lib/rate-limit";
  * is the same inbox). The application counts as received when at least one of
  * the two succeeds. When Kobo fails, the email carries the full application
  * so the team can enter it by hand.
+ *
+ * Every application must carry a Cloudflare Turnstile token, checked with
+ * Cloudflare before anything is sent (when TURNSTILE_SECRET_KEY is set; a
+ * production deployment without it refuses all applications).
  *
  * Nothing about the applicant is logged: only the reference and error text.
  */
@@ -70,6 +75,10 @@ export async function POST(req: Request) {
   const recipients = emailRecipients();
   const canEmail = Boolean(mailer && recipients);
   const canKobo = isKoboConfigured();
+  if (turnstileMisconfigured()) {
+    console.error("BecomingHER: TURNSTILE_SECRET_KEY is not set in production.");
+    return NextResponse.json({ error: GENERIC_ERROR }, { status: 503 });
+  }
   if (!dryRun && !canEmail && !canKobo) {
     console.error(
       "BecomingHER: no destination. Set KOBO_API_TOKEN, or BECOMING_HER_TO_EMAIL with the SMTP variables.",
@@ -96,6 +105,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
+  // The Turnstile token travels with the answers but is not one of them.
+  let token: unknown;
+  if (body && typeof body === "object" && !Array.isArray(body)) {
+    const { turnstile_token, ...answers } = body as Record<string, unknown>;
+    token = turnstile_token;
+    body = answers;
+  }
+
   const result = validateApplication(body, now);
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 400 });
@@ -110,6 +127,19 @@ export async function POST(req: Request) {
   const tooFast = app.elapsed_ms < MIN_FILL_SECONDS * 1000;
   if (app.website || tooFast) {
     return NextResponse.json({ ok: true, reference });
+  }
+
+  const human = await verifyTurnstile(token, "becoming-her", clientKey(req));
+  if (!human.ok) {
+    return human.reason === "unavailable"
+      ? NextResponse.json(
+          { error: "We could not check your application just now. Please try again in a minute." },
+          { status: 503 },
+        )
+      : NextResponse.json(
+          { error: "We could not confirm the security check. Please try sending again." },
+          { status: 400 },
+        );
   }
 
   if (dryRun) {
